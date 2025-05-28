@@ -4,13 +4,13 @@
     <title>Connections Game</title>
     <link rel="stylesheet" href="style.css">
   </head>
-  <body>
-    <h1>Medical Connections</h1>
-    <div id="game-board" class="grid"></div>
-    <button id="submit-button">Submit Group</button>
-    <p id="feedback"></p>
-    <script src="script.js"></script>
-  </body>
-<link rel="stylesheet" href="style.css">
-<script src="script.js"></script>
+<body>
+  <h1>Medical Connections</h1>
+  <div id="guess-counter">Guesses remaining: 4</div>
+  <div id="board"></div>
+  <div id="feedback"></div>
+  <button onclick="checkGroup()">Submit Group</button>
+  <button onclick="resetGame()">Reset Game</button>
+  <script src="script.js"></script>
+</body>
 </html>
