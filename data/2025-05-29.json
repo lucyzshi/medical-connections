@@ -1,0 +1,6 @@
+{
+  "Signs of severe aortic stenosis": ["Heart Failure", "Syncope", "Pulsus Parvus", "Paradoxical Split S2"],
+  "Signs of aortic insufficiency": ["Wide Pulse Pressure", "Water Hammer", "Heave", "Austin Flint"],
+  "Signs of Cardiac Tamponade": ["Kussmaul's", "Rub", "JVD", "Pulsus Paradoxus"],
+  "Signs of Heart Failure": ["S3", "Orthopnea", "Paroxysmal Nocturnal Dyspnea", "Displaced PMI"]
+}
