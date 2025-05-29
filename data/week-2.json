@@ -1,0 +1,6 @@
+{
+  "Findings in Rheumatoid Arthritis": ["Polyarthritis", "Carpal Tunnel", "Nodules", "ILD"],
+  "Findings in Spondyloarthropathies": ["Psoriasis", "Axial", "IBD", "Uveitis"],
+  "Findings in Reactive Arthritis": ["Oligoarthritis", "Conjunctivitis", "Urethritis", "Diarrhea"],
+  "Common rheum-associated findings ending in -itis": ["Enthesitis", "Dactylitis", "Bursitis", "Tendonitis"]
+}
