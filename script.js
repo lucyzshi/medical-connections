@@ -1,35 +1,32 @@
-let groups = {
-  "Signs of severe aortic stenosis": [
-    "Heart Failure",
-    "Syncope",
-    "Pulsus Parvus",
-    "Paradoxical Split S2"
-  ],
-  "Signs of aortic insufficiency": [
-    "Wide Pulse Pressure",
-    "Water Hammer",
-    "Heave",
-    "Austin Flint"
-  ],
-  "Signs of Cardiac Tamponade": [
-    "Kussmaul's",
-    "Rub",
-    "JVD",
-    "Pulsus Paradoxus"
-  ],
-  "Signs of Heart Failure": [
-    "S3",
-    "Orthopnea",
-    "Paroxysmal Nocturnal Dyspnea",
-    "Displaced PMI"
-  ]
-};
-
+let groups = {};
 let selectedTiles = [];
 let solvedGroups = [];
 let wrongGuesses = 0;
 const maxWrongGuesses = 4;
 let shuffled = false;
+
+// 🗓 Get current ISO week number
+function getCurrentISOWeek() {
+  const now = new Date();
+  const jan1 = new Date(now.getFullYear(), 0, 1);
+  const days = Math.floor((now - jan1) / (24 * 60 * 60 * 1000));
+  return Math.ceil((days + jan1.getDay() + 1) / 7);
+}
+
+// 📦 Load JSON file for current week
+async function loadPuzzleForWeek(weekNumber) {
+  const url = `data/week${weekNumber}.json`;
+  try {
+    const response = await fetch(url);
+    if (!response.ok) throw new Error("Puzzle not found.");
+    groups = await response.json();
+    resetGame();
+  } catch (err) {
+    document.getElementById("feedback").textContent =
+      "❌ No puzzle found for this week. Please check back later.";
+    document.getElementById("shuffle-btn").disabled = true;
+  }
+}
 
 function shuffleArray(arr) {
   for (let i = arr.length - 1; i > 0; i--) {
@@ -116,7 +113,7 @@ function renderTiles() {
   const tileContainer = document.getElementById("tile-container");
   tileContainer.innerHTML = "";
 
-  // Render solved groups at top
+  // Solved groups
   solvedGroups.forEach(group => {
     const groupWrapper = document.createElement("div");
     groupWrapper.className = "group-wrapper";
@@ -127,7 +124,7 @@ function renderTiles() {
     groupWrapper.appendChild(label);
 
     group.words.forEach(word => {
-      const tile = createTile(word, true); // solved = true
+      const tile = createTile(word, true);
       groupWrapper.appendChild(tile);
     });
 
@@ -135,13 +132,15 @@ function renderTiles() {
   });
 
   // Remaining tiles
-  const allSolvedWords = solvedGroups.flatMap(g => g.words);
-  const remainingWords = Object.values(groups).flat().filter(w => !allSolvedWords.includes(w));
+  const solvedWords = solvedGroups.flatMap(g => g.words);
+  const remainingWords = Object.values(groups)
+    .flat()
+    .filter(word => !solvedWords.includes(word));
 
-  if (!shuffled) shuffleArray(remainingWords); // Only shuffle once unless user triggers it
+  if (!shuffled) shuffleArray(remainingWords);
 
   remainingWords.forEach(word => {
-    const tile = createTile(word, false); // not solved
+    const tile = createTile(word, false);
     tileContainer.appendChild(tile);
   });
 }
@@ -167,6 +166,8 @@ function shuffleRemainingTiles() {
 
 document.getElementById("shuffle-btn").addEventListener("click", shuffleRemainingTiles);
 
+// 🚀 Load the current week's puzzle on page load
 window.onload = () => {
-  resetGame();
+  const week = getCurrentISOWeek();
+  loadPuzzleForWeek(week);
 };
