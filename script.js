@@ -110,7 +110,7 @@ function renderTiles() {
   const tileContainer = document.getElementById("tile-container");
   tileContainer.innerHTML = "";
 
-  // Solved groups (1x4 rows)
+  // ➤ Solved Groups at the top
   solvedGroups.forEach(group => {
     const groupWrapper = document.createElement("div");
     groupWrapper.className = "group-wrapper";
@@ -128,29 +128,24 @@ function renderTiles() {
       row.appendChild(tile);
     });
 
-    groupWrapper.appendChild(row);
+    Wrapper.appendChild(row);
     tileContainer.appendChild(groupWrapper);
   });
 
-  // Remaining tiles
-  const solvedWords = solvedGroups.flatMap(g => g.words);
-  const remainingWords = Object.values(groups)
-    .flat()
-    .filter(word => !solvedWords.includes(word));
-
-  if (!shuffled) shuffleArray(remainingWords);
+  // ➤ Remaining tiles (keep 4x4 grid)
+  const allSolvedWords = solvedGroups.flatMap(g => g.words);
+  const remaining = Object.values(groups).flat().filter(w => !allSolvedWords.includes(w));
 
   const grid = document.createElement("div");
   grid.className = "unsolved-grid";
 
-  remainingWords.forEach(word => {
+  remaining.forEach(word => {
     const tile = createTile(word, false);
     grid.appendChild(tile);
   });
 
   tileContainer.appendChild(grid);
 }
-
 
 function createTile(word, solved = false) {
   const tile = document.createElement("div");
