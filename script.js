@@ -8,18 +8,21 @@ function getCurrentWeekFile() {
 
 const puzzleFile = getCurrentWeekFile();
 
-fetch(`data/${puzzleFile}`)
+fetch(`./data/${puzzleFile}`)
   .then(res => {
     if (!res.ok) throw new Error("Puzzle not found");
     return res.json();
   })
   .then(json => {
     groups = json;
-    resetGame(); // your existing function to start the game
+    resetGame(); // or your game initialization function
   })
   .catch(err => {
     document.getElementById("feedback").textContent = "⚠️ No puzzle found for this week.";
+    console.error(err);
   });
+
+console.log("Attempting to load puzzle file:", puzzleFile);
 
 let allWords = Object.values(groups).flat().sort(() => Math.random() - 0.5);
 let selected = [];
