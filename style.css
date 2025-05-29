@@ -17,7 +17,7 @@ h1 {
   font-size: 18px;
 }
 
-#tile-container {
+#board {
   display: grid;
   grid-template-columns: repeat(4, 150px);
   gap: 10px;
