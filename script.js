@@ -15,7 +15,7 @@ function getCurrentISOWeek() {
 
 // 📦 Load JSON file for current week
 async function loadPuzzleForWeek(weekNumber) {
-  const url = `data/week${weekNumber}.json`;
+  const url = `puzzles/week${weekNumber}.json`;
   try {
     const response = await fetch(url);
     if (!response.ok) throw new Error("Puzzle not found.");
