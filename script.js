@@ -1,17 +1,25 @@
-const groups = {
-  "Signs of severe aortic stenosis": [
-    "Heart Failure", "Syncope", "Pulsus Parvus", "Paradoxical Split S2"
-  ],
-  "Signs of aortic insufficiency": [
-    "Wide Pulse Pressure", "Water Hammer", "Heave", "Austin Flint"
-  ],
-  "Signs of Cardiac Tamponade": [
-    "Kussmaul's", "Rub", "JVD", "Pulsus Paradoxus"
-  ],
-  "Signs of Heart Failure": [
-    "S3", "Orthopnea", "Paroxysmal Nocturnal Dyspnea", "Displaced PMI"
-  ]
-};
+function getCurrentWeekFile() {
+  const now = new Date();
+  const firstDay = new Date(now.getFullYear(), 0, 1);
+  const pastDays = Math.floor((now - firstDay) / 86400000);
+  const weekNumber = Math.ceil((pastDays + firstDay.getDay() + 1) / 7);
+  return `week-${weekNumber}.json`;
+}
+
+const puzzleFile = getCurrentWeekFile();
+
+fetch(`data/${puzzleFile}`)
+  .then(res => {
+    if (!res.ok) throw new Error("Puzzle not found");
+    return res.json();
+  })
+  .then(json => {
+    groups = json;
+    resetGame(); // your existing function to start the game
+  })
+  .catch(err => {
+    document.getElementById("feedback").textContent = "⚠️ No puzzle found for this week.";
+  });
 
 let allWords = Object.values(groups).flat().sort(() => Math.random() - 0.5);
 let selected = [];
