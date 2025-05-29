@@ -22,7 +22,6 @@ fetch(`./data/${puzzleFile}`)
     console.error(err);
   });
 
-console.log("Attempting to load puzzle file:", puzzleFile);
 
 let allWords = Object.values(groups).flat().sort(() => Math.random() - 0.5);
 let selected = [];
