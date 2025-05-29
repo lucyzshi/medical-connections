@@ -1,62 +1,48 @@
-let groups = {};
-let solvedGroups = [];
+let groups = {
+  "Signs of severe aortic stenosis": [
+    "Heart Failure",
+    "Syncope",
+    "Pulsus Parvus",
+    "Paradoxical Split S2"
+  ],
+  "Signs of aortic insufficiency": [
+    "Wide Pulse Pressure",
+    "Water Hammer",
+    "Heave",
+    "Austin Flint"
+  ],
+  "Signs of Cardiac Tamponade": [
+    "Kussmaul's",
+    "Rub",
+    "JVD",
+    "Pulsus Paradoxus"
+  ],
+  "Signs of Heart Failure": [
+    "S3",
+    "Orthopnea",
+    "Paroxysmal Nocturnal Dyspnea",
+    "Displaced PMI"
+  ]
+};
+
 let selectedTiles = [];
+let solvedGroups = [];
 let wrongGuesses = 0;
 const maxWrongGuesses = 4;
+let shuffled = false;
 
-function getCurrentWeekFile() {
-  const now = new Date();
-  const firstDay = new Date(now.getFullYear(), 0, 1);
-  const pastDays = Math.floor((now - firstDay) / 86400000);
-  const weekNumber = Math.ceil((pastDays + firstDay.getDay() + 1) / 7);
-  return `week-${weekNumber}.json`;
-}
-
-const puzzleFile = getCurrentWeekFile();
-console.log("Attempting to load:", puzzleFile);
-
-fetch(`./data/${puzzleFile}`)
-  .then(res => {
-    if (!res.ok) throw new Error("Puzzle not found");
-    return res.json();
-  })
-  .then(json => {
-    groups = json;
-    resetGame();
-  })
-  .catch(err => {
-    document.getElementById("feedback").textContent = "⚠️ No puzzle found for this week.";
-    console.error(err);
-  });
-
-function resetGame() {
-  solvedGroups = [];
-  selectedTiles = [];
-  wrongGuesses = 0;
-
-  const tileContainer = document.getElementById("tile-container");
-  tileContainer.innerHTML = "";
-  document.getElementById("feedback").textContent = "";
-  updateGuessDisplay();
-
-  const allWords = Object.values(groups).flat();
-  shuffleArray(allWords);
-
-  allWords.forEach(word => {
-    const tile = document.createElement("div");
-    tile.className = "tile";
-    tile.textContent = word;
-    tile.dataset.word = word;
-    tile.addEventListener("click", () => handleTileClick(tile));
-    tileContainer.appendChild(tile);
-  });
+function shuffleArray(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
 }
 
 function handleTileClick(tile) {
-  if (tile.classList.contains("solved") || tile.classList.contains("disabled")) return;
-
   const word = tile.dataset.word;
-  if (selectedTiles.includes(word)) {
+  if (tile.classList.contains("disabled") || tile.classList.contains("solved")) return;
+
+  if (tile.classList.contains("selected")) {
     tile.classList.remove("selected");
     selectedTiles = selectedTiles.filter(w => w !== word);
   } else {
@@ -71,70 +57,116 @@ function handleTileClick(tile) {
 }
 
 function checkSelection() {
-  const selectedGroup = selectedTiles.slice().sort().join(",");
+  const match = Object.entries(groups).find(([groupName, words]) =>
+    words.every(w => selectedTiles.includes(w)) &&
+    selectedTiles.every(w => words.includes(w))
+  );
 
-  for (const [groupName, words] of Object.entries(groups)) {
-    const correctGroup = words.slice().sort().join(",");
-    if (selectedGroup === correctGroup && !solvedGroups.includes(groupName)) {
-      markGroupAsSolved(words, groupName);
-      return;
-    }
-  }
-
-  wrongGuesses++;
-  updateGuessDisplay();
-  selectedTiles.forEach(word => {
-    const tile = document.querySelector(`[data-word="${word}"]`);
-    if (tile) tile.classList.remove("selected");
-  });
-  selectedTiles = [];
-
-  if (wrongGuesses >= maxWrongGuesses) {
-    endGame("❌ You've used all your guesses. Game over!");
+  if (match) {
+    markGroupAsSolved(match[1], match[0]);
   } else {
-    showFeedback("❌ Incorrect group. Try again.");
+    wrongGuesses++;
+    updateGuessDisplay();
+    showFeedback("❌ Incorrect group.");
+    if (wrongGuesses >= maxWrongGuesses) {
+      endGame("💥 Game over. You've used all your guesses.");
+    }
+    selectedTiles = [];
+    renderTiles();
   }
 }
 
 function markGroupAsSolved(words, groupName) {
-  solvedGroups.push(groupName);
-  words.forEach(word => {
-    const tile = document.querySelector(`[data-word="${word}"]`);
-    tile.classList.add("solved");
-    tile.classList.remove("selected");
-    tile.classList.add("disabled");
-  });
-
+  solvedGroups.push({ name: groupName, words });
   selectedTiles = [];
   showFeedback(`✅ Correct! Group: ${groupName}`);
+  renderTiles();
 
   if (solvedGroups.length === Object.keys(groups).length) {
     endGame("🎉 Congratulations! You solved all groups.");
   }
 }
 
-function showFeedback(message) {
-  const feedback = document.getElementById("feedback");
-  feedback.textContent = message;
+function endGame(message) {
+  showFeedback(message);
+  document.querySelectorAll(".tile").forEach(t => t.classList.add("disabled"));
+  document.getElementById("shuffle-btn").disabled = true;
+}
+
+function showFeedback(msg) {
+  document.getElementById("feedback").textContent = msg;
 }
 
 function updateGuessDisplay() {
-  const guessDisplay = document.getElementById("guesses-left");
-  if (guessDisplay) {
-    guessDisplay.textContent = `Wrong guesses left: ${maxWrongGuesses - wrongGuesses}`;
-  }
+  const remaining = maxWrongGuesses - wrongGuesses;
+  document.getElementById("guesses-left").textContent = `Wrong guesses left: ${remaining}`;
 }
 
-function endGame(message) {
-  showFeedback(message);
-  // Optionally disable remaining tiles
-  const tiles = document.querySelectorAll(".tile:not(.solved)");
-  tiles.forEach(tile => tile.classList.add("disabled"));
+function resetGame() {
+  selectedTiles = [];
+  solvedGroups = [];
+  wrongGuesses = 0;
+  shuffled = false;
+  document.getElementById("shuffle-btn").disabled = false;
+  updateGuessDisplay();
+  renderTiles();
 }
 
-function shuffleArray(arr) {
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
+function renderTiles() {
+  const tileContainer = document.getElementById("tile-container");
+  tileContainer.innerHTML = "";
+
+  // Render solved groups at top
+  solvedGroups.forEach(group => {
+    const groupWrapper = document.createElement("div");
+    groupWrapper.className = "group-wrapper";
+
+    const label = document.createElement("div");
+    label.className = "group-label";
+    label.textContent = group.name;
+    groupWrapper.appendChild(label);
+
+    group.words.forEach(word => {
+      const tile = createTile(word, true); // solved = true
+      groupWrapper.appendChild(tile);
+    });
+
+    tileContainer.appendChild(groupWrapper);
+  });
+
+  // Remaining tiles
+  const allSolvedWords = solvedGroups.flatMap(g => g.words);
+  const remainingWords = Object.values(groups).flat().filter(w => !allSolvedWords.includes(w));
+
+  if (!shuffled) shuffleArray(remainingWords); // Only shuffle once unless user triggers it
+
+  remainingWords.forEach(word => {
+    const tile = createTile(word, false); // not solved
+    tileContainer.appendChild(tile);
+  });
 }
+
+function createTile(word, solved = false) {
+  const tile = document.createElement("div");
+  tile.className = "tile";
+  if (solved) tile.classList.add("solved", "disabled");
+  tile.textContent = word;
+  tile.dataset.word = word;
+
+  if (!solved) {
+    tile.addEventListener("click", () => handleTileClick(tile));
+  }
+
+  return tile;
+}
+
+function shuffleRemainingTiles() {
+  shuffled = true;
+  renderTiles();
+}
+
+document.getElementById("shuffle-btn").addEventListener("click", shuffleRemainingTiles);
+
+window.onload = () => {
+  resetGame();
+};
