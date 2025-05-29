@@ -1,15 +1,23 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <title>Connections Game</title>
-    <link rel="stylesheet" href="style.css">
-  </head>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Medical Connections</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
 <body>
-  <h1>Medical Connections</h1>
-  <div id="board"></div>
-  <div id="feedback"></div>
-    <div id="guess-counter">Guesses remaining: 4</div>
-  <button onclick="checkGroup()">Submit Group</button>
+  <main>
+    <h1>🧠 Medical Connections</h1>
+
+    <div id="feedback" class="feedback"></div>
+    <div id="guesses-left" class="guesses-left">Wrong guesses left: 4</div>
+
+    <div id="tile-container" class="tile-container"></div>
+
+    <button id="shuffle-btn" class="shuffle-btn">🔀 Shuffle Remaining Tiles</button>
+  </main>
+
   <script src="script.js"></script>
 </body>
 </html>
