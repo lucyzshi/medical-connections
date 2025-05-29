@@ -17,14 +17,14 @@ h1 {
   font-size: 18px;
 }
 
-#board {
+#tile-container {
   display: grid;
-  grid-template-columns: repeat(4, 150px);
+  grid-template-columns: repeat(4, 1fr); /* Always 4 columns */
   gap: 10px;
   max-width: 600px;
   margin: 0 auto 20px;
-  padding: 0 10px;
 }
+
 
 .tile {
   background-color: white;
