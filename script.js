@@ -1,3 +1,9 @@
+let groups = {};
+let solvedGroups = [];
+let selectedTiles = [];
+let wrongGuesses = 0;
+const maxWrongGuesses = 4;
+
 function getCurrentWeekFile() {
   const now = new Date();
   const firstDay = new Date(now.getFullYear(), 0, 1);
@@ -7,6 +13,7 @@ function getCurrentWeekFile() {
 }
 
 const puzzleFile = getCurrentWeekFile();
+console.log("Attempting to load:", puzzleFile);
 
 fetch(`./data/${puzzleFile}`)
   .then(res => {
@@ -15,114 +22,119 @@ fetch(`./data/${puzzleFile}`)
   })
   .then(json => {
     groups = json;
-    resetGame(); // or your game initialization function
+    resetGame();
   })
   .catch(err => {
     document.getElementById("feedback").textContent = "⚠️ No puzzle found for this week.";
     console.error(err);
   });
 
+function resetGame() {
+  solvedGroups = [];
+  selectedTiles = [];
+  wrongGuesses = 0;
 
-let allWords = Object.values(groups).flat().sort(() => Math.random() - 0.5);
-let selected = [];
-let solvedGroups = [];
-let wrongGuesses = 0;
-const maxGuesses = 4;
+  const tileContainer = document.getElementById("tile-container");
+  tileContainer.innerHTML = "";
+  document.getElementById("feedback").textContent = "";
+  updateGuessDisplay();
 
-function renderTiles() {
-  const board = document.getElementById("board");
-  board.innerHTML = "";
+  const allWords = Object.values(groups).flat();
+  shuffleArray(allWords);
 
   allWords.forEach(word => {
     const tile = document.createElement("div");
-    tile.textContent = word;
     tile.className = "tile";
-
-    if (selected.includes(word)) {
-      tile.classList.add("selected");
-    }
-
-    if (solvedGroups.some(group => group.includes(word))) {
-      tile.classList.add("solved");
-      tile.onclick = null;
-    } else {
-      tile.onclick = () => toggleSelect(word);
-    }
-
-    if (wrongGuesses >= maxGuesses || isGameWon()) {
-      tile.classList.add("disabled");
-    }
-
-    board.appendChild(tile);
+    tile.textContent = word;
+    tile.dataset.word = word;
+    tile.addEventListener("click", () => handleTileClick(tile));
+    tileContainer.appendChild(tile);
   });
 }
 
-function toggleSelect(word) {
-  if (selected.includes(word)) {
-    selected = selected.filter(w => w !== word);
-  } else if (selected.length < 4) {
-    selected.push(word);
-  }
-  renderTiles();
-}
+function handleTileClick(tile) {
+  if (tile.classList.contains("solved") || tile.classList.contains("disabled")) return;
 
-function checkGroup() {
-  if (selected.length !== 4) {
-    updateFeedback("⚠️ Select exactly 4 tiles.");
-    return;
-  }
-
-  const isCorrect = Object.values(groups).some(group =>
-    group.every(word => selected.includes(word)) &&
-    selected.every(word => group.includes(word))
-  );
-
-  if (isCorrect) {
-    solvedGroups.push([...selected]);
-    updateFeedback("✅ Correct group!");
+  const word = tile.dataset.word;
+  if (selectedTiles.includes(word)) {
+    tile.classList.remove("selected");
+    selectedTiles = selectedTiles.filter(w => w !== word);
   } else {
-    wrongGuesses++;
-    updateFeedback(`❌ Incorrect group. ${maxGuesses - wrongGuesses} guesses remaining.`);
+    if (selectedTiles.length >= 4) return;
+    tile.classList.add("selected");
+    selectedTiles.push(word);
   }
 
-  selected = [];
-  renderTiles();
-  checkWinOrLose();
+  if (selectedTiles.length === 4) {
+    checkSelection();
+  }
 }
 
-function checkWinOrLose() {
-  if (isGameWon()) {
-    updateFeedback("🎉 Congratulations! You found all groups!");
-  } else if (wrongGuesses >= maxGuesses) {
-    updateFeedback("❌ Game Over! You used all your guesses.");
+function checkSelection() {
+  const selectedGroup = selectedTiles.slice().sort().join(",");
+
+  for (const [groupName, words] of Object.entries(groups)) {
+    const correctGroup = words.slice().sort().join(",");
+    if (selectedGroup === correctGroup && !solvedGroups.includes(groupName)) {
+      markGroupAsSolved(words, groupName);
+      return;
+    }
   }
 
-  updateGuessCounter();
+  wrongGuesses++;
+  updateGuessDisplay();
+  selectedTiles.forEach(word => {
+    const tile = document.querySelector(`[data-word="${word}"]`);
+    if (tile) tile.classList.remove("selected");
+  });
+  selectedTiles = [];
+
+  if (wrongGuesses >= maxWrongGuesses) {
+    endGame("❌ You've used all your guesses. Game over!");
+  } else {
+    showFeedback("❌ Incorrect group. Try again.");
+  }
 }
 
-function isGameWon() {
-  return solvedGroups.length === Object.keys(groups).length;
+function markGroupAsSolved(words, groupName) {
+  solvedGroups.push(groupName);
+  words.forEach(word => {
+    const tile = document.querySelector(`[data-word="${word}"]`);
+    tile.classList.add("solved");
+    tile.classList.remove("selected");
+    tile.classList.add("disabled");
+  });
+
+  selectedTiles = [];
+  showFeedback(`✅ Correct! Group: ${groupName}`);
+
+  if (solvedGroups.length === Object.keys(groups).length) {
+    endGame("🎉 Congratulations! You solved all groups.");
+  }
 }
 
-function updateFeedback(msg) {
-  document.getElementById("feedback").textContent = msg;
+function showFeedback(message) {
+  const feedback = document.getElementById("feedback");
+  feedback.textContent = message;
 }
 
-function updateGuessCounter() {
-  const counter = document.getElementById("guess-counter");
-  counter.textContent = `Guesses remaining: ${Math.max(0, maxGuesses - wrongGuesses)}`;
+function updateGuessDisplay() {
+  const guessDisplay = document.getElementById("guesses-left");
+  if (guessDisplay) {
+    guessDisplay.textContent = `Wrong guesses left: ${maxWrongGuesses - wrongGuesses}`;
+  }
 }
 
-function resetGame() {
-  selected = [];
-  solvedGroups = [];
-  wrongGuesses = 0;
-  allWords = Object.values(groups).flat().sort(() => Math.random() - 0.5);
-  updateFeedback("");
-  updateGuessCounter();
-  renderTiles();
+function endGame(message) {
+  showFeedback(message);
+  // Optionally disable remaining tiles
+  const tiles = document.querySelectorAll(".tile:not(.solved)");
+  tiles.forEach(tile => tile.classList.add("disabled"));
 }
 
-// Start the game
-renderTiles();
-updateGuessCounter();
+function shuffleArray(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+}
