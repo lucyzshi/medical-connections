@@ -1,72 +1,88 @@
 body {
   font-family: Arial, sans-serif;
+  background-color: #f8f9fa;
   text-align: center;
   padding: 20px;
-  background: #f8f9fa;
+  margin: 0;
 }
 
 h1 {
-  color: #333;
+  margin-bottom: 10px;
+  font-size: 24px;
 }
 
-#board {
+#guesses-left {
+  font-weight: bold;
+  margin-bottom: 15px;
+  font-size: 18px;
+}
+
+#tile-container {
   display: grid;
-  grid-template-columns: repeat(4, 150px);
+  grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
   gap: 10px;
-  justify-content: center;
-  margin: 20px 0;
+  max-width: 600px;
+  margin: 0 auto 20px;
+  padding: 0 10px;
 }
 
 .tile {
-  background-color: #e0e0e0;
-  border: 2px solid #bbb;
+  background-color: white;
+  border: 2px solid #ccc;
+  border-radius: 8px;
   padding: 20px;
-  cursor: pointer;
-  border-radius: 10px;
-  transition: background-color 0.3s;
+  font-size: 16px;
   font-weight: bold;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s, transform 0.2s;
+  word-break: break-word;
+}
+
+.tile:hover {
+  transform: scale(1.05);
 }
 
 .tile.selected {
-  background-color: #b3e5fc;
-  border-color: #03a9f4;
+  background-color: #d0eaff;
+  border-color: #3399ff;
 }
 
 .tile.solved {
-  background-color: #c8e6c9;
+  background-color: #c8f7c5;
   border-color: #4caf50;
-  cursor: default;
+  color: #2e7d32;
 }
 
 .tile.disabled {
-  cursor: default;
-  opacity: 0.5;
+  background-color: #e0e0e0;
+  color: #999;
+  cursor: not-allowed;
 }
 
 #feedback {
-  margin-top: 10px;
-  font-size: 1.2em;
-  color: #555;
+  margin-top: 15px;
+  font-size: 18px;
+  min-height: 24px;
+  padding: 0 10px;
 }
 
-button {
-  margin: 10px;
-  padding: 10px 15px;
-  font-size: 1em;
-  border: none;
-  background-color: #2196f3;
-  color: white;
-  border-radius: 5px;
-  cursor: pointer;
-}
+/* Small screens */
+@media (max-width: 500px) {
+  .tile {
+    font-size: 14px;
+    padding: 16px;
+  }
 
-button:hover {
-  background-color: #1976d2;
-}
+  h1 {
+    font-size: 20px;
+  }
 
-#guess-counter {
-  font-weight: bold;
-  margin-bottom: 10px;
-  font-size: 1.1em;
-  color: #333;
+  #guesses-left {
+    font-size: 16px;
+  }
+
+  #feedback {
+    font-size: 16px;
+  }
 }
