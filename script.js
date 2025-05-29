@@ -15,15 +15,15 @@ function getCurrentISOWeek() {
 
 // 📦 Load JSON file for current week
 async function loadPuzzleForWeek(weekNumber) {
-  const url = `puzzles/week${weekNumber}.json`;
+  const url = `data/week${weekNumber}.json`;
   try {
     const response = await fetch(url);
-    if (!response.ok) throw new Error("Puzzle not found.");
+    if (!response.ok) throw new Error("Game not found.");
     groups = await response.json();
     resetGame();
   } catch (err) {
     document.getElementById("feedback").textContent =
-      "❌ No puzzle found for this week. Please check back later.";
+      "❌ No game found for this week. Please check back later.";
     document.getElementById("shuffle-btn").disabled = true;
   }
 }
