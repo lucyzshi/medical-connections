@@ -48,9 +48,6 @@ function handleTileClick(tile) {
     selectedTiles.push(word);
   }
 
-  if (selectedTiles.length === 4) {
-    checkSelection();
-  }
 }
 
 function checkSelection() {
@@ -113,7 +110,7 @@ function renderTiles() {
   const tileContainer = document.getElementById("tile-container");
   tileContainer.innerHTML = "";
 
-  // Solved groups
+  // Solved groups (1x4 rows)
   solvedGroups.forEach(group => {
     const groupWrapper = document.createElement("div");
     groupWrapper.className = "group-wrapper";
@@ -123,11 +120,15 @@ function renderTiles() {
     label.textContent = group.name;
     groupWrapper.appendChild(label);
 
+    const row = document.createElement("div");
+    row.className = "solved-row";
+
     group.words.forEach(word => {
       const tile = createTile(word, true);
-      groupWrapper.appendChild(tile);
+      row.appendChild(tile);
     });
 
+    groupWrapper.appendChild(row);
     tileContainer.appendChild(groupWrapper);
   });
 
@@ -139,11 +140,17 @@ function renderTiles() {
 
   if (!shuffled) shuffleArray(remainingWords);
 
+  const grid = document.createElement("div");
+  grid.className = "unsolved-grid";
+
   remainingWords.forEach(word => {
     const tile = createTile(word, false);
-    tileContainer.appendChild(tile);
+    grid.appendChild(tile);
   });
+
+  tileContainer.appendChild(grid);
 }
+
 
 function createTile(word, solved = false) {
   const tile = document.createElement("div");
@@ -164,6 +171,7 @@ function shuffleRemainingTiles() {
   renderTiles();
 }
 
+document.getElementById("submit-btn").addEventListener("click", checkSelection);
 document.getElementById("shuffle-btn").addEventListener("click", shuffleRemainingTiles);
 
 // 🚀 Load the current week's puzzle on page load
@@ -171,3 +179,5 @@ window.onload = () => {
   const week = getCurrentISOWeek();
   loadPuzzleForWeek(week);
 };
+
+
