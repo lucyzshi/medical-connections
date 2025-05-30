@@ -137,10 +137,7 @@ function renderTiles() {
   const allSolvedWords = solvedGroups.flatMap(g => g.words);
   let remaining = Object.values(groups).flat().filter(w => !allSolvedWords.includes(w));
 
-  if (!shuffled) {
     shuffleArray(remaining);
-    shuffled = true;
-  }
 
   const grid = document.createElement("div");
   grid.className = "unsolved-grid";
