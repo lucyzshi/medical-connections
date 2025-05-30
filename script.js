@@ -213,4 +213,7 @@ window.onload = () => {
   loadPuzzleForWeek(week);
   document.getElementById("submit-button").addEventListener("click", checkSelection);
   document.getElementById("shuffle-btn").addEventListener("click", shuffleRemainingTiles);
+  document.getElementById("leaderboard-button").addEventListener("click", () => {
+    window.location.href = "leaderboard.html";
+  });
 };
