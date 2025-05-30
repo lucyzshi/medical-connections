@@ -47,7 +47,6 @@ function handleTileClick(tile) {
     tile.classList.add("selected");
     selectedTiles.push(word);
   }
-
 }
 
 function checkSelection() {
@@ -110,7 +109,7 @@ function renderTiles() {
   const tileContainer = document.getElementById("tile-container");
   tileContainer.innerHTML = "";
 
-  // ➤ Solved Groups at the top
+  // Solved Groups at the top
   solvedGroups.forEach(group => {
     const groupWrapper = document.createElement("div");
     groupWrapper.className = "group-wrapper";
@@ -132,14 +131,8 @@ function renderTiles() {
     tileContainer.appendChild(groupWrapper);
   });
 
-  // ➤ Remaining tiles (keep 4x4 grid)
   const allSolvedWords = solvedGroups.flatMap(g => g.words);
   let remaining = Object.values(groups).flat().filter(w => !allSolvedWords.includes(w));
-  
-function shuffleRemainingTiles() {
-  shuffled = false;  // allow reshuffling
-  renderTiles();     // re-render with shuffled tiles
-}
 
   if (!shuffled) {
     shuffleArray(remaining);
@@ -156,7 +149,6 @@ function shuffleRemainingTiles() {
 
   tileContainer.appendChild(grid);
 }
-
 
 function createTile(word, solved = false) {
   const tile = document.createElement("div");
@@ -178,6 +170,7 @@ function shuffleRemainingTiles() {
   shuffleArray(remaining);
   renderTilesWithCustomOrder(remaining);
 }
+
 function renderTilesWithCustomOrder(customOrder) {
   const tileContainer = document.getElementById("tile-container");
   tileContainer.innerHTML = "";
@@ -214,17 +207,10 @@ function renderTilesWithCustomOrder(customOrder) {
   tileContainer.appendChild(grid);
 }
 
+// ✅ Only one window.onload
 window.onload = () => {
   const week = getCurrentISOWeek();
   loadPuzzleForWeek(week);
-
-document.getElementById("submit-button").addEventListener("click", checkSelection);
-document.getElementById("shuffle-btn").addEventListener("click", shuffleRemainingTiles);
-
-// 🚀 Load the current week's puzzle on page load
-window.onload = () => {
-  const week = getCurrentISOWeek();
-  loadPuzzleForWeek(week);
+  document.getElementById("submit-button").addEventListener("click", checkSelection);
+  document.getElementById("shuffle-btn").addEventListener("click", shuffleRemainingTiles);
 };
-
-
