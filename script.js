@@ -230,6 +230,46 @@ function renderTilesWithCustomOrder(customOrder) {
   tileContainer.appendChild(grid);
 }
 
+import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-database.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBnc5HI3Qti60AXXDCpL9B-YfBQNYW4MXM",
+  authDomain: "leaderboard-7580a.firebaseapp.com",
+  databaseURL: "https://leaderboard-7580a-default-rtdb.firebaseio.com",
+  projectId: "leaderboard-7580a",
+  storageBucket: "leaderboard-7580a.appspot.com",
+  messagingSenderId: "1065369349992",
+  appId: "1:1065369349992:web:f8cc82b10ada7d286730dd",
+  measurementId: "G-QT1C8X36P8"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+function saveWinStreak(name, streak) {
+  const newRef = push(ref(db, 'leaderboard'));
+  set(newRef, {
+    name: name,
+    streak: streak,
+    timestamp: Date.now()
+  });
+}
+
+function onGameComplete() {
+  if (wrongGuesses === 0 && solvedGroups.length === 4) {
+    const playerName = localStorage.getItem("playerName") || prompt("Enter your name:") || "Anonymous";
+    localStorage.setItem("playerName", playerName);
+    const currentStreak = parseInt(localStorage.getItem("winStreak") || "0") + 1;
+    saveWinStreak(playerName, currentStreak);
+    localStorage.setItem("winStreak", currentStreak);
+  } else {
+    localStorage.setItem("winStreak", 0);
+  }
+}
+
+// Call onGameComplete() at the end of endGame() if all groups solved
+
 // ✅ Only one window.onload
 window.onload = () => {
   const week = getCurrentISOWeek();
