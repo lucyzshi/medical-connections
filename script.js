@@ -203,6 +203,9 @@ function renderTilesWithCustomOrder(customOrder) {
   tileContainer.appendChild(grid);
 }
 
+window.onload = () => {
+  const week = getCurrentISOWeek();
+  loadPuzzleForWeek(week);
 
 document.getElementById("submit-button").addEventListener("click", checkSelection);
 document.getElementById("shuffle-btn").addEventListener("click", shuffleRemainingTiles);
