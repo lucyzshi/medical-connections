@@ -1,0 +1,6 @@
+ {
+  "Serotonin syndrome": ["Hyperreflexia", "Clonus",	"Mydriasis",	"Hyperactive bowel"],
+  "Neuroleptic Malignant Syndrome": ["Hyporeflexia",	"Rigidity",	"Rhabdomyolysis",	"Hyperthermia"],
+  "Opiate overdose": ["Miosis",	"Hypoventilation",	"Lethargy",	"Hypoactive bowel"],
+  "Anticholinergic Syndrome": ["Hallucinations", "Flushed", "Widened QRS", "Urinary retention"]
+}
