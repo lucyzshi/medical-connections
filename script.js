@@ -128,7 +128,7 @@ function renderTiles() {
       row.appendChild(tile);
     });
 
-    Wrapper.appendChild(row);
+    groupWrapper.appendChild(row);
     tileContainer.appendChild(groupWrapper);
   });
 
@@ -162,11 +162,49 @@ function createTile(word, solved = false) {
 }
 
 function shuffleRemainingTiles() {
-  shuffled = true;
-  renderTiles();
+  const allSolvedWords = solvedGroups.flatMap(g => g.words);
+  const remaining = Object.values(groups).flat().filter(w => !allSolvedWords.includes(w));
+  shuffleArray(remaining);
+  renderTilesWithCustomOrder(remaining);
+}
+function renderTilesWithCustomOrder(customOrder) {
+  const tileContainer = document.getElementById("tile-container");
+  tileContainer.innerHTML = "";
+
+  solvedGroups.forEach(group => {
+    const groupWrapper = document.createElement("div");
+    groupWrapper.className = "group-wrapper";
+
+    const label = document.createElement("div");
+    label.className = "group-label";
+    label.textContent = group.name;
+    groupWrapper.appendChild(label);
+
+    const row = document.createElement("div");
+    row.className = "solved-row";
+
+    group.words.forEach(word => {
+      const tile = createTile(word, true);
+      row.appendChild(tile);
+    });
+
+    groupWrapper.appendChild(row);
+    tileContainer.appendChild(groupWrapper);
+  });
+
+  const grid = document.createElement("div");
+  grid.className = "unsolved-grid";
+
+  customOrder.forEach(word => {
+    const tile = createTile(word, false);
+    grid.appendChild(tile);
+  });
+
+  tileContainer.appendChild(grid);
 }
 
-document.getElementById("submit-btn").addEventListener("click", checkSelection);
+
+document.getElementById("submit-button").addEventListener("click", checkSelection);
 document.getElementById("shuffle-btn").addEventListener("click", shuffleRemainingTiles);
 
 // 🚀 Load the current week's puzzle on page load
