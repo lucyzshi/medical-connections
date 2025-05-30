@@ -134,7 +134,17 @@ function renderTiles() {
 
   // ➤ Remaining tiles (keep 4x4 grid)
   const allSolvedWords = solvedGroups.flatMap(g => g.words);
-  const remaining = Object.values(groups).flat().filter(w => !allSolvedWords.includes(w));
+  let remaining = Object.values(groups).flat().filter(w => !allSolvedWords.includes(w));
+  
+function shuffleRemainingTiles() {
+  shuffled = false;  // allow reshuffling
+  renderTiles();     // re-render with shuffled tiles
+}
+
+  if (!shuffled) {
+    shuffleArray(remaining);
+    shuffled = true;
+  }
 
   const grid = document.createElement("div");
   grid.className = "unsolved-grid";
@@ -146,6 +156,7 @@ function renderTiles() {
 
   tileContainer.appendChild(grid);
 }
+
 
 function createTile(word, solved = false) {
   const tile = document.createElement("div");
