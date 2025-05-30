@@ -11,41 +11,13 @@
     <h1>Medical Connections</h1>
 
     <div id="feedback" class="feedback"></div>
-    <div id="guesses-left" class="guesses-left">Wrong guesses left: 4</div>
-
     <div id="tile-container" class="tile-container"></div>
-
+    <div id="guesses-left" class="guesses-left">Wrong guesses left: 4</div>
     <button id="shuffle-btn" class="shuffle-btn">🔀 Shuffle</button>
     <button id="submit-button">Submit Group</button>
-    <button id="leaderboard-button">🏆 View Leaderboard</button>
+    <button class="btn" onclick="window.location.href='leaderboard.html'">🏆 View Leaderboard</button>
 
   </main>
-
-
-<script type="module">
-  // Import the functions you need from the SDKs you need
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-analytics.js";
-  // TODO: Add SDKs for Firebase products that you want to use
-  // https://firebase.google.com/docs/web/setup#available-libraries
-
-  // Your web app's Firebase configuration
-  // For Firebase JS SDK v7.20.0 and later, measurementId is optional
-  const firebaseConfig = {
-    apiKey: "AIzaSyBnc5HI3Qti60AXXDCpL9B-YfBQNYW4MXM",
-    authDomain: "leaderboard-7580a.firebaseapp.com",
-    databaseURL: "https://leaderboard-7580a-default-rtdb.firebaseio.com",
-    projectId: "leaderboard-7580a",
-    storageBucket: "leaderboard-7580a.firebasestorage.app",
-    messagingSenderId: "1065369349992",
-    appId: "1:1065369349992:web:f8cc82b10ada7d286730dd",
-    measurementId: "G-QT1C8X36P8"
-  };
-
-  // Initialize Firebase
-  const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
-</script>
 
 </body>
 </html>
