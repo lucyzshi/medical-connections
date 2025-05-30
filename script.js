@@ -84,7 +84,30 @@ function endGame(message) {
   showFeedback(message);
   document.querySelectorAll(".tile").forEach(t => t.classList.add("disabled"));
   document.getElementById("shuffle-btn").disabled = true;
+
+  const playerName = localStorage.getItem("playerName") || prompt("Enter your name:");
+  if (!playerName) return;
+
+  localStorage.setItem("playerName", playerName);
+
+  const isPerfect = wrongGuesses === 0;
+  let streak = parseInt(localStorage.getItem("winStreak") || "0");
+
+  if (isPerfect) {
+    streak += 1;
+    localStorage.setItem("winStreak", streak);
+
+    firebase.database().ref("leaderboard/" + playerName).set({
+      name: playerName,
+      streak: streak,
+      timestamp: Date.now()
+    });
+  } else {
+    streak = 0;
+    localStorage.setItem("winStreak", streak);
+  }
 }
+
 
 function showFeedback(msg) {
   document.getElementById("feedback").textContent = msg;
