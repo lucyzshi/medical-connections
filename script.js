@@ -73,6 +73,7 @@ function markGroupAsSolved(words, groupName) {
   solvedGroups.push({ name: groupName, words });
   selectedTiles = [];
   showFeedback(`✅ Correct! Group: ${groupName}`);
+    remainingOrder = remainingOrder.filter(word => !words.includes(word));
   renderTiles();
 
   if (solvedGroups.length === Object.keys(groups).length) {
@@ -102,9 +103,10 @@ function resetGame() {
   selectedTiles = [];
   solvedGroups = [];
   wrongGuesses = 0;
-  shuffled = false;
   document.getElementById("shuffle-btn").disabled = false;
   updateGuessDisplay();
+    remainingOrder = Object.values(groups).flat();
+  shuffleArray(remainingOrder);
   renderTiles();
 }
 
@@ -134,10 +136,6 @@ function renderTiles() {
     tileContainer.appendChild(groupWrapper);
   });
 
-  const allSolvedWords = solvedGroups.flatMap(g => g.words);
-  let remaining = Object.values(groups).flat().filter(w => !allSolvedWords.includes(w));
-
-    shuffleArray(remaining);
 
   const grid = document.createElement("div");
   grid.className = "unsolved-grid";
@@ -165,47 +163,11 @@ function createTile(word, solved = false) {
 }
 
 function shuffleRemainingTiles() {
-  const allSolvedWords = solvedGroups.flatMap(g => g.words);
-  const remaining = Object.values(groups).flat().filter(w => !allSolvedWords.includes(w));
   shuffleArray(remaining);
-  renderTilesWithCustomOrder(remaining);
+  renderTiles();
 }
 
-function renderTilesWithCustomOrder(customOrder) {
-  const tileContainer = document.getElementById("tile-container");
-  tileContainer.innerHTML = "";
 
-  solvedGroups.forEach(group => {
-    const groupWrapper = document.createElement("div");
-    groupWrapper.className = "group-wrapper";
-
-    const label = document.createElement("div");
-    label.className = "group-label";
-    label.textContent = group.name;
-    groupWrapper.appendChild(label);
-
-    const row = document.createElement("div");
-    row.className = "solved-row";
-
-    group.words.forEach(word => {
-      const tile = createTile(word, true);
-      row.appendChild(tile);
-    });
-
-    groupWrapper.appendChild(row);
-    tileContainer.appendChild(groupWrapper);
-  });
-
-  const grid = document.createElement("div");
-  grid.className = "unsolved-grid";
-
-  customOrder.forEach(word => {
-    const tile = createTile(word, false);
-    grid.appendChild(tile);
-  });
-
-  tileContainer.appendChild(grid);
-}
 
 import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-database.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
