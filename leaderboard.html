@@ -4,42 +4,27 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Leaderboard</title>
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .leaderboard-entry {
+      padding: 0.5rem;
+      border-bottom: 1px solid #ccc;
+    }
+
+    .leaderboard-entry.current-player {
+      background-color: #d0f0ff;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
-  <h1>🏆 Leaderboard</h1>
-  <div id="leaderboard"></div>
-    <button class="btn" onclick="window.location.href='index.html'">⬅️ Back to Game</button>
+  <main>
+    <h1>🏆 Leaderboard</h1>
+    <div id="player-streak" class="feedback"></div>
+    <div id="leaderboard"></div>
+    <button onclick="window.location.href='index.html'">⬅️ Back to Game</button>
+  </main>
 
-<script type="module">
-  import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
-    import { getDatabase, ref, query, orderByChild, limitToLast, onValue } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-database.js";
-  
-  const firebaseConfig = {
-    apiKey: "AIzaSyBnc5HI3Qti60AXXDCpL9B-YfBQNYW4MXM",
-    authDomain: "leaderboard-7580a.firebaseapp.com",
-    databaseURL: "https://leaderboard-7580a-default-rtdb.firebaseio.com",
-    projectId: "leaderboard-7580a",
-    storageBucket: "leaderboard-7580a.firebasestorage.app",
-    messagingSenderId: "1065369349992",
-    appId: "1:1065369349992:web:f8cc82b10ada7d286730dd",
-    measurementId: "G-QT1C8X36P8"
-  };
-
-  const app = initializeApp(firebaseConfig);
-    const db = getDatabase(app);
-
-    const list = document.getElementById("leaderboard-list");
-
-    const q = query(ref(db, 'leaderboard'), orderByChild('streak'), limitToLast(10));
-    onValue(q, (snapshot) => {
-      const data = [];
-      snapshot.forEach(child => data.push(child.val()));
-      data.reverse();
-      list.innerHTML = data.map((entry, i) => `
-        <li>#${i + 1}: ${entry.name} - 🔥 ${entry.streak}</li>
-      `).join("");
-    });
-  </script>
+  <script type="module" src="leaderboard.js"></script>
 </body>
 </html>
