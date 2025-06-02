@@ -5,12 +5,13 @@ let wrongGuesses = 0;
 const maxWrongGuesses = 4;
 let shuffled = false;
 
-// 🗓 Get current ISO week number
 function getCurrentISOWeek() {
   const now = new Date();
-  const jan1 = new Date(now.getFullYear(), 0, 1);
-  const days = Math.floor((now - jan1) / (24 * 60 * 60 * 1000));
-  return Math.ceil((days + jan1.getDay() + 1) / 7);
+  const dayNum = now.getUTCDay() || 7;
+  now.setUTCDate(now.getUTCDate() + 4 - dayNum);
+  const yearStart = new Date(Date.UTC(now.getUTCFullYear(), 0, 1));
+  const weekNo = Math.ceil((((now - yearStart) / 86400000) + 1) / 7);
+  return weekNo;
 }
 
 // 📦 Load JSON file for current week
@@ -27,6 +28,8 @@ async function loadPuzzleForWeek(weekNumber) {
     document.getElementById("shuffle-btn").disabled = true;
   }
 }
+
+console.log(`Attempting to load: data/week${weekNumber}.json`);
 
 function shuffleArray(arr) {
   for (let i = arr.length - 1; i > 0; i--) {
