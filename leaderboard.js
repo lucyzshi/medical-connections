@@ -20,7 +20,7 @@ const playerName = localStorage.getItem("playerName") || "Anonymous";
 const currentStreak = localStorage.getItem("winStreak") || 0;
 
 document.getElementById("player-streak").textContent =
-  `🧠 ${playerName}'s current streak: ${currentStreak}`;
+  `${playerName}'s current streak: ${currentStreak}`;
 
 get(leaderboardRef).then(snapshot => {
   if (!snapshot.exists()) {
