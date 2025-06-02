@@ -73,7 +73,6 @@ function markGroupAsSolved(words, groupName) {
   solvedGroups.push({ name: groupName, words });
   selectedTiles = [];
   showFeedback(`✅ Correct! Group: ${groupName}`);
-    remainingOrder = remainingOrder.filter(word => !words.includes(word));
   renderTiles();
 
   if (solvedGroups.length === Object.keys(groups).length) {
@@ -105,8 +104,8 @@ function resetGame() {
   wrongGuesses = 0;
   document.getElementById("shuffle-btn").disabled = false;
   updateGuessDisplay();
-    remainingOrder = Object.values(groups).flat();
-  shuffleArray(remainingOrder);
+    remaining = Object.values(groups).flat();
+  shuffleArray(remaining);
   renderTiles();
 }
 
