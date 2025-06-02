@@ -226,6 +226,7 @@ if (leaderboardBtn) {
 // ✅ Only one window.onload
 window.onload = () => {
   const week = getCurrentISOWeek();
+    console.log(`Attempting to load: data/week${weekNumber}.json`);
   loadPuzzleForWeek(week);
   document.getElementById("submit-button").addEventListener("click", checkSelection);
   document.getElementById("shuffle-btn").addEventListener("click", shuffleRemainingTiles);
