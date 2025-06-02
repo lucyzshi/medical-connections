@@ -1,5 +1,5 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
-import { getDatabase, ref, get, child } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-database.js";
+import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBnc5HI3Qti60AXXDCpL9B-YfBQNYW4MXM",
@@ -8,39 +8,61 @@ const firebaseConfig = {
   projectId: "leaderboard-7580a",
   storageBucket: "leaderboard-7580a.appspot.com",
   messagingSenderId: "1065369349992",
-  appId: "1:1065369349992:web:f8cc82b10ada7d286730dd"
+  appId: "1:1065369349992:web:f8cc82b10ada7d286730dd",
+  measurementId: "G-QT1C8X36P8"
 };
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
+const leaderboardRef = ref(db, "leaderboard");
 
-const playerName = localStorage.getItem("playerName");
-const playerStreak = localStorage.getItem("winStreak");
-document.getElementById("player-streak").textContent = `👤 ${playerName}'s streak: ${playerStreak}`;
+const playerName = localStorage.getItem("playerName") || "Anonymous";
+const currentStreak = localStorage.getItem("winStreak") || 0;
 
-async function loadLeaderboard() {
-  const snapshot = await get(child(ref(db), "leaderboard"));
-  if (snapshot.exists()) {
-    const data = snapshot.val();
-    const entries = Object.values(data);
+document.getElementById("player-streak").textContent =
+  `🧠 ${playerName}'s current streak: ${currentStreak}`;
 
-    entries.sort((a, b) => b.streak - a.streak);
-
-    const tbody = document.getElementById("leaderboard-body");
-    entries.forEach((entry, index) => {
-      const row = document.createElement("tr");
-      if (entry.name === playerName) row.style.backgroundColor = "#fff3cd"; // highlight
-
-      row.innerHTML = `
-        <td>${index + 1}</td>
-        <td>${entry.name}</td>
-        <td>${entry.streak}</td>
-      `;
-      tbody.appendChild(row);
-    });
-  } else {
-    document.getElementById("leaderboard-body").innerHTML = "<tr><td colspan='3'>No entries yet.</td></tr>";
+get(leaderboardRef).then(snapshot => {
+  if (!snapshot.exists()) {
+    document.getElementById("leaderboard").textContent = "No data available.";
+    return;
   }
-}
 
-loadLeaderboard();
+  const data = snapshot.val();
+  let leaderboardArray = Object.values(data);
+
+  // Sort by streak descending
+  leaderboardArray.sort((a, b) => b.streak - a.streak);
+
+  // Find current player’s entry (even if not in top 10)
+  const currentPlayerEntry = leaderboardArray.find(entry => entry.name === playerName);
+
+  // Take top 10
+  const topTen = leaderboardArray.slice(0, 10);
+
+  // If current player not in top ten, add them to the bottom
+  const isInTopTen = topTen.some(entry => entry.name === playerName);
+  if (!isInTopTen && currentPlayerEntry) {
+    topTen.push(currentPlayerEntry);
+  }
+
+  const container = document.getElementById("leaderboard");
+  container.innerHTML = "";
+
+  topTen.forEach((entry, index) => {
+    const div = document.createElement("div");
+    div.className = "leaderboard-entry";
+    if (entry.name === playerName) div.classList.add("current-player");
+
+    // Determine rank (offset if current player added after top 10)
+    const rank = index + 1;
+    const rankLabel = isInTopTen || index < 10 ? `#${rank}` : "…";
+
+    div.textContent = `${rankLabel} ${entry.name}: ${entry.streak}`;
+    container.appendChild(div);
+  });
+
+}).catch(error => {
+  console.error(error);
+  document.getElementById("leaderboard").textContent = "Error loading leaderboard.";
+});
