@@ -10,13 +10,13 @@ function getCurrentISOWeek() {
   const dayNum = now.getUTCDay() || 7;
   now.setUTCDate(now.getUTCDate() + 4 - dayNum);
   const yearStart = new Date(Date.UTC(now.getUTCFullYear(), 0, 1));
-  const weekNo = Math.ceil((((now - yearStart) / 86400000) + 1) / 7);
-  return weekNo;
+  const week = Math.ceil((((now - yearStart) / 86400000) + 1) / 7);
+  return week;
 }
 
 // 📦 Load JSON file for current week
-async function loadPuzzleForWeek(weekNumber) {
-  const url = `data/week${weekNumber}.json`;
+async function loadPuzzleForWeek(week) {
+  const url = `data/week${week}.json`;
   try {
     const response = await fetch(url);
     if (!response.ok) throw new Error("Game not found.");
@@ -226,7 +226,7 @@ if (leaderboardBtn) {
 // ✅ Only one window.onload
 window.onload = () => {
   const week = getCurrentISOWeek();
-    console.log(`Attempting to load: data/week${weekNumber}.json`);
+    console.log(`Attempting to load: data/week${week}.json`);
   loadPuzzleForWeek(week);
   document.getElementById("submit-button").addEventListener("click", checkSelection);
   document.getElementById("shuffle-btn").addEventListener("click", shuffleRemainingTiles);
