@@ -2,6 +2,7 @@ let groups = {};
 let selectedTiles = [];
 let solvedGroups = [];
 let wrongGuesses = 0;
+let remaining = [];
 const maxWrongGuesses = 4;
 let shuffled = false;
 
@@ -21,6 +22,7 @@ async function loadPuzzleForWeek(week) {
     const response = await fetch(url);
     if (!response.ok) throw new Error("Game not found.");
     groups = await response.json();
+    console.log("Loaded groups:", groups); 
     resetGame();
   } catch (err) {
     document.getElementById("feedback").textContent =
