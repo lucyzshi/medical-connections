@@ -3,6 +3,7 @@ let selectedTiles = [];
 let solvedGroups = [];
 let wrongGuesses = 0;
 let remaining = [];
+let previousGuesses = [];
 const maxWrongGuesses = 4;
 let shuffled = false;
 
@@ -53,6 +54,15 @@ function handleTileClick(tile) {
 }
 
 function checkSelection() {
+  const currentGuess = [...selectedTiles].sort().join(",");
+
+  if (previousGuesses.includes(currentGuess)) {
+    showFeedback("⚠️ You've already tried this combination.");
+    return;
+  }
+
+  previousGuesses.push(currentGuess);
+
   const match = Object.entries(groups).find(([groupName, words]) =>
     words.every(w => selectedTiles.includes(w)) &&
     selectedTiles.every(w => words.includes(w))
@@ -61,19 +71,36 @@ function checkSelection() {
   if (match) {
     markGroupAsSolved(match[1], match[0]);
   } else {
+    // 3. Check if 3 out of 4 are correct
+    const closeMatch = Object.values(groups).some(words => {
+      const intersection = words.filter(w => selectedTiles.includes(w));
+      return intersection.length === 3;
+    });
+
     wrongGuesses++;
     updateGuessDisplay();
-    showFeedback("❌ Incorrect group.");
+
+    if (closeMatch) {
+      showFeedback("🟡 So close! You're one away from a correct group.");
+    } else {
+      showFeedback("❌ Incorrect group.");
+    }
+
     if (wrongGuesses >= maxWrongGuesses) {
       endGame("💥 Game over. You've used all your guesses.");
     }
+
     selectedTiles = [];
     renderTiles();
   }
 }
 
+
 function markGroupAsSolved(words, groupName) {
   solvedGroups.push({ name: groupName, words });
+  // Remove solved words from remaining
+  remaining = remaining.filter(word => !words.includes(word));
+  
   selectedTiles = [];
   showFeedback(`✅ Correct! Group: ${groupName}`);
   renderTiles();
@@ -87,10 +114,24 @@ function endGame(message) {
   showFeedback(message);
   document.querySelectorAll(".tile").forEach(t => t.classList.add("disabled"));
   document.getElementById("shuffle-btn").disabled = true;
+
+  // Show unsolved groups
+  const unsolved = Object.entries(groups).filter(([groupName]) =>
+    !solvedGroups.some(s => s.name === groupName)
+  );
+
+  unsolved.forEach(([groupName, words]) => {
+    solvedGroups.push({ name: groupName + " (Unsolved)", words });
+  });
+
+  renderTiles();
   onGameComplete();
+
+
+const currentWeek = getCurrentISOWeek();
+localStorage.setItem("completedWeek", currentWeek);
+
 }
-
-
 
 function showFeedback(msg) {
   document.getElementById("feedback").textContent = msg;
@@ -229,6 +270,14 @@ if (leaderboardBtn) {
 window.onload = () => {
   const week = getCurrentISOWeek();
     console.log(`Attempting to load: data/week${week}.json`);
+  const completed = parseInt(localStorage.getItem("completedWeek"));
+if (completed === week) {
+  document.getElementById("feedback").textContent = "✅ You've already completed this week's puzzle.";
+  document.getElementById("submit-button").disabled = true;
+  document.getElementById("shuffle-btn").disabled = true;
+  return;
+}
+
   loadPuzzleForWeek(week);
   document.getElementById("submit-button").addEventListener("click", checkSelection);
   document.getElementById("shuffle-btn").addEventListener("click", shuffleRemainingTiles);
