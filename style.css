@@ -76,6 +76,7 @@ h1 {
 .tile.solved {
   background-color: #d4edda;
   border-color: #28a745;
+  opacity: 0.6;
   cursor: default;
 }
 
