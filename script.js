@@ -16,7 +16,7 @@ function getCurrentISOWeek() {
   return week;
 }
 
-const Week = getCurrentISOWeek();
+const week = getCurrentISOWeek();
 
 // 📦 Load JSON file for current week
 async function loadPuzzleForWeek(week) {
@@ -130,7 +130,7 @@ function endGame(message) {
   onGameComplete();
 
 
-localStorage.setItem("completedWeek", Week);
+localStorage.setItem("completedWeek", week);
 
 }
 
