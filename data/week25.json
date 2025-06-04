@@ -1,0 +1,6 @@
+ {
+  "Associated with ILD": ["Smoking", "Low DLCO", "Clubbing", "Autoimmune"],
+  "Asociated with asthma": ["Rhinitis", "Atopy", "Eosinophil", "Methacholine"],
+  "Asociated with COPD": ["Sputum", "Hyperinflation", "Normal DLCO", "A1 antitrypsin"],
+  "Associated with bronchiectasis": ["Aspiration", "Dilated airways", "Aspergillus", "CFTR"]
+}
