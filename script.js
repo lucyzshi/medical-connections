@@ -16,6 +16,8 @@ function getCurrentISOWeek() {
   return week;
 }
 
+const Week = getCurrentISOWeek();
+
 // 📦 Load JSON file for current week
 async function loadPuzzleForWeek(week) {
   const url = `data/week${week}.json`;
@@ -128,8 +130,7 @@ function endGame(message) {
   onGameComplete();
 
 
-const currentWeek = getCurrentISOWeek();
-localStorage.setItem("completedWeek", currentWeek);
+localStorage.setItem("completedWeek", Week);
 
 }
 
@@ -239,10 +240,12 @@ function saveWinStreak(name, streak) {
 }
 
 function onGameComplete() {
-  const playerName = localStorage.getItem("playerName") || prompt("Enter your name:") || "Anonymous";
-  localStorage.setItem("playerName", playerName);
+  
+const isPerfect = wrongGuesses === 0 && solvedGroups.length === Object.keys(groups).length;
+  if (isPerfect) {
+    const playerName = localStorage.getItem("playerName") || prompt("Enter your name:") || "Anonymous";
+    localStorage.setItem("playerName", playerName);
 
-  if (wrongGuesses === 0 && solvedGroups.length === Object.keys(groups).length) {
     const currentStreak = parseInt(localStorage.getItem("winStreak") || "0") + 1;
     localStorage.setItem("winStreak", currentStreak);
 
@@ -268,7 +271,6 @@ if (leaderboardBtn) {
 
 // ✅ Only one window.onload
 window.onload = () => {
-  const week = getCurrentISOWeek();
     console.log(`Attempting to load: data/week${week}.json`);
   const completed = parseInt(localStorage.getItem("completedWeek"));
 if (completed === week) {
