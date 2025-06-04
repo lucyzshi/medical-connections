@@ -2,5 +2,5 @@
   "Findings in Rheumatoid Arthritis": ["Polyarthritis", "Carpal Tunnel", "Nodules", "ILD"],
   "Findings in Spondyloarthropathies": ["Psoriasis", "Axial", "IBD", "Uveitis"],
   "Findings in Reactive Arthritis": ["Oligoarthritis", "Conjunctivitis", "Urethritis", "Diarrhea"],
-  "Ends with in -itis": ["Hepatitis", "Meningitis", "Bursitis", "Tendonitis"]
+  "Findings in Gout": ["Recurrent",	"Nephrolithiasis",	"Monoarthritis",	"Monosodium urate"]
 }
