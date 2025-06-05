@@ -1,0 +1,6 @@
+ {
+  "Causes of pancreatitis": ["Alcohol", "Autoimmune",	"Trauma",	"Calcium"],
+  "Complications of gallstones": ["Pancreatitis",	"Cholecystitis", "Ileus", "Cholangitis"],
+  "Complications of alcohol use disorder": ["Gastritis",	"Hepatitis",	"Hallucination",	"Seizure"],
+  "Medical Eponyms": ["Murphy", "Cullen", "Alzheimer", "Parkinson"]
+}
