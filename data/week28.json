@@ -1,6 +1,6 @@
  {
   "Findings in Rheumatoid Arthritis": ["Polyarthritis", "Carpal Tunnel", "Nodules", "ILD"],
-  "Findings in Spondyloarthropathies": ["Psoriasis", "Axial", "IBD", "Uveitis"],
-  "Findings in Reactive Arthritis": ["Oligoarthritis", "Conjunctivitis", "Urethritis", "Diarrhea"],
+  "Findings in Spondyloarthropathies": ["Axial", "Psoriasis", "IBD", "Uveitis"],
+  "Findings in Reactive Arthritis": ["Oligoarthritis", "Conjunctivitis", "Urethritis", "HLA-B27"],
   "Findings in Gout": ["Recurrent",	"Nephrolithiasis",	"Monoarthritis",	"Monosodium urate"]
 }
