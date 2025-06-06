@@ -1,0 +1,6 @@
+ {
+  "Thiazolidinedione (TZD) and side effects": ["Insulin sensitivity", "CHF exac",	"Fracture",	"Pioglitazone"],
+  "Insulin side effects": ["Weight gain", "Hypoglycemia",	"Lipodystrophy",	"Temp sensitive"],
+  "GLP-1 receptor agonist and side effects": ["Liraglutide", "Weight loss", "Pancreatitis", "Slow Gastric Emptying"],
+  "SGLT-2 inhibitor and side effects": ["Empagliflozin", "Glucosuria", "Euglycemic DKA", "HFrEF benefit"]
+}
