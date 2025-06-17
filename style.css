@@ -110,14 +110,18 @@ button {
 }
 
 .small-button {
-  padding: 0.3rem 0.6rem;
-  font-size: 0.9rem;
-  border-radius: 5px;
+  padding: 0.4rem 0.8rem;
+  font-size: 1rem;
+  border-radius: 6px;
   background-color: #007bff;
   color: white;
   border: none;
   cursor: pointer;
+  width: auto;              /* Ensure it's not full width */
+  min-width: 100px;         /* Optional: make buttons more consistent */
+  flex: 0 0 auto;           /* Prevent growing to full width in flexbox */
 }
+
 
 .small-button:hover {
   background-color: #0056b3;
