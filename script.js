@@ -40,7 +40,7 @@ function formatWeekRange(year, week) {
 }
 
 function populatePastWeeksDropdown(Week, numWeeks = 5) {
-  const select = document.getElementById("week-select");
+  const select = document.getElementById("week-picker");
 for (let i = 1; i <= numWeeks; i++) {
     let week = currentWeekInfo.week - i;
     let year = currentWeekInfo.year;
@@ -328,7 +328,7 @@ window.onload = () => {
   if (completed === week) {
     document.getElementById("feedback").textContent = "✅ You've already completed this week's puzzle.";
     document.getElementById("submit-button").disabled = true;
-    document.getElementById("shuffle-btn").disabled = true;
+    document.getElementById("shuffle-button").disabled = true;
 
     const saved = localStorage.getItem("solvedGroups");
     if (saved) {
@@ -342,14 +342,14 @@ window.onload = () => {
   loadPuzzleForWeek(week);
   populatePastWeeksDropdown(currentWeek);
 
-  document.getElementById("week-select").addEventListener("change", () => {
-    const selected = document.getElementById("week-select").value;
+  document.getElementById("week-picker").addEventListener("change", () => {
+    const selected = document.getElementById("week-picker").value;
     const [year, wk] = selected.split("-").map(Number);
     startGameForWeek(year, wk);
   });
 
   document.getElementById("submit-button").addEventListener("click", checkSelection);
-  document.getElementById("shuffle-btn").addEventListener("click", shuffleRemainingTiles);
+  document.getElementById("shuffle-button").addEventListener("click", shuffleRemainingTiles);
   document.getElementById("leaderboard-button").addEventListener("click", () => {
     window.location.href = "leaderboard.html";
   });
