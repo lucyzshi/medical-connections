@@ -6,73 +6,98 @@
   <title>Leaderboard</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background-color: #f4f4f9;
-      margin: 0;
-      padding: 2rem;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
+/* Base table styling */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+}
 
-    h1 {
-      margin-bottom: 1rem;
-    }
+thead {
+  background-color: #007acc;
+  color: white;
+}
 
-    .leaderboard-container {
-      width: 100%;
-      max-width: 600px;
-      background-color: #fff;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      overflow: hidden;
-    }
+th, td {
+  padding: 0.75rem 1rem;
+  border-bottom: 1px solid #ddd;
+  text-align: left;
+  word-wrap: break-word;
+}
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-    }
+th:nth-child(1), td:nth-child(1) {
+  width: 15%;
+}
 
-    thead {
-      background-color: #007acc;
-      color: white;
-    }
+th:nth-child(2), td:nth-child(2) {
+  width: 55%;
+}
 
-    th, td {
-      padding: 0.75rem;
-      text-align: left;
-    }
+th:nth-child(3), td:nth-child(3) {
+  width: 30%;
+}
 
-    tbody tr:nth-child(even) {
-      background-color: #f9f9f9;
-    }
+tbody tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
 
-    .current-player {
-      background-color: #d0f0ff !important;
-      font-weight: bold;
-    }
+.current-player {
+  background-color: #d0f0ff !important;
+  font-weight: bold;
+}
 
-    button {
-      margin-top: 2rem;
-      padding: 0.6rem 1.2rem;
-      font-size: 1rem;
-      background-color: #007acc;
-      color: white;
-      border: none;
-      border-radius: 6px;
-      cursor: pointer;
-      transition: background-color 0.2s ease;
-    }
+/* Table container styling */
+.leaderboard-container {
+  width: 100%;
+  max-width: 700px;
+  margin: 1rem auto;
+  background-color: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  overflow-x: auto;
+}
 
-    button:hover {
-      background-color: #005fa3;
-    }
+/* Mobile responsive behavior */
+@media (max-width: 600px) {
+  table, thead, tbody, th, td, tr {
+    display: block;
+  }
 
-    .feedback {
-      margin-bottom: 1rem;
-      font-weight: bold;
-    }
+  thead {
+    display: none;
+  }
+
+  tr {
+    margin-bottom: 1rem;
+    border-bottom: 2px solid #ccc;
+    padding-bottom: 0.5rem;
+  }
+
+  td {
+    padding: 0.5rem 1rem;
+    text-align: left;
+    position: relative;
+  }
+
+  td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 1rem;
+    top: 0.5rem;
+    font-weight: bold;
+    color: #555;
+    width: 40%;
+  }
+
+  td:nth-child(1)::before { content: "Rank"; }
+  td:nth-child(2)::before { content: "Name"; }
+  td:nth-child(3)::before { content: "Streak"; }
+
+  td {
+    padding-left: 50%;
+  }
+}
+
   </style>
 </head>
 <body>
