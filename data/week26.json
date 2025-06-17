@@ -1,0 +1,6 @@
+{
+  "Characteristic findings in coccidiodomycosis": ["Dimorphic fungi",	"Desert",	"Granuloma",	"Pneumonia"],
+  "Characteristic findings in aspergillus": ["Septate hyphae", "Halo sign",	"Galactomannan",	"Angioinvasion"],
+  "Characteristic findings in cryptococcus": ["India ink",	"Encapsulated",	"High opening pressure",	"Pigeons"],
+  "Characteristic findings in mucormycosis": ["Non-septate hyphae", "DKA",	"Painless ulcer",	"Necrosis"]
+}
