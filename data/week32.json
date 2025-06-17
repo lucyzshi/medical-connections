@@ -1,0 +1,6 @@
+{
+  "Associated with Hep C": ["Cryoglobulin", "IVDU",	"Palpable purpura", "Hepatitis"],
+  "Associated with SLE": ["Complement", "Endocarditis", "Pleuritis", "Photosensitivity"],
+  "Associated with granulomatosis w polyangiitis (GPA)": ["Saddle nose deformity", "ANCA", "Strawberry gingiva", "Glomerulonephritis"],
+  "Associated with Kawasaki disease": ["Strawberry tongue" ,"Children", "Desquamation", "Coronary a aneurysm"]
+}
