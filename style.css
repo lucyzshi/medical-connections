@@ -89,8 +89,8 @@ h1 {
 
 /* Buttons */
 button {
-  display: block;
-  width: 100%;
+  display: inline-block;  /* or 'inline-flex' */
+  width: auto;            /* Remove full width */
   margin-top: 0.5rem;
   padding: 0.75rem;
   font-size: 1rem;
@@ -101,6 +101,7 @@ button {
   cursor: pointer;
   transition: background-color 0.2s ease;
 }
+
 .button-row {
   display: flex;
   justify-content: center; /* Or space-between, space-around, etc. */
