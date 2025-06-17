@@ -37,12 +37,24 @@ function formatWeekRange(year, week) {
   const start = getStartOfISOWeek(year, week);
   const end = new Date(start);
   end.setUTCDate(start.getUTCDate() + 6);
-  const options = { month: "short", day: "numeric" };
+
+  const options = { timeZone: 'UTC', month: "short", day: "numeric" };
   return `${start.toLocaleDateString("en-US", options)} – ${end.toLocaleDateString("en-US", options)}, ${year}`;
 }
 
+
 function populatePastWeeksDropdown(currentWeekInfo, numWeeks = 5) {
   const select = document.getElementById("week-picker");
+  select.innerHTML = ""; // Clear existing options
+
+  // Add default prompt option
+  const promptOption = document.createElement("option");
+  promptOption.value = "";
+  promptOption.textContent = "📆 Play a previous week";
+  promptOption.disabled = true;
+  promptOption.selected = true;
+  select.appendChild(promptOption);
+
   for (let i = 1; i <= numWeeks; i++) {
     let week = currentWeekInfo.week - i;
     let year = currentWeekInfo.year;
