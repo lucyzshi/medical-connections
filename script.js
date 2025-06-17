@@ -22,16 +22,15 @@ const currentWeek = currentWeekInfo.week;         // for backward compatibility
 const currentYear = currentWeekInfo.year;
 
 function getStartOfISOWeek(year, week) {
-  const simple = new Date(Date.UTC(year, 0, 1 + (week - 1) * 7));
-  const dayOfWeek = simple.getUTCDay();
-  const ISOweekStart = simple;
-  if (dayOfWeek <= 4) {
-    ISOweekStart.setUTCDate(simple.getUTCDate() - simple.getUTCDay() + 1);
-  } else {
-    ISOweekStart.setUTCDate(simple.getUTCDate() + 8 - simple.getUTCDay());
-  }
-  return ISOweekStart;
+  const jan4 = new Date(Date.UTC(year, 0, 4)); // Jan 4 always in week 1
+  const jan4Day = jan4.getUTCDay() || 7;
+  const startOfWeek1 = new Date(jan4);
+  startOfWeek1.setUTCDate(jan4.getUTCDate() - jan4Day + 1);
+  const startDate = new Date(startOfWeek1);
+  startDate.setUTCDate(startOfWeek1.getUTCDate() + (week - 1) * 7);
+  return startDate;
 }
+
 
 function formatWeekRange(year, week) {
   const start = getStartOfISOWeek(year, week);
@@ -75,8 +74,9 @@ function populatePastWeeksDropdown(currentWeekInfo, numWeeks = 5) {
 
 
 // 📦 Load JSON file for current week
-async function loadPuzzleForWeek(week) {
-  const url = `data/week${week}.json`;
+async function loadPuzzleForWeek(year, week) {
+  const url = `puzzles/${year}-${week}.json`; // Matches your new file naming convention
+
   try {
     const response = await fetch(url);
     if (!response.ok) throw new Error("Game not found.");
@@ -356,7 +356,7 @@ window.onload = () => {
     return;
   }
 
-  loadPuzzleForWeek(week);
+loadPuzzleForWeek(currentYear, week);
   populatePastWeeksDropdown(currentWeek);
 
   document.getElementById("week-picker").addEventListener("change", () => {
@@ -375,5 +375,6 @@ window.onload = () => {
 function startGameForWeek(year, wk) {
   const fileWeek = wk;
   console.log(`Loading puzzle for: year ${year}, week ${wk}`);
-  loadPuzzleForWeek(fileWeek);
+loadPuzzleForWeek(year, wk);
+
 }
