@@ -18,6 +18,41 @@ function getCurrentISOWeek() {
 
 const week = getCurrentISOWeek();
 
+function getStartOfISOWeek(year, week) {
+  const simple = new Date(Date.UTC(year, 0, 1 + (week - 1) * 7));
+  const dayOfWeek = simple.getUTCDay();
+  const ISOweekStart = simple;
+  if (dayOfWeek <= 4) {
+    ISOweekStart.setUTCDate(simple.getUTCDate() - simple.getUTCDay() + 1);
+  } else {
+    ISOweekStart.setUTCDate(simple.getUTCDate() + 8 - simple.getUTCDay());
+  }
+  return ISOweekStart;
+}
+
+function formatWeekRange(year, week) {
+  const start = getStartOfISOWeek(year, week);
+  const end = new Date(start);
+  end.setUTCDate(start.getUTCDate() + 6);
+  const options = { month: "short", day: "numeric" };
+  return `${start.toLocaleDateString("en-US", options)} – ${end.toLocaleDateString("en-US", options)}, ${year}`;
+}
+
+function populatePastWeeksDropdown(Week, numWeeks = 10) {
+  const select = document.getElementById("week-select");
+  const currentYear = new Date().getUTCFullYear();
+  for (let w = Week - 1; w > Week - 1 - numWeeks; w--) {
+    const year = w < 1 ? currentYear - 1 : currentYear;
+    const adjustedWeek = w < 1 ? 52 + w : w;
+    const label = formatWeekRange(year, adjustedWeek);
+    const option = document.createElement("option");
+    option.value = adjustedWeek;
+    option.textContent = label;
+    select.appendChild(option);
+  }
+}
+
+
 // 📦 Load JSON file for current week
 async function loadPuzzleForWeek(week) {
   const url = `data/week${week}.json`;
@@ -273,6 +308,7 @@ if (leaderboardBtn) {
 // ✅ Only one window.onload
 window.onload = () => {
     console.log(`Attempting to load: data/week${week}.json`);
+  
   const completed = parseInt(localStorage.getItem("completedWeek"));
 if (completed === week) {
   document.getElementById("feedback").textContent = "✅ You've already completed this week's puzzle.";
@@ -290,6 +326,14 @@ if (completed === week) {
 
 
   loadPuzzleForWeek(week);
+    populatePastWeeksDropdown(currentWeek);
+
+  document.getElementById("week-select").addEventListener("change", () => {
+    const selected = document.getElementById("week-select").value;
+    if (selected) {
+      startGameForWeek(parseInt(selected));
+    }
+  });
   document.getElementById("submit-button").addEventListener("click", checkSelection);
   document.getElementById("shuffle-btn").addEventListener("click", shuffleRemainingTiles);
   document.getElementById("leaderboard-button").addEventListener("click", () => {
