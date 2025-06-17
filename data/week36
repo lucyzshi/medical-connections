@@ -1,0 +1,6 @@
+{
+  "Findings in Listeria": ["Soft cheese",	"Elderly",	"Meningitis",	"Gram-positive"],
+  "Findings in Shiga toxin E Coli": ["Hemolytic Anemia",	"Toxin",	"AKI", "0157:H7"],
+  "Findings in Campylobacter Jejuni": ["Guillan-Barre", "Bloody diarrhea", "Reactive arthritis", "Gram-negative"],
+  "Findings in C Diff": ["Antibiotic use", "Pseudomembranes", "Megacolon", "Hospital"]
+}
