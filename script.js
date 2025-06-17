@@ -16,8 +16,10 @@ function getCurrentISOWeekInfo() {
  return { year: now.getUTCFullYear(), week };
 }
 
-const week = getCurrentISOWeekInfo();
-const week = currentWeek.week; 
+const currentWeekInfo = getCurrentISOWeekInfo();  // Get current year + week
+const week = currentWeekInfo.week;                // Current week number
+const currentWeek = currentWeekInfo.week;         // for backward compatibility
+const currentYear = currentWeekInfo.year;
 
 function getStartOfISOWeek(year, week) {
   const simple = new Date(Date.UTC(year, 0, 1 + (week - 1) * 7));
@@ -39,9 +41,9 @@ function formatWeekRange(year, week) {
   return `${start.toLocaleDateString("en-US", options)} – ${end.toLocaleDateString("en-US", options)}, ${year}`;
 }
 
-function populatePastWeeksDropdown(Week, numWeeks = 5) {
+function populatePastWeeksDropdown(currentWeekInfo, numWeeks = 5) {
   const select = document.getElementById("week-picker");
-for (let i = 1; i <= numWeeks; i++) {
+  for (let i = 1; i <= numWeeks; i++) {
     let week = currentWeekInfo.week - i;
     let year = currentWeekInfo.year;
 
@@ -57,6 +59,7 @@ for (let i = 1; i <= numWeeks; i++) {
     select.appendChild(option);
   }
 }
+
 
 
 // 📦 Load JSON file for current week
@@ -148,9 +151,11 @@ function markGroupAsSolved(words, groupName) {
   showFeedback(`✅ Correct! Group: ${groupName}`);
   renderTiles();
 
-  if (solvedGroups.length === Object.keys(groups).length) {
-    endGame("🎉 Congratulations! You solved all groups.");
-  }
+if (solvedGroups.length === Object.keys(groups).length) {
+  endGame("🎉 Congratulations! You solved all groups.");
+  onGameComplete();
+}
+
 }
 
 function endGame(message) {
