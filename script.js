@@ -173,7 +173,7 @@ function endGame(message) {
   });
 
   renderTiles();
-  onGameComplete();
+
 
 
 localStorage.setItem("completedWeek", week);
