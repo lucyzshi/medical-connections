@@ -1,6 +1,7 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
 import { getDatabase, ref, get } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-database.js";
 
+// Firebase config
 const firebaseConfig = {
   apiKey: "AIzaSyBnc5HI3Qti60AXXDCpL9B-YfBQNYW4MXM",
   authDomain: "leaderboard-7580a.firebaseapp.com",
@@ -12,57 +13,70 @@ const firebaseConfig = {
   measurementId: "G-QT1C8X36P8"
 };
 
+// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 const leaderboardRef = ref(db, "leaderboard");
 
+// Get current player info from localStorage
 const playerName = localStorage.getItem("playerName") || "Anonymous";
 const currentStreak = localStorage.getItem("winStreak") || 0;
 
+// Show current streak above the table
 document.getElementById("player-streak").textContent =
   `${playerName}'s current streak: ${currentStreak}`;
 
-get(leaderboardRef).then(snapshot => {
-  if (!snapshot.exists()) {
-    document.getElementById("leaderboard").textContent = "No data available.";
-    return;
-  }
+get(leaderboardRef)
+  .then(snapshot => {
+    if (!snapshot.exists()) {
+      document.getElementById("leaderboard").innerHTML = "<tr><td colspan='3'>No data available.</td></tr>";
+      return;
+    }
 
-  const data = snapshot.val();
-  let leaderboardArray = Object.values(data);
+    const data = snapshot.val();
+    let leaderboardArray = Object.values(data);
 
-  // Sort by streak descending
-  leaderboardArray.sort((a, b) => b.streak - a.streak);
+    // Sort by streak descending
+    leaderboardArray.sort((a, b) => b.streak - a.streak);
 
-  // Find current player’s entry (even if not in top 10)
-  const currentPlayerEntry = leaderboardArray.find(entry => entry.name === playerName);
+    // Find current player's entry
+    const currentPlayerEntry = leaderboardArray.find(entry => entry.name === playerName);
 
-  // Take top 10
-  const topTen = leaderboardArray.slice(0, 10);
+    // Get top 10
+    const topTen = leaderboardArray.slice(0, 10);
 
-  // If current player not in top ten, add them to the bottom
-  const isInTopTen = topTen.some(entry => entry.name === playerName);
-  if (!isInTopTen && currentPlayerEntry) {
-    topTen.push(currentPlayerEntry);
-  }
+    // Include current player if not in top 10
+    const isInTopTen = topTen.some(entry => entry.name === playerName);
+    if (!isInTopTen && currentPlayerEntry) {
+      topTen.push(currentPlayerEntry);
+    }
 
-  const container = document.getElementById("leaderboard");
-  container.innerHTML = "";
+    const tbody = document.getElementById("leaderboard");
+    tbody.innerHTML = ""; // Clear previous entries
 
-  topTen.forEach((entry, index) => {
-    const div = document.createElement("div");
-    div.className = "leaderboard-entry";
-    if (entry.name === playerName) div.classList.add("current-player");
+    topTen.forEach((entry, index) => {
+      const tr = document.createElement("tr");
 
-    // Determine rank (offset if current player added after top 10)
-    const rank = index + 1;
-    const rankLabel = isInTopTen || index < 10 ? `#${rank}` : "…";
+      // Determine rank: show "…" if not in top 10
+      const isExtraRow = !isInTopTen && index === 10;
+      const rank = isExtraRow ? "…" : (index + 1);
 
-    div.textContent = `${rankLabel} ${entry.name}: ${entry.streak}`;
-    container.appendChild(div);
+      // Apply current-player class if matched
+      if (entry.name === playerName) {
+        tr.classList.add("current-player");
+      }
+
+      tr.innerHTML = `
+        <td>${rank}</td>
+        <td>${entry.name}</td>
+        <td>${entry.streak}</td>
+      `;
+
+      tbody.appendChild(tr);
+    });
+  })
+  .catch(error => {
+    console.error("Error loading leaderboard:", error);
+    document.getElementById("leaderboard").innerHTML =
+      "<tr><td colspan='3'>Error loading leaderboard.</td></tr>";
   });
-
-}).catch(error => {
-  console.error(error);
-  document.getElementById("leaderboard").textContent = "Error loading leaderboard.";
-});
