@@ -131,6 +131,7 @@ function endGame(message) {
 
 
 localStorage.setItem("completedWeek", week);
+   localStorage.setItem("solvedGroups", JSON.stringify(solvedGroups));
 
 }
 
@@ -277,8 +278,16 @@ if (completed === week) {
   document.getElementById("feedback").textContent = "✅ You've already completed this week's puzzle.";
   document.getElementById("submit-button").disabled = true;
   document.getElementById("shuffle-btn").disabled = true;
+
+  const saved = localStorage.getItem("solvedGroups");
+  if (saved) {
+    solvedGroups = JSON.parse(saved);
+    remaining = []; // no unsolved words
+    renderTiles();
+  }
   return;
 }
+
 
   loadPuzzleForWeek(week);
   document.getElementById("submit-button").addEventListener("click", checkSelection);
