@@ -114,7 +114,13 @@ button {
   flex-wrap: wrap; /* Allow wrapping on small screens */
   margin: 1rem 0;
 }
-
+.centered-button-column {
+  display: flex;
+  flex-direction: column;      /* stack vertically */
+  align-items: center;         /* center horizontally */
+  gap: 0.75rem;                /* space between buttons */
+  margin-top: 1rem;
+}
 .small-button {
   padding: 0.4rem 0.8rem;
   font-size: 1rem;
