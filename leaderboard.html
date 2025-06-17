@@ -6,13 +6,71 @@
   <title>Leaderboard</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    .leaderboard-entry {
-      padding: 0.5rem;
-      border-bottom: 1px solid #ccc;
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f4f4f9;
+      margin: 0;
+      padding: 2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
     }
 
-    .leaderboard-entry.current-player {
-      background-color: #d0f0ff;
+    h1 {
+      margin-bottom: 1rem;
+    }
+
+    .leaderboard-container {
+      width: 100%;
+      max-width: 600px;
+      background-color: #fff;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    thead {
+      background-color: #007acc;
+      color: white;
+    }
+
+    th, td {
+      padding: 0.75rem;
+      text-align: left;
+    }
+
+    tbody tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    .current-player {
+      background-color: #d0f0ff !important;
+      font-weight: bold;
+    }
+
+    button {
+      margin-top: 2rem;
+      padding: 0.6rem 1.2rem;
+      font-size: 1rem;
+      background-color: #007acc;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+    }
+
+    button:hover {
+      background-color: #005fa3;
+    }
+
+    .feedback {
+      margin-bottom: 1rem;
       font-weight: bold;
     }
   </style>
@@ -21,7 +79,20 @@
   <main>
     <h1>🏆 Leaderboard</h1>
     <div id="player-streak" class="feedback"></div>
-    <div id="leaderboard"></div>
+    <div class="leaderboard-container">
+      <table>
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Name</th>
+            <th>Streak</th>
+          </tr>
+        </thead>
+        <tbody id="leaderboard">
+          <!-- JS will populate leaderboard rows here -->
+        </tbody>
+      </table>
+    </div>
     <button onclick="window.location.href='index.html'">⬅️ Back to Game</button>
   </main>
 
