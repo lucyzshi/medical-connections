@@ -66,11 +66,12 @@ get(leaderboardRef)
         tr.classList.add("current-player");
       }
 
-      tr.innerHTML = `
-        <td>${rank}</td>
-        <td>${entry.name}</td>
-        <td>${entry.streak}</td>
-      `;
+tr.innerHTML = `
+  <td data-label="Rank">${rank}</td>
+  <td data-label="Name">${entry.name}</td>
+  <td data-label="Streak">${entry.streak}</td>
+`;
+
 
       tbody.appendChild(tr);
     });
