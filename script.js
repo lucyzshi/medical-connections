@@ -309,7 +309,17 @@ if (leaderboardBtn) {
     window.location.href = "leaderboard.html";
   });
 }
+  const modal = document.getElementById("instructionsModal");
+  const btn = document.getElementById("howToPlayBtn");
+  const closeBtn = document.querySelector(".modal .close");
 
+  btn.onclick = () => modal.style.display = "block";
+  closeBtn.onclick = () => modal.style.display = "none";
+  window.onclick = (event) => {
+    if (event.target == modal) {
+      modal.style.display = "none";
+    }
+  };
 // 🟩 Only one window.onload — CLEANLY call all inits
 window.onload = () => {
   console.log(`Attempting to load: data/week${week}.json`);
