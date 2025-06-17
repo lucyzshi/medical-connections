@@ -18,6 +18,11 @@ h1 {
   text-align: center;
   margin-bottom: 1rem;
 }
+h2 {
+  text-align: center;
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
 
 /* Feedback and guess tracker */
 .feedback, .guesses-left {
