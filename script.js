@@ -75,7 +75,7 @@ function populatePastWeeksDropdown(currentWeekInfo, numWeeks = 5) {
 
 // 📦 Load JSON file for current week
 async function loadPuzzleForWeek(year, week) {
-  const url = `puzzles/${year}-${week}.json`; // Matches your new file naming convention
+  const url = `data/${year}-${week}.json`;
 
   try {
     const response = await fetch(url);
