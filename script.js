@@ -346,7 +346,21 @@ if (leaderboardBtn) {
 
 window.onload = () => {
   console.log(`Attempting to load: data/${currentYear}-${currentWeek}.json`);
+  
+    populatePastWeeksDropdown(currentWeekInfo);
 
+    document.getElementById("week-picker").addEventListener("change", () => {
+    const selected = document.getElementById("week-picker").value;
+    const [year, wk] = selected.split("-").map(Number);
+    startGameForWeek(year, wk);
+  });
+
+    document.getElementById("submit-button").addEventListener("click", checkSelection);
+  document.getElementById("shuffle-button").addEventListener("click", shuffleRemainingTiles);
+  document.getElementById("leaderboard-button").addEventListener("click", () => {
+    window.location.href = "leaderboard.html";
+  });
+  
   const completed = parseInt(localStorage.getItem("completedWeek"));
   if (completed === currentWeek) {
     document.getElementById("feedback").textContent = "✅ You've already completed this week's puzzle.";
@@ -359,28 +373,13 @@ window.onload = () => {
       remaining = []; 
       renderTiles();
     }
-    return;
+  } else {
+    loadPuzzleForWeek(currentYear, currentWeek);
   }
 
-loadPuzzleForWeek(currentYear, currentWeek);
-  populatePastWeeksDropdown(currentWeekinfo);
-
-  document.getElementById("week-picker").addEventListener("change", () => {
-    const selected = document.getElementById("week-picker").value;
-    const [year, wk] = selected.split("-").map(Number);
-    startGameForWeek(year, wk);
-  });
-
-  document.getElementById("submit-button").addEventListener("click", checkSelection);
-  document.getElementById("shuffle-button").addEventListener("click", shuffleRemainingTiles);
-  document.getElementById("leaderboard-button").addEventListener("click", () => {
-    window.location.href = "leaderboard.html";
-  });
 };
 
 function startGameForWeek(year, wk) {
-  const fileWeek = wk;
   console.log(`Loading puzzle for: year ${year}, week ${wk}`);
-loadPuzzleForWeek(year, wk);
-
+  loadPuzzleForWeek(year, wk);
 }
