@@ -339,7 +339,7 @@ if (leaderboardBtn) {
   };
 // 🟩 Only one window.onload — CLEANLY call all inits
 window.onload = () => {
-  console.log(`Attempting to load: data/week${week}.json`);
+  console.log(`Attempting to load: data/${year}-${week}.json`);
 
   const completed = parseInt(localStorage.getItem("completedWeek"));
   if (completed === week) {
