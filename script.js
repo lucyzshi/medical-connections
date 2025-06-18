@@ -13,13 +13,22 @@ function getCurrentISOWeekInfo() {
   now.setUTCDate(now.getUTCDate() + 4 - dayNum);
   const yearStart = new Date(Date.UTC(now.getUTCFullYear(), 0, 1));
   const week = Math.ceil((((now - yearStart) / 86400000) + 1) / 7);
- return { year: now.getUTCFullYear(), week };
+  return { year: now.getUTCFullYear(), week };
 }
 
 const currentWeekInfo = getCurrentISOWeekInfo();  // Get current year + week
 const week = currentWeekInfo.week;                // Current week number
 const currentWeek = currentWeekInfo.week;         // for backward compatibility
 const currentYear = currentWeekInfo.year;
+
+// 🔁 Helper to get number of ISO weeks in a year
+function getISOWeeksInYear(year) {
+  const dec28 = new Date(Date.UTC(year, 11, 28)); // Dec 28 is always in the last ISO week
+  const day = dec28.getUTCDay() || 7;
+  dec28.setUTCDate(dec28.getUTCDate() + 4 - day);
+  const startOfYear = new Date(Date.UTC(dec28.getUTCFullYear(), 0, 1));
+  return Math.ceil((((dec28 - startOfYear) / 86400000) + 1) / 7);
+}
 
 function getStartOfISOWeek(year, week) {
   const jan4 = new Date(Date.UTC(year, 0, 4)); // Jan 4 always in week 1
@@ -31,7 +40,6 @@ function getStartOfISOWeek(year, week) {
   return startDate;
 }
 
-
 function formatWeekRange(year, week) {
   const start = getStartOfISOWeek(year, week);
   const end = new Date(start);
@@ -41,12 +49,10 @@ function formatWeekRange(year, week) {
   return `${start.toLocaleDateString("en-US", options)} – ${end.toLocaleDateString("en-US", options)}, ${year}`;
 }
 
-
 function populatePastWeeksDropdown(currentWeekInfo, numWeeks = 5) {
   const select = document.getElementById("week-picker");
-  select.innerHTML = ""; // Clear existing options
+  select.innerHTML = "";
 
-  // Add default prompt option
   const promptOption = document.createElement("option");
   promptOption.value = "";
   promptOption.textContent = "📆 Play a previous week";
@@ -54,13 +60,14 @@ function populatePastWeeksDropdown(currentWeekInfo, numWeeks = 5) {
   promptOption.selected = true;
   select.appendChild(promptOption);
 
-  for (let i = 1; i <= numWeeks; i++) {
-    let week = currentWeekInfo.week - i;
-    let year = currentWeekInfo.year;
+  let week = currentWeekInfo.week;
+  let year = currentWeekInfo.year;
 
+  for (let i = 1; i <= numWeeks; i++) {
+    week -= 1;
     if (week < 1) {
-      week += 52;
       year -= 1;
+      week = getISOWeeksInYear(year); // ✅ use real ISO week count for the previous year
     }
 
     const label = formatWeekRange(year, week);
@@ -70,7 +77,6 @@ function populatePastWeeksDropdown(currentWeekInfo, numWeeks = 5) {
     select.appendChild(option);
   }
 }
-
 
 
 // 📦 Load JSON file for current week
@@ -86,7 +92,7 @@ async function loadPuzzleForWeek(year, week) {
   } catch (err) {
     document.getElementById("feedback").textContent =
       "❌ No game found for this week. Please check back later.";
-    document.getElementById("shuffle-btn").disabled = true;
+    document.getElementById("shuffle-button").disabled = true;
   }
 }
 
@@ -173,7 +179,7 @@ if (solvedGroups.length === Object.keys(groups).length) {
 function endGame(message) {
   showFeedback(message);
   document.querySelectorAll(".tile").forEach(t => t.classList.add("disabled"));
-  document.getElementById("shuffle-btn").disabled = true;
+  document.getElementById("shuffle-button").disabled = true;
 
   // Show unsolved groups
   const unsolved = Object.entries(groups).filter(([groupName]) =>
@@ -206,7 +212,7 @@ function resetGame() {
   selectedTiles = [];
   solvedGroups = [];
   wrongGuesses = 0;
-  document.getElementById("shuffle-btn").disabled = false;
+  document.getElementById("shuffle-button").disabled = false;
   updateGuessDisplay();
     remaining = Object.values(groups).flat();
   shuffleArray(remaining);
@@ -339,10 +345,10 @@ if (leaderboardBtn) {
   };
 // 🟩 Only one window.onload — CLEANLY call all inits
 window.onload = () => {
-  console.log(`Attempting to load: data/${year}-${week}.json`);
+  console.log(`Attempting to load: data/${currentyear}-${currentweek}.json`);
 
   const completed = parseInt(localStorage.getItem("completedWeek"));
-  if (completed === week) {
+  if (completed === currentweek) {
     document.getElementById("feedback").textContent = "✅ You've already completed this week's puzzle.";
     document.getElementById("submit-button").disabled = true;
     document.getElementById("shuffle-button").disabled = true;
@@ -356,8 +362,8 @@ window.onload = () => {
     return;
   }
 
-loadPuzzleForWeek(currentYear, week);
-  populatePastWeeksDropdown(currentWeek);
+loadPuzzleForWeek(currentYear, currentweek);
+  populatePastWeeksDropdown(currentWeekinfo);
 
   document.getElementById("week-picker").addEventListener("change", () => {
     const selected = document.getElementById("week-picker").value;
