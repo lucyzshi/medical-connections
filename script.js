@@ -343,12 +343,12 @@ if (leaderboardBtn) {
       modal.style.display = "none";
     }
   };
-// 🟩 Only one window.onload — CLEANLY call all inits
+
 window.onload = () => {
   console.log(`Attempting to load: data/${currentYear}-${currentWeek}.json`);
 
   const completed = parseInt(localStorage.getItem("completedWeek"));
-  if (completed === currentweek) {
+  if (completed === currentWeek) {
     document.getElementById("feedback").textContent = "✅ You've already completed this week's puzzle.";
     document.getElementById("submit-button").disabled = true;
     document.getElementById("shuffle-button").disabled = true;
@@ -356,13 +356,13 @@ window.onload = () => {
     const saved = localStorage.getItem("solvedGroups");
     if (saved) {
       solvedGroups = JSON.parse(saved);
-      remaining = []; // all solved
+      remaining = []; 
       renderTiles();
     }
     return;
   }
 
-loadPuzzleForWeek(currentYear, currentweek);
+loadPuzzleForWeek(currentYear, currentWeek);
   populatePastWeeksDropdown(currentWeekinfo);
 
   document.getElementById("week-picker").addEventListener("change", () => {
