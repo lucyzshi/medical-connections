@@ -1,6 +1,6 @@
 {
   "Findings and treatment for complete heart block": ["Cannon a", "Dissociation", "Pacemaker", "Bradycardia"],
-  "Findings and treatment for afib": ["Absent a", "Turbulence", "Ablation", "Absent p"],
+  "Findings and treatment for afib": ["Absent a", "Turbulent flow", "Amiodarone", "Absent p"],
   "Findings in Wolff-Parkinson-White": ["Short PR", "Delta wave", "Congenital", "Accessory"],
-  "Findings and treatment for Mobitz type I": ["Long PR", "Drop", "Atropine", "Irregular"]
+  "Findings and treatment for Mobitz type I": ["Progressive prolongation", "Drop", "Atropine", "Irregular"]
 }
