@@ -148,6 +148,13 @@ button:disabled {
   cursor: not-allowed;
 }
 
+.visit-counter-container {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+
 #visit-box {
   font-family: 'Courier New', monospace;
   font-size: 1.2rem;
