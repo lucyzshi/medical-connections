@@ -148,6 +148,34 @@ button:disabled {
   cursor: not-allowed;
 }
 
+#visit-box {
+  font-family: 'Courier New', monospace;
+  font-size: 1.2rem;
+  color: limegreen;
+  background-color: black;
+  padding: 8px 12px;
+  border: 2px inset gray;
+  display: inline-block;
+  margin: 20px auto;
+  text-align: center;
+  box-shadow: 2px 2px 4px rgba(0,0,0,0.4);
+}
+
+#visit-box .label {
+  margin-right: 8px;
+  color: white;
+}
+
+#visit-box .digits {
+  letter-spacing: 2px;
+  font-weight: bold;
+  background-color: #222;
+  padding: 4px 8px;
+  border: 1px solid #0f0;
+  display: inline-block;
+  color: #0f0;
+}
+
 /* Modal Styles */
 .modal {
   display: none; /* Hidden by default */
