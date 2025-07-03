@@ -304,6 +304,26 @@ function saveWinStreak(name, streak) {
   });
 }
 
+import { runTransaction } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-database.js";
+
+const visitRef = ref(db, 'visits');
+
+if (!sessionStorage.getItem("visited")) {
+  runTransaction(visitRef, current => (current || 0) + 1).then(result => {
+    document.getElementById("visit-count").textContent = result.snapshot.val();
+    sessionStorage.setItem("visited", "true");
+  }).catch(err => {
+    console.error("Visitor counter failed:", err);
+    document.getElementById("visit-count").textContent = "Error";
+  });
+} else {
+  // Already visited this session, just display the count
+  get(visitRef).then(snapshot => {
+    document.getElementById("visit-count").textContent = snapshot.val();
+  });
+}
+
+
 function onGameComplete() {
   
 const isPerfect = wrongGuesses === 0 && solvedGroups.length === Object.keys(groups).length;
