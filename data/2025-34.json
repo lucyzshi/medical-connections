@@ -1,0 +1,6 @@
+{
+  "Findings in DRESS": ["Onset 2-8 weeks",	"Facial Edema",	"Eosinophilia",	"LFT abn"],
+  "Findings in TEN/SJS": ["Onset 1-2 weeks", "Dusky Lesions",	"Mucosal Involvement",	"Nikolsky Sign"],
+  "Findings in Toxic Shock Syndrome": ["Strawberry tongue",	"High Fever",	"Desquamation of Palms/Soles",	"Diffuse Erythroderma"],
+  "Findings in AGEP": ["Onset 1-2 days", "Intertriginous Areas",	"Pustules",	"Spontaneous Resolution"]
+}
