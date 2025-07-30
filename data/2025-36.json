@@ -1,0 +1,6 @@
+{
+  "Findings in Lambert Eaton Syndrome": ["Improves w Activity",	"VGCC Ab",	"Proximal Weakness",	"SCLC"],
+  "Findings in Myasthenia Gravis": ["Worse w Activity", "AchR Ab",	"Thymic Mass",	"Ptosis"],
+  "Findings in Guillan Barre": ["Ascending Weakness",	"Preceding infection",	"Paresthesias",	"Myelin destruction"],
+  "Findings in ALS": ["Fasciculations", "Atrophy",	"Progressive Degeneration",	"Spasticity"]
+}
