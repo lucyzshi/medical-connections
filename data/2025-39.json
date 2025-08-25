@@ -1,0 +1,6 @@
+{
+  "Findings in B Cereus": ["Toxin-mediated", "Gram-Positive Bacteria", "Reheated Rice", "Rare Endophthalmitis"],
+  "Findings in Norovirus": ["Cruise ship", "Onset 12-48H", "SS RNA virus", "1-3d of symptoms"],
+  "Findings in Rotavirus": ["3-8d of symptoms", "Infants", "DS RNA virus", "oral vaccine"],
+  "Findings in Giardia": ["Onset 7-14d", "Steatorrhea", "Camping", "Cyst"]
+}
