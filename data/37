@@ -1,1 +1,6 @@
-leukemias
+{
+  "Findings and associations in AML": ["Auer Rods",	"Gingival Hyperplasia",	"History of MDS",	"Leukostasis"],
+  "Findings and associations in ALL": ["Children", "TdT",	"Anterior Mediastinal Mass",	"CNS involvement"],
+  "Findings and associations in CLL": ["Agent Orange Exposure",	"Richter's transformation",	"Smudge cells",	"AIHA"],
+  "Findings and associations in CML": ["BCR-ABL", "Tyrosine Kinase",	"Increased Basophils",	"Blast Crisis"]
+}
