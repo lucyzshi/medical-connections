@@ -1,0 +1,6 @@
+{
+  "Landmark AFib rate v rhythm trials": ["AFFIRM",	"RACE II",	"CABANA",	"CASTLE-AF"],
+  "Landmark AFib anticoagulation trials": ["ENGAGE-AF", "ARISTOTLE",	"ROCKET-AF",	"RE-LY"],
+  "Landmark HFrEF trials": ["EMPHASIS-HF",	"COPERNICUS",	"PARADIGM-HF",	"DAPA-HF"],
+  "Landmark HFpEF trials": ["TOPCAT", "PARAGON-HF",	"EMPEROR-preserved",	"DELIVER"]
+}
