@@ -1,0 +1,6 @@
+{
+  "Findings in IDA": ["Koilonychia",	"Pica",	"Low Ferritin",	"High Mentzer Index"],
+  "Findings in Thalassemia": ["Target cells",	"Low Mentzer Index",	"Elevated HbA2", "Normal Iron studies"],
+  "Findings in Anemia of Chronic Disease": ["Elevated Ferritin", "Normocytic", "Low TIBC", "Increased Hepcidin"],
+  "Findings in Hemolytic Anemia": ["Low haptoglobin", "Jaundice", "Reticulocytosis", "Elevated LDH"]
+}
