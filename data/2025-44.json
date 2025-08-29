@@ -1,0 +1,6 @@
+{
+  "Findings in Pemphigus Vulgaris": ["Flaccid Bullae","Mucosal involvement","Nikolsky positive","Intraepidermal"],
+  "Findings in Bullous Pemphigoid": ["Tense Bullae","Subepidermal","Flexor Surfaces","Elderly"],
+  "Findings in Varicella": ["Centripetal","Dew-drop","Virus mediated","All Stages at Once"],
+  "Findings in Dermatitis Herpetiformis": ["Extensor surfaces","Symmetric","IgA deposits","Clustered Vesicles"]
+}
