@@ -366,40 +366,58 @@ if (leaderboardBtn) {
 
 window.onload = () => {
   console.log(`Attempting to load: data/${currentYear}-${currentWeek}.json`);
-  
-    populatePastWeeksDropdown(currentWeekInfo);
 
-    document.getElementById("week-picker").addEventListener("change", () => {
+  populatePastWeeksDropdown(currentWeekInfo);
+
+  document.getElementById("week-picker").addEventListener("change", () => {
     const selected = document.getElementById("week-picker").value;
     const [year, wk] = selected.split("-").map(Number);
-    startGameForWeek(year, wk);
+    startGameForWeek(year, wk, false); // false = not forced current-week check
   });
 
-    document.getElementById("submit-button").addEventListener("click", checkSelection);
+  document.getElementById("submit-button").addEventListener("click", checkSelection);
   document.getElementById("shuffle-button").addEventListener("click", shuffleRemainingTiles);
   document.getElementById("leaderboard-button").addEventListener("click", () => {
     window.location.href = "leaderboard.html";
   });
-  
+
+  // ✅ Only enforce "completed" lockout for current week, not past weeks
   const completed = parseInt(localStorage.getItem("completedWeek"));
   if (completed === currentWeek) {
-    document.getElementById("feedback").textContent = "✅ You've already completed this week's puzzle.";
+    document.getElementById("feedback").textContent =
+      "✅ You've already completed this week's puzzle.";
     document.getElementById("submit-button").disabled = true;
     document.getElementById("shuffle-button").disabled = true;
 
     const saved = localStorage.getItem("solvedGroups");
     if (saved) {
       solvedGroups = JSON.parse(saved);
-      remaining = []; 
+      remaining = [];
       renderTiles();
     }
   } else {
     loadPuzzleForWeek(currentYear, currentWeek);
   }
-
 };
 
-function startGameForWeek(year, wk) {
+function startGameForWeek(year, wk, checkCompletion = true) {
   console.log(`Loading puzzle for: year ${year}, week ${wk}`);
+
+  // Only check localStorage lockout if it's the current week
+  if (checkCompletion && year === currentYear && wk === currentWeek) {
+    const completed = parseInt(localStorage.getItem("completedWeek"));
+    if (completed === currentWeek) {
+      document.getElementById("feedback").textContent =
+        "✅ You've already completed this week's puzzle.";
+      document.getElementById("submit-button").disabled = true;
+      document.getElementById("shuffle-button").disabled = true;
+      return;
+    }
+  }
+
+  // ✅ Allow loading normally for past weeks
+  document.getElementById("submit-button").disabled = false;
+  document.getElementById("shuffle-button").disabled = false;
   loadPuzzleForWeek(year, wk);
 }
+
