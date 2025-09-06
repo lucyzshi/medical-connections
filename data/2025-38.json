@@ -1,6 +1,6 @@
 {
-  "Landmark AFib trials": ["AFFIRM",	"RACE II",	"CABANA",	"ARISTOTLE"],
-  "Landmark Pulmonary/Crit Care trials": ["ARDSNet", "TORCH",	"FLAME",	"Rivers"],
-  "Landmark Heart Failure trials": ["TOPCAT",	"COPERNICUS",	"PARAGON",	"EMPEROR-preserved"],
-  "Landmark HTN trials": ["HYVET", "SPRINT", "ALLHAT", "ASCOT-BPLA"]
+  "Findings in Glomerulonephritis": ["RBC casts","Dysmorphic RBCs","Tea colored urine","Immune Complex Deposits"],
+  "Findings in ATN": ["Muddy brown casts","Necrotic tubules","Renal Tubular Epithelial Cells","Recovery Polyuria"],
+  "Findings in Interstitial Nephritis": ["Urine Eo","WBC casts","Rash","Fever"],
+  "Findings in Nephrotic Syndrome": ["Maltese Cross","Fatty casts","Hypoalbuminemia","Hyperlipidemia"]
 }
