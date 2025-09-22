@@ -1,0 +1,6 @@
+{
+  "Findings in Proteus UTI": ["Struvite stones",	"Staghorn Calculi",	"Alkaline Urine",	"Urease +"],
+  "Findings in Enterococcus UTI": ["Nitrite -",	"Cephalosporin resistant",	"GPC", "Biofilm"],
+  "Findings in Enterobacter Cloacae UTI": ["Can be ESBL", "Inducible AmpC", "Mid-treatment resistance", "Nitrite +"],
+  "Findings with Candida UTI": ["Acidic Urine", "Oval budding yeast", "Colonization common", "Fungal Ball"]
+}
