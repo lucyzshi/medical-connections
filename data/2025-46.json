@@ -1,0 +1,6 @@
+{
+  "Findings in Cerebral Amyloid Angiopathy": ["Cognitive Impairment",	"Amyloid beta-peptide",	"Spontaneous Hemorrhage",	"Vessel Wall Deposits"],
+  "Findings in Multiple Myeloma": ["Clonal plasma cells",	"IgG or IgA",	"Bone Lesions", "Cast Nephropathy"],
+  "Findings in AL Amyloidosis": ["Lambda Light Chains", "Congo red stain", "Cardiomyopathy", "Neuropathy"],
+  "Findings in Waldenstrom Macroglobulinemia": ["IgM", "Hyperviscosity", "Lymphoma transformation", "Cytopenias"]
+}
