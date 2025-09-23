@@ -183,6 +183,40 @@ button:disabled {
   color: #0f0;
 }
 
+/* Center and style comments section */
+.comments-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 2rem auto;
+  max-width: 500px;
+  text-align: center;
+}
+
+#comment-input {
+  width: 100%;
+  max-width: 500px;
+  margin-bottom: 0.5rem;
+  padding: 0.75rem;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+#submit-comment {
+  background-color: #28a745;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+#submit-comment:hover {
+  background-color: #218838;
+}
+
+
 /* Modal Styles */
 .modal {
   display: none; /* Hidden by default */
