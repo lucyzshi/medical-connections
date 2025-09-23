@@ -343,6 +343,13 @@ document.getElementById("submit-comment").addEventListener("click", () => {
     alert("✅ Thanks! Your comment was submitted.");
   }
 });
+const commentInput = document.getElementById("comment-input");
+
+// Auto-resize textarea as user types
+commentInput.addEventListener("input", () => {
+  commentInput.style.height = "auto"; // reset height
+  commentInput.style.height = commentInput.scrollHeight + "px"; // set to content height
+});
 
 function onGameComplete() {
   
