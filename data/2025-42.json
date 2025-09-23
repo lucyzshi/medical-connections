@@ -1,6 +1,6 @@
 {
-  "Findings in Sarcoidosis": ["Hilar Lymphadenopathy",	"Erythema Nodosum",	"Uveitis",	"Elevated ACE"],
-  "Findings in IPF": ["Honeycombing",	"Lower lobe bronchiectasis",	"Fine Crackles", "Restrictive PFTs"],
-  "Findings in Cystic Fibrosis": ["Upper lobe bronchiectasis", "Meconium Ileus", "Sinusitis", "DIOS"],
-  "Findings in COPD": ["Barrel chest", "Coarse Crackles", "Obstructive PFTs", "Hyperresonance"]
+  "Findings in Sarcoidosis": ["Hilar Adenopathy",	"Erythema Nodosum",	"Uveitis",	"Elevated ACE"],
+  "Findings in IPF": ["Honeycombing",	"Lower bronchiectasis",	"Fine Crackles", "Restrictive"],
+  "Findings in Cystic Fibrosis": ["Upper bronchiectasis", "Meconium Ileus", "Sinusitis", "DIOS"],
+  "Findings in COPD": ["Barrel chest", "Short Laryngeal Height", "Hoover's Sign", "Hyperresonance"]
 }
