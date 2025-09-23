@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Medical Connections</title>
+  <meta name="description" content="Play this free medical Connections game to practice clinical reasoning. Designed for med students, residents, attendings, and educators." />
+  <meta name="keywords" content="medical game, connections game, connections, clinical reasoning, med ed, medical students, medical education, gamification, GME, UME, resident education, diagnostic reasoning, differential diagnosis" />
+  <meta name="author" content="Lucy Z Shi" />
+
+  <!-- Open Graph for better social media sharing -->
+  <meta property="og:title" content="Medical Connections Game" />
+  <meta property="og:description" content="Practice clinical reasoning with this free puzzle game for medical education." />
+  <meta property="og:url" content="https://lucyzshi.github.io/medical-connections/" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="google-site-verification" content="nW-RMwxXt0GXx_MRytrcTWHmjonFAO424NBJkEUV4Zs" />
+  <link rel="stylesheet" href="style.css" />
+  </head>
+<body>
+  <main>
+    <h1>Medical Connections</h1>
+    <h2>Your Weekly Dose of Clinical Reasoning</h2>
+
+    <div id="feedback" class="feedback"></div>
+    <div id="guesses-left" class="guesses-left">Wrong guesses left: 4</div>
+    
+    <div id="tile-container" class="tile-container"></div>
+    <div class="button-row">
+      <button id="howToPlayBtn" class="small-button">How to Play</button>
+  <button id="shuffle-button" class="small-button">🔀 Shuffle</button>
+  <button id="submit-button" class="small-button">Submit Group</button>
+      </div>
+
+    <div class="centered-button-column">
+  <button id="leaderboard-button">🏆 View Leaderboard</button>
+      <select id="week-picker">
+        <!-- Options will be populated dynamically by your script -->
+      </select>
+</div>
+
+
+
+<!-- Instructions Modal -->
+<div id="instructionsModal" class="modal">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h2>How to Play</h2>
+    <ol>
+      <li>You’ll see a grid of <strong>16 words</strong>.</li>
+      <li>Find <strong>four groups of four</strong> words with a common theme.</li>
+      <li>Select four words and click <strong>"Submit"</strong>.</li>
+      <li>If correct, the words are grouped. If not, you lose a life.</li>
+      <li>You get <strong>four lives total</strong>.</li>
+      <li>The game ends when you solve all groups or lose all lives.</li>
+    </ol>
+    <p>Have fun and good luck! 🧠</p>
+  </div>
+</div>
+    
+<div class="visit-counter-container">
+<div id="visit-box">
+  <span class="label">Visitor #</span>
+  <span id="visit-count" class="digits">Loading...</span>
+</div>
+  </div>
+
+  <div id="comments-section">
+  <h2>Comments or Suggestions</h2>
+      <div class="comment-input-wrapper">
+  <textarea id="comment-input" placeholder="Leave a note..." rows="3"></textarea>
+  <button id="submit-comment">Submit</button>
+    </div>
+  <div id="comments-list"></div>
+</div>
+
+    
+<script type="module" src="script.js"></script>
+    <script type="module" src="comments.js"></script>
+    
+  </main>
+
+</body>
+</html>
