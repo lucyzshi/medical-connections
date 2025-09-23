@@ -469,4 +469,3 @@ function startGameForWeek(year, wk, checkCompletion = true) {
   document.getElementById("shuffle-button").disabled = false;
   loadPuzzleForWeek(year, wk);
 }
-
