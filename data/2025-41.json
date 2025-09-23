@@ -1,6 +1,6 @@
 {
-  "Findings in Rheumatoid Arthritis": ["MCP and PIP",	"Anti-CCP",	"Swan-neck deformity",	"Boutonniere deformity"],
-  "Findings in Osteoarthritis": ["Heberden nodes",	"Bouchard nodes",	"DIP and PIP", "Subchondral sclerosis"],
+  "Findings in Rheumatoid Arthritis": ["MCP and PIP",	"Anti-CCP",	"Swan-neck",	"Boutonniere"],
+  "Findings in Osteoarthritis": ["Heberden",	"Bouchard",	"DIP and PIP", "Subchondral sclerosis"],
   "Findings in Psoriatic arthritis": ["Nail pitting", "Dactylitis", "Enthesitis", "Oil drop sign"],
   "Findings in Hemochromatosis": ["Hyperpigmentation", "2nd and 3rd MCP", "Hook like osteophytes", "Diabetes"]
 }
