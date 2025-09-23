@@ -183,38 +183,70 @@ button:disabled {
   color: #0f0;
 }
 
-/* Center and style comments section */
-.comments-section {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+/* ===== Comments Section ===== */
+#comments-section {
+  max-width: 600px;
   margin: 2rem auto;
-  max-width: 500px;
   text-align: center;
 }
 
+#comments-section h2 {
+  margin-bottom: 0.75rem;
+}
+
+/* Wrapper for input + button */
+.comment-input-wrapper {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  justify-content: center;
+  margin-bottom: 1rem;
+}
+
 #comment-input {
-  width: 100%;
-  max-width: 500px;
-  margin-bottom: 0.5rem;
-  padding: 0.75rem;
+  flex: 1;
+  min-height: 3rem;
+  padding: 0.5rem;
+  font-size: 1rem;
+  border: 2px solid #ccc;
   border-radius: 6px;
-  border: 1px solid #ccc;
+  resize: vertical;
 }
 
 #submit-comment {
-  background-color: #28a745;
-  color: white;
+  height: fit-content;
   padding: 0.5rem 1rem;
+  font-size: 1rem;
   border: none;
   border-radius: 6px;
+  background-color: #4a90e2;
+  color: white;
   cursor: pointer;
   transition: background-color 0.2s ease;
 }
 
 #submit-comment:hover {
-  background-color: #218838;
+  background-color: #357ab7;
 }
+
+/* Comments list (hidden to players, but structured) */
+#comments-list {
+  margin-top: 1rem;
+  text-align: left;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 480px) {
+  .comment-input-wrapper {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  #submit-comment {
+    width: 100%;
+  }
+}
+
 
 
 /* Modal Styles */
