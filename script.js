@@ -305,8 +305,6 @@ function saveWinStreak(name, streak) {
   });
 }
 
-import { runTransaction, get } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-database.js";
-
 const visitRef = ref(db, 'visits');
 
 if (!sessionStorage.getItem("visited")) {
