@@ -375,12 +375,6 @@ function initCommentBox() {
 // Call init after DOM loads
 window.addEventListener("DOMContentLoaded", initCommentBox);
 
-// Auto-resize textarea as user types
-commentInput.addEventListener("input", () => {
-  commentInput.style.height = "auto"; // reset height
-  commentInput.style.height = commentInput.scrollHeight + "px"; // set to content height
-});
-
 function onGameComplete() {
   
 const isPerfect = wrongGuesses === 0 && solvedGroups.length === Object.keys(groups).length;
