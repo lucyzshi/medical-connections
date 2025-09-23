@@ -1,5 +1,5 @@
-import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-database.js";
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
+import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-database.js";
 
 const firebaseConfig = {
   apiKey: "AIzaSyBnc5HI3Qti60AXXDCpL9B-YfBQNYW4MXM",
@@ -325,25 +325,55 @@ if (!sessionStorage.getItem("visited")) {
 }
 
 
+// Save a comment to Firebase
 function saveComment(text) {
   const commentsRef = ref(db, "comments");
   const newComment = push(commentsRef);
   set(newComment, {
     text: text,
     timestamp: Date.now()
+  }).then(() => {
+    console.log("Comment saved!");
+  }).catch(err => {
+    console.error("Error saving comment:", err);
   });
 }
 
-document.getElementById("submit-comment").addEventListener("click", () => {
-  const input = document.getElementById("comment-input");
-  const text = input.value.trim();
-  if (text) {
+// Initialize the comment box
+function initCommentBox() {
+  const commentInput = document.getElementById("comment-input");
+  const submitBtn = document.getElementById("submit-comment");
+
+  if (!commentInput || !submitBtn) return; // Safety check
+
+  // Auto-resize textarea as user types
+  commentInput.addEventListener("input", () => {
+    commentInput.style.height = "auto"; // Reset height
+    commentInput.style.height = commentInput.scrollHeight + "px"; // Adjust to content
+  });
+
+  // Submit comment on button click
+  submitBtn.addEventListener("click", () => {
+    const text = commentInput.value.trim();
+    if (!text) return; // Don't submit empty comments
+
     saveComment(text);
-    input.value = "";
+    commentInput.value = "";
+    commentInput.style.height = "auto";
     alert("✅ Thanks! Your comment was submitted.");
-  }
-});
-const commentInput = document.getElementById("comment-input");
+  });
+
+  // Optional: Submit comment on Enter key (mobile-friendly)
+  commentInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      submitBtn.click();
+    }
+  });
+}
+
+// Call init after DOM loads
+window.addEventListener("DOMContentLoaded", initCommentBox);
 
 // Auto-resize textarea as user types
 commentInput.addEventListener("input", () => {
