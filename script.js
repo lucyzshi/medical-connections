@@ -247,6 +247,9 @@ function renderTiles() {
   const tileContainer = document.getElementById("tile-container");
   tileContainer.innerHTML = "";
 
+  // Reset selected tiles
+  selectedTiles = [];
+
   // Solved Groups at the top
   solvedGroups.forEach(group => {
     const groupWrapper = document.createElement("div");
