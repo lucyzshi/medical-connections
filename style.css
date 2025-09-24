@@ -67,23 +67,24 @@ h2 {
   display: flex;
   align-items: center;
   justify-content: center;
- border-radius: 1.25rem; /* original pill shape */
-  padding: 0.75rem 1.25rem; /* keeps them smaller and compact */
+  border-radius: 1.25rem;          /* pill shape */
+  padding: 0.75rem 1.25rem;        /* keeps tiles compact */
+  margin: 8px;
   text-align: center;
   font-weight: 500;
-  font-size: 1rem; /* fits nicely on smaller pills */
- font-size: calc(0.8rem + 0.5vw); /* responsive font scaling */
+  font-size: calc(0.8rem + 0.5vw); /* responsive font scaling */
   line-height: 1.2;
   background: linear-gradient(145deg, #e6f1fb, #ffffff);
   box-shadow:
     inset 2px 2px 4px rgba(255, 255, 255, 0.8),
     inset -2px -2px 4px rgba(0, 0, 0, 0.05),
     0 6px 16px rgba(0, 0, 0, 0.25);
-  padding: 0.75rem 1.25rem;
-  margin: 8px;
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   word-wrap: break-word;
-    overflow-wrap: break-word;
+  overflow-wrap: break-word;
+  min-width: 80px;                 /* ensures pills don’t collapse */
+  max-width: 200px;                /* keeps pills from being too wide */
+  box-sizing: border-box;          /* include padding in width */
 }
 
 .tile:hover {
