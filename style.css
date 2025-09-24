@@ -4,13 +4,12 @@ body {
   margin: 0;
   padding: 1rem;
   background-color: #f9fbff;
-  background-image: repeating-linear-gradient(
-    0deg,
-    transparent,
-    transparent 48px,
-    rgba(200,230,255,0.1) 48px,
-    rgba(200,230,255,0.1) 50px
-    );
+  
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cg stroke='rgba(255,0,0,0.08)' stroke-width='1'%3E%3Cline x1='10' y1='30' x2='70' y2='50'/%3E%3Cline x1='70' y1='50' x2='130' y2='20'/%3E%3Cline x1='30' y1='80' x2='100' y2='120'/%3E%3Cline x1='100' y1='120' x2='160' y2='90'/%3E%3Ccircle cx='10' cy='30' r='2' fill='rgba(255,0,0,0.1)'/%3E%3Ccircle cx='70' cy='50' r='2' fill='rgba(255,0,0,0.1)'/%3E%3Ccircle cx='130' cy='20' r='2' fill='rgba(255,0,0,0.1)'/%3E%3Ccircle cx='30' cy='80' r='2' fill='rgba(255,0,0,0.1)'/%3E%3Ccircle cx='100' cy='120' r='2' fill='rgba(255,0,0,0.1)'/%3E%3Ccircle cx='160' cy='90' r='2' fill='rgba(255,0,0,0.1)'/%3E%3C/g%3E%3C/svg%3E");
+
+  background-repeat: repeat;
+  background-size: 200px 200px;
+  
   display: flex;
   justify-content: center;
 }
