@@ -58,24 +58,38 @@ h2 {
 
 /* Tiles */
 .tile {
-  border-radius: 1.25rem; /* rounded pill/card shape */
-  padding: 0.75rem 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22vw;            /* responsive width relative to viewport */
+  max-width: 120px;       /* caps at desktop size */
+  min-width: 80px;        /* ensures tiles aren't too small */
+  height: 22vw;           /* keeps square shape */
+  max-height: 120px;
+  min-height: 80px;
+  border-radius: 1.25rem;
   text-align: center;
   font-weight: 500;
-  background: linear-gradient(145deg, #e6f1fb, #ffffff); /* subtle blue gradient */
+ font-size: calc(0.8rem + 0.5vw); /* responsive font scaling */
+  line-height: 1.2;
+  background: linear-gradient(145deg, #e6f1fb, #ffffff);
   box-shadow:
-    inset 2px 2px 4px rgba(255, 255, 255, 0.8),   /* top-left emboss highlight */
-    inset -2px -2px 4px rgba(0, 0, 0, 0.05),      /* bottom-right emboss shadow */
-    0 4px 8px rgba(0, 0, 0, 0.12);                /* drop shadow */
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+    inset 2px 2px 4px rgba(255, 255, 255, 0.8),
+    inset -2px -2px 4px rgba(0, 0, 0, 0.05),
+    0 6px 16px rgba(0, 0, 0, 0.25);
+  padding: 0.75rem 1.25rem;
+  margin: 8px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .tile:hover {
-  transform: translateY(-2px);
+  transform: translateY(-4px);
   box-shadow:
     inset 1px 1px 3px rgba(255, 255, 255, 0.7),
     inset -1px -1px 3px rgba(0, 0, 0, 0.05),
-    0 6px 12px rgba(0, 0, 0, 0.18);
+    0 10px 20px rgba(0, 0, 0, 0.35);
 }
 
 .tile.selected {
@@ -83,7 +97,7 @@ h2 {
   box-shadow:
     inset 1px 1px 4px rgba(255, 255, 255, 0.6),
     inset -2px -2px 5px rgba(0, 0, 0, 0.1),
-    0 6px 12px rgba(0, 0, 0, 0.2);
+    0 10px 20px rgba(0, 0, 0, 0.35);
 }
 
 .tile.solved {
