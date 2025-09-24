@@ -72,7 +72,7 @@ h2 {
   padding: 0.75rem 1.25rem;        /* keeps tiles compact */
   text-align: center;
   font-weight: 500;
-  font-size: calc(0.8rem + 0.5vw); /* responsive font scaling */
+  font-size: clamp(0.8rem, 1.5vw, 1.2rem); /* responsive font scaling */
   line-height: 1.2;
   background: linear-gradient(145deg, #e6f1fb, #ffffff);
   box-shadow:
