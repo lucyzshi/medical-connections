@@ -182,6 +182,13 @@ function markGroupAsSolved(words, groupName) {
   // Remove solved words from remaining
   remaining = remaining.filter(word => !words.includes(word));
   
+  words.forEach(word => {
+    const tileEl = document.querySelector(`.cell[data-word="${word}"]`);
+    if (tileEl) {
+      tileEl.classList.add("solved");
+    }
+  });
+  
   selectedTiles = [];
   showFeedback(`✅ Correct! Group: ${groupName}`);
   renderTiles();
