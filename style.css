@@ -10,6 +10,7 @@ body {
     transparent 48px,
     rgba(200,230,255,0.05) 48px,
     rgba(200,230,255,0.05) 50px
+    );
   display: flex;
   justify-content: center;
 }
