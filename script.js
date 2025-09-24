@@ -288,10 +288,7 @@ function createTile(word, solved = false) {
   tile.textContent = word;
   tile.dataset.word = word;
 
-  if (!solved) {
-    tile.addEventListener("click", () => handleTileClick(tile));
-  }
-
+  
   return tile;
 }
 
@@ -423,6 +420,14 @@ window.onload = () => {
   console.log(`Attempting to load: data/${currentYear}-${currentWeek}.json`);
 
   populatePastWeeksDropdown(currentWeekInfo);
+
+    const tileContainer = document.getElementById("tile-container");
+  tileContainer.addEventListener("click", (e) => {
+    const tile = e.target.closest(".tile");
+    if (!tile || tile.classList.contains("disabled") || tile.classList.contains("solved")) return;
+
+    handleTileClick(tile);
+  });
 
   document.getElementById("week-picker").addEventListener("change", () => {
     const selected = document.getElementById("week-picker").value;
