@@ -58,31 +58,46 @@ h2 {
 
 /* Tiles */
 .tile {
-  background-color: #ffffff;
-  border: 2px solid #ccc;
-  border-radius: 8px;
-  padding: 1rem;
+  border-radius: 1.25rem; /* rounded pill/card shape */
+  padding: 0.75rem 1.25rem;
   text-align: center;
-  font-size: 1rem;
-  cursor: pointer;
-  user-select: none;
-  transition: background-color 0.2s, border-color 0.2s;
+  font-weight: 500;
+  background: linear-gradient(145deg, #e6f1fb, #ffffff); /* subtle blue gradient */
+  box-shadow:
+    inset 2px 2px 4px rgba(255, 255, 255, 0.8),   /* top-left emboss highlight */
+    inset -2px -2px 4px rgba(0, 0, 0, 0.05),      /* bottom-right emboss shadow */
+    0 4px 8px rgba(0, 0, 0, 0.12);                /* drop shadow */
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
 .tile:hover {
-  border-color: #999;
+  transform: translateY(-2px);
+  box-shadow:
+    inset 1px 1px 3px rgba(255, 255, 255, 0.7),
+    inset -1px -1px 3px rgba(0, 0, 0, 0.05),
+    0 6px 12px rgba(0, 0, 0, 0.18);
 }
 
 .tile.selected {
-  background-color: #d0eaff;
-  border-color: #4a90e2;
+  background: linear-gradient(145deg, #bbdefb, #e3f2fd); /* stronger medical blue */
+  box-shadow:
+    inset 1px 1px 4px rgba(255, 255, 255, 0.6),
+    inset -2px -2px 5px rgba(0, 0, 0, 0.1),
+    0 6px 12px rgba(0, 0, 0, 0.2);
 }
 
 .tile.solved {
-  background-color: #d4edda;
-  border-color: #28a745;
-  opacity: 0.6;
-  cursor: default;
+  background: linear-gradient(145deg, #c8e6c9, #e8f5e9); /* green gradient */
+  animation: heartbeat 0.8s ease-in-out;
+}
+
+/* Heartbeat pulse animation */
+@keyframes heartbeat {
+  0%   { transform: scale(1); }
+  25%  { transform: scale(1.12); }
+  40%  { transform: scale(0.95); }
+  60%  { transform: scale(1.08); }
+  100% { transform: scale(1); }
 }
 
 .tile.disabled {
