@@ -81,9 +81,10 @@ h2 {
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   word-wrap: break-word;
   overflow-wrap: break-word;
-  min-width: 80px;                 /* ensures pills don’t collapse */
-  max-width: 200px;                /* keeps pills from being too wide */
+  min-width: 0;                 /* ensures pills don’t collapse */
+  max-width: 100%;                /* keeps pills from being too wide */
   box-sizing: border-box;          /* include padding in width */
+  margin: 0;
 }
 
 .tile:hover {
