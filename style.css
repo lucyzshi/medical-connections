@@ -67,15 +67,11 @@ h2 {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 22vw;            /* responsive width relative to viewport */
-  max-width: 120px;       /* caps at desktop size */
-  min-width: 80px;        /* ensures tiles aren't too small */
-  height: 22vw;           /* keeps square shape */
-  max-height: 120px;
-  min-height: 80px;
-  border-radius: 1.25rem;
+ border-radius: 1.25rem; /* original pill shape */
+  padding: 0.75rem 1.25rem; /* keeps them smaller and compact */
   text-align: center;
   font-weight: 500;
+  font-size: 1rem; /* fits nicely on smaller pills */
  font-size: calc(0.8rem + 0.5vw); /* responsive font scaling */
   line-height: 1.2;
   background: linear-gradient(145deg, #e6f1fb, #ffffff);
