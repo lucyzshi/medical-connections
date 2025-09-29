@@ -539,4 +539,32 @@ function startGameForWeek(year, wk, checkCompletion = true) {
   document.getElementById("submit-button").disabled = false;
   document.getElementById("shuffle-button").disabled = false;
   loadPuzzleForWeek(year, wk);
+
+  const gameURL = encodeURIComponent("https://lucyzshi.github.io/medical-connections/");
+const message = encodeURIComponent(`Check out this fun game with a medical twist. I just completed this week's puzzle! Can you beat me? 🎉`);
+
+// Twitter
+document.getElementById("twitter-share").href =
+  `https://twitter.com/intent/tweet?text=${message}&url=${gameURL}`;
+
+// Bluesky
+document.getElementById("bluesky-share").href =
+  `https://bsky.app/intent/post?text=${message} ${gameURL}`;
+
+// LinkedIn
+document.getElementById("linkedin-share").href =
+  `https://www.linkedin.com/sharing/share-offsite/?url=${gameURL}`;
+
+// Reddit
+document.getElementById("reddit-share").href =
+  `https://www.reddit.com/submit?url=${gameURL}&title=${message}`;
+
+// Instagram (manual share)
+document.getElementById("instagram-share").href = "https://www.instagram.com/";
+document.getElementById("instagram-share").addEventListener("click", (e) => {
+  e.preventDefault();
+  alert("📸 To share on Instagram, take a screenshot of your score and post it on your feed or story!");
+});
+
 }
+
