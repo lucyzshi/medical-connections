@@ -203,6 +203,14 @@ if (solvedGroups.length === Object.keys(groups).length) {
 }
 
 }
+function showEndPrompt() {
+  document.getElementById("endPrompt").classList.remove("hidden");
+  launchConfetti();
+}
+
+function closePrompt() {
+  document.getElementById("endPrompt").classList.add("hidden");
+}
 
 function endGame(message) {
   showFeedback(message);
