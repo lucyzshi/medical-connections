@@ -399,63 +399,73 @@ function launchConfetti() {
   });
 }
 
-function onGameComplete() {
+function onGameComplete(year = currentYear, wk = currentWeek) {
+  const isCurrentWeek = year === currentYear && wk === currentWeek;
+
   const isPerfect =
+    isCurrentWeek &&
     wrongGuesses === 0 &&
     solvedGroups.length === Object.keys(groups).length;
 
   let currentStreak = 0;
 
-  // Update streaks and leaderboard
-  if (isPerfect) {
-    const playerName =
-      localStorage.getItem("playerName") ||
-      prompt("Enter your name:") ||
-      "Anonymous";
-    localStorage.setItem("playerName", playerName);
+  if (isCurrentWeek) {
+    if (isPerfect) {
+      const playerName =
+        localStorage.getItem("playerName") ||
+        prompt("Enter your name:") ||
+        "Anonymous";
+      localStorage.setItem("playerName", playerName);
 
-    currentStreak =
-      parseInt(localStorage.getItem("winStreak") || "0") + 1;
-    localStorage.setItem("winStreak", currentStreak);
+      currentStreak =
+        parseInt(localStorage.getItem("winStreak") || "0") + 1;
+      localStorage.setItem("winStreak", currentStreak);
 
-    const dbRef = ref(db, "leaderboard/" + playerName);
-    set(dbRef, {
-      name: playerName,
-      streak: currentStreak,
-      timestamp: Date.now(),
-    });
+      // ✅ Only update leaderboard for current week
+      const dbRef = ref(db, "leaderboard/" + playerName);
+      set(dbRef, {
+        name: playerName,
+        streak: currentStreak,
+        timestamp: Date.now(),
+      });
+    } else {
+      // Reset streak only for current week
+      currentStreak = 0;
+      localStorage.setItem("winStreak", 0);
+    }
+
+    // Confetti only for current week
+    launchConfetti();
+
+    // Update messages
+    const streakMessage = document.getElementById("streakMessage");
+    const performanceMessage = document.getElementById("performanceMessage");
+    const endPromptTitle = document.getElementById("endPromptTitle");
+
+    if (currentStreak > 1) {
+      streakMessage.textContent = `🔥 Current streak: ${currentStreak} perfect weeks!`;
+    } else if (currentStreak === 1) {
+      streakMessage.textContent = `🔥 Current streak: 1 perfect week!`;
+    } else {
+      streakMessage.textContent = `❌ Streak broken — try again next week!`;
+    }
+
+    if (isPerfect) {
+      performanceMessage.textContent = "🎉 Amazing! You solved all groups perfectly!";
+      endPromptTitle.textContent = "🎉 Perfect Solve!";
+    } else {
+      performanceMessage.textContent = `You solved ${solvedGroups.length} of ${Object.keys(groups).length} groups. Great effort!`;
+      endPromptTitle.textContent = "Puzzle Complete!";
+    }
+
+    showEndPrompt();
   } else {
-    // reset streak
-    currentStreak = 0;
-    localStorage.setItem("winStreak", 0);
+    // Past week: no leaderboard, no confetti, no streak update
+    console.log("Past week completed — leaderboard not updated.");
   }
-
-  // Launch confetti for any completion
-  launchConfetti();
-
-  // Update streak info in modal
-  const streakMessage = document.getElementById("streakMessage");
-  if (currentStreak > 1) {
-    streakMessage.textContent = `🔥 Current streak: ${currentStreak} perfect weeks!`;
-  } else if (currentStreak === 1) {
-    streakMessage.textContent = `🔥 Current streak: 1 perfect week!`;
-  } else {
-    streakMessage.textContent = `❌ Streak broken — try again next week!`;
-  }
-
-  // Update performance message based on completion
-  const performanceMessage = document.getElementById("performanceMessage");
-  if (isPerfect) {
-    performanceMessage.textContent = "🎉 Amazing! You solved all groups perfectly!";
-    document.getElementById("endPromptTitle").textContent = "🎉 Perfect Solve!";
-  } else {
-    performanceMessage.textContent = `You solved ${solvedGroups.length} of ${Object.keys(groups).length} groups. Great effort!`;
-    document.getElementById("endPromptTitle").textContent = "Puzzle Complete!";
-  }
-
-  // Show the modal
-  showEndPrompt();
 }
+
+
 
 // Call onGameComplete() at the end of endGame() if all groups solved
 const leaderboardBtn = document.getElementById("leaderboard-button");
@@ -477,54 +487,77 @@ if (leaderboardBtn) {
   };
 
 window.onload = () => {
-  console.log(`Attempting to load: data/${currentYear}-${currentWeek}.json`);
+// ---------------------------
+// WINDOW ONLOAD
+// ---------------------------
+window.addEventListener("DOMContentLoaded", () => {
+  console.log(`Loading current week: data/${currentYear}-${currentWeek}.json`);
 
+  // Populate past weeks dropdown
   populatePastWeeksDropdown(currentWeekInfo);
 
-    const tileContainer = document.getElementById("tile-container");
+  // Tile click delegation
+  const tileContainer = document.getElementById("tile-container");
   tileContainer.addEventListener("click", (e) => {
     const tile = e.target.closest(".tile");
     if (!tile || tile.classList.contains("disabled") || tile.classList.contains("solved")) return;
-
     handleTileClick(tile);
   });
 
-  document.getElementById("week-picker").addEventListener("change", () => {
-    const selected = document.getElementById("week-picker").value;
-    const [year, wk] = selected.split("-").map(Number);
-    startGameForWeek(year, wk, false); // false = not forced current-week check
+  // Past week selection
+  const weekPicker = document.getElementById("week-picker");
+  weekPicker.addEventListener("change", () => {
+    const [year, wk] = weekPicker.value.split("-").map(Number);
+    startGameForWeek(year, wk, false); // false = don't enforce current-week lockout
   });
 
+  // Buttons
   document.getElementById("submit-button").addEventListener("click", checkSelection);
   document.getElementById("shuffle-button").addEventListener("click", shuffleRemainingTiles);
-  document.getElementById("leaderboard-button").addEventListener("click", () => {
-    window.location.href = "leaderboard.html";
-  });
 
-  // ✅ Only enforce "completed" lockout for current week, not past weeks
-  const completed = localStorage.getItem("completedWeek");
-if (completed === `${currentYear}-${currentWeek}`) {
-    document.getElementById("feedback").textContent =
-      "✅ You've already completed this week's puzzle.";
+  // Leaderboard button
+  const leaderboardBtn = document.getElementById("leaderboard-button");
+  if (leaderboardBtn) {
+    leaderboardBtn.addEventListener("click", () => window.location.href = "leaderboard.html");
+  }
+
+  // Instructions modal (single initialization)
+  const modal = document.getElementById("instructionsModal");
+  const btn = document.getElementById("howToPlayBtn");
+  const closeBtn = modal.querySelector(".close");
+
+  btn.onclick = () => modal.style.display = "block";
+  closeBtn.onclick = () => modal.style.display = "none";
+  window.onclick = (event) => {
+    if (event.target === modal) modal.style.display = "none";
+  };
+
+  // ✅ Load current week by default
+  const completedWeek = localStorage.getItem("completedWeek");
+  if (completedWeek === `${currentYear}-${currentWeek}`) {
+    // Already completed current week: load saved state
+    solvedGroups = JSON.parse(localStorage.getItem("solvedGroups") || "[]");
+    remaining = [];
+    renderTiles();
+
+    document.getElementById("feedback").textContent = "✅ You've already completed this week's puzzle.";
     document.getElementById("submit-button").disabled = true;
     document.getElementById("shuffle-button").disabled = true;
-
-    const saved = localStorage.getItem("solvedGroups");
-    if (saved) {
-      solvedGroups = JSON.parse(saved);
-      remaining = [];
-      renderTiles();
-    }
-  } else {
-    loadPuzzleForWeek(currentYear, currentWeek);
   }
-};
 
-function startGameForWeek(year, wk, checkCompletion = true) {
-  console.log(`Loading puzzle for: year ${year}, week ${wk}`);
+  // Load the current week puzzle fresh
+  startGameForWeek(currentYear, currentWeek, true); // true = enforce current week lockout
+});
 
-  // Only check localStorage lockout if it's the current week
-  if (checkCompletion && year === currentYear && wk === currentWeek) {
+// ---------------------------
+// START GAME FUNCTION
+// ---------------------------
+function startGameForWeek(year, wk, enforceLockout = true) {
+  console.log(`Starting game for year ${year}, week ${wk}`);
+  const isCurrentWeek = year === currentYear && wk === currentWeek;
+
+  // Lockout check for current week
+  if (enforceLockout && isCurrentWeek) {
     const completed = localStorage.getItem("completedWeek");
     if (completed === `${currentYear}-${currentWeek}`) {
       document.getElementById("feedback").textContent =
@@ -534,11 +567,47 @@ function startGameForWeek(year, wk, checkCompletion = true) {
       return;
     }
   }
-  
-  // ✅ Allow loading normally for past weeks
+
+  // Enable buttons
   document.getElementById("submit-button").disabled = false;
   document.getElementById("shuffle-button").disabled = false;
+
+  // Reset state for the week
+  selectedTiles = [];
+  solvedGroups = [];
+  wrongGuesses = 0;
+  previousGuesses = [];
+  remaining = [];
+
+  // Load puzzle JSON
   loadPuzzleForWeek(year, wk);
+}
+
+// ---------------------------
+// END GAME FUNCTION
+// ---------------------------
+function endGame(message, year = currentYear, wk = currentWeek) {
+  showFeedback(message);
+
+  // Disable all tiles
+  document.querySelectorAll(".tile").forEach(t => t.classList.add("disabled"));
+  document.getElementById("shuffle-button").disabled = true;
+
+  const isCurrentWeek = year === currentYear && wk === currentWeek;
+
+  // Only save solved groups / localStorage for current week
+  if (isCurrentWeek) {
+    localStorage.setItem("completedWeek", `${currentYear}-${currentWeek}`);
+    localStorage.setItem("solvedGroups", JSON.stringify(solvedGroups));
+  }
+
+  renderTiles(); // Re-render solved/unsolved tiles
+
+  // Call leaderboard/confetti logic only for current week
+  if (isCurrentWeek) {
+    onGameComplete(year, wk);
+  }
+}
 
   const gameURL = encodeURIComponent("https://lucyzshi.github.io/medical-connections/");
 const message = encodeURIComponent(`Check out this fun game with a medical twist. I just completed this week's puzzle! Can you beat me? 🎉`);
@@ -566,5 +635,4 @@ document.getElementById("instagram-share").addEventListener("click", (e) => {
   alert("📸 To share on Instagram, take a screenshot of your score and post it on your feed or story!");
 });
 
-}
 
