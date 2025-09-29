@@ -30,7 +30,6 @@ let wrongGuesses = 0;
 let remaining = [];
 let previousGuesses = [];
 const maxWrongGuesses = 4;
-let shuffled = false;
 
 // ---------------------------
 // HELPER FUNCTIONS (WEEKS, SHUFFLE, TILES, FEEDBACK)
