@@ -208,7 +208,7 @@ button:disabled {
   padding: 0.6rem 1.2rem;
   border-radius: 9999px; /* pill shape */
   text-decoration: none;
-  font-size: 0.95rem;
+  font-size: 0.5rem;
   font-weight: 500;
   color: white;
   background-color: #006d77; /* matches your tile accent/primary color */
