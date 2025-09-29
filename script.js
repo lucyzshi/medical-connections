@@ -211,7 +211,7 @@ function closePrompt() {
   document.getElementById("endPrompt").classList.add("hidden");
 }
 
-function endGame(message) {
+function endGame(message, year = currentYear, wk = currentWeek) {
   showFeedback(message);
   document.querySelectorAll(".tile").forEach(t => t.classList.add("disabled"));
   document.getElementById("shuffle-button").disabled = true;
@@ -228,9 +228,10 @@ function endGame(message) {
   renderTiles();
 
 
-
-localStorage.setItem("completedWeek", `${currentYear}-${week}`);
-   localStorage.setItem("solvedGroups", JSON.stringify(solvedGroups));
+  if (year === currentYear && wk === currentWeek) {
+    localStorage.setItem("completedWeek", `${currentYear}-${currentWeek}`);
+    localStorage.setItem("solvedGroups", JSON.stringify(solvedGroups));
+  }
   onGameComplete();
 }
 
