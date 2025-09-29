@@ -193,7 +193,7 @@ button:disabled {
 .share-buttons {
   margin-top: 1.5rem;
   text-align: center;
-  font-family: sans-serif;
+  font-family: inherit;
 }
 
 .share-buttons p {
@@ -205,34 +205,20 @@ button:disabled {
 .share-buttons a {
   display: inline-block;
   margin: 0.25rem;
-  padding: 0.5rem 1rem;
+  padding: 0.6rem 1.2rem;
   border-radius: 9999px; /* pill shape */
   text-decoration: none;
   font-size: 0.95rem;
   font-weight: 500;
+  color: white;
+  background-color: #006d77; /* primary accent (teal/blue) */
   transition: all 0.2s ease-in-out;
   box-shadow: 0 2px 6px rgba(0,0,0,0.08);
 }
 
-/* Brand-inspired subtle colors */
-.share-buttons a[href*="twitter"] {
-  background-color: #1da1f2;
-  color: white;
-}
-
-.share-buttons a[href*="linkedin"] {
-  background-color: #0077b5;
-  color: white;
-}
-
-.share-buttons a[href*="reddit"] {
-  background-color: #ff4500;
-  color: white;
-}
-
 /* Hover effect */
 .share-buttons a:hover {
-  filter: brightness(1.1);
+  background-color: #00555d; /* darker teal */
   box-shadow: 0 4px 12px rgba(0,0,0,0.15);
   transform: translateY(-2px);
 }
