@@ -465,18 +465,25 @@ function startGameForWeek(year, wk, enforceLockout = true) {
 window.addEventListener("DOMContentLoaded", () => {
   const endPrompt = document.getElementById("endPrompt");
   const endPromptClose = document.getElementById("endPromptClose");
+  const modal = document.getElementById("instructionsModal");
+  const btn = document.getElementById("howToPlayBtn");
+  const closeBtn = modal?.querySelector(".close");
 
-  // Close button
+  // Close endPrompt
   endPromptClose?.addEventListener("click", () => {
     endPrompt.classList.add("hidden");
   });
 
   // Click outside to close
   window.addEventListener("click", (event) => {
-    if (event.target === endPrompt) {
-      endPrompt.classList.add("hidden");
-    }
+    if (event.target === endPrompt) endPrompt.classList.add("hidden");
+    if (event.target === modal) modal.style.display = "none";
   });
+
+  // Instructions modal
+  btn?.addEventListener("click", () => modal.style.display = "block");
+  closeBtn?.addEventListener("click", () => modal.style.display = "none");
+
   // Populate past weeks dropdown
   populatePastWeeksDropdown(currentWeekInfo);
 
@@ -495,12 +502,13 @@ window.addEventListener("DOMContentLoaded", () => {
   });
 
   // Past week selection
-const weekPicker = document.getElementById("week-picker");
-if (weekPicker) {
-  weekPicker.addEventListener("change", () => {
-    const [year, wk] = weekPicker.value.split("-").map(Number);
-    startGameForWeek(year, wk, false);
-  });
+  const weekPicker = document.getElementById("week-picker");
+  if (weekPicker) {
+    weekPicker.addEventListener("change", () => {
+      const [year, wk] = weekPicker.value.split("-").map(Number);
+      startGameForWeek(year, wk, false);
+    });
+  }
 
   // Buttons
   document.getElementById("submit-button").addEventListener("click", checkSelection);
@@ -510,20 +518,9 @@ if (weekPicker) {
   const leaderboardBtn = document.getElementById("leaderboard-button");
   if (leaderboardBtn) leaderboardBtn.addEventListener("click", () => window.location.href = "leaderboard.html");
 
-  // Instructions modal
-  const modal = document.getElementById("instructionsModal");
-  const btn = document.getElementById("howToPlayBtn");
-  const closeBtn = modal?.querySelector(".close");
-  btn?.addEventListener("click", () => modal.style.display = "block");
-  closeBtn?.addEventListener("click", () => modal.style.display = "none");
-  window.addEventListener("click", (event) => {
-    if (event.target === modal) modal.style.display = "none";
-  });
-
   // Social share buttons
   const gameURL = encodeURIComponent("https://lucyzshi.github.io/medical-connections/");
   const message = encodeURIComponent("Check out this fun game with a medical twist. I just completed this week's puzzle! Can you beat me? 🎉");
-
   document.getElementById("twitter-share")?.setAttribute("href", `https://twitter.com/intent/tweet?text=${message}&url=${gameURL}`);
   document.getElementById("bluesky-share")?.setAttribute("href", `https://bsky.app/intent/post?text=${message} ${gameURL}`);
   document.getElementById("linkedin-share")?.setAttribute("href", `https://www.linkedin.com/sharing/share-offsite/?url=${gameURL}`);
@@ -533,20 +530,19 @@ if (weekPicker) {
     alert("📸 To share on Instagram, take a screenshot of your score and post it on your feed or story!");
   });
 
-  // ✅ Load saved state if already completed current week
-const completedWeek = localStorage.getItem("completedWeek");
-if (completedWeek === `${currentYear}-${currentWeek}`) {
-  solvedGroups = JSON.parse(localStorage.getItem("solvedGroups") || "[]");
-  remaining = [];
-  renderTiles();
+  // Load saved state if completed
+  const completedWeek = localStorage.getItem("completedWeek");
+  if (completedWeek === `${currentYear}-${currentWeek}`) {
+    solvedGroups = JSON.parse(localStorage.getItem("solvedGroups") || "[]");
+    remaining = [];
+    renderTiles();
 
-  document.getElementById("feedback").textContent = "✅ You've already completed this week's puzzle.";
-  document.getElementById("submit-button").disabled = true;
-  document.getElementById("shuffle-button").disabled = true;
-} else {
-  // 🧹 Clear stale archive progress so we don’t get stuck
-  localStorage.removeItem("solvedGroups");
-}
+    document.getElementById("feedback").textContent = "✅ You've already completed this week's puzzle.";
+    document.getElementById("submit-button").disabled = true;
+    document.getElementById("shuffle-button").disabled = true;
+  } else {
+    localStorage.removeItem("solvedGroups");
+  }
 
   // Start current week
   startGameForWeek(currentYear, currentWeek, true);
