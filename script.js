@@ -82,7 +82,7 @@ function populatePastWeeksDropdown(currentWeekInfo) {
 
   const { week: currentWeek, year: currentYear } = currentWeekInfo;
 
-  for (let i = 1; i < 5; i++) {
+  for (let i = 1; i < 6; i++) {
     let week = currentWeek - i;
     let year = currentYear;
 
@@ -200,11 +200,11 @@ function resetGame() {
   renderTiles();
 }
 
-function renderTiles() {
+function renderTiles(readOnly = false) {
   const tileContainer = document.getElementById("tile-container");
   tileContainer.innerHTML = "";
 
-  selectedTiles = [];
+  if (!readOnly) selectedTiles = [];
 
   // Solved Groups at top
   solvedGroups.forEach(group => {
@@ -221,6 +221,7 @@ function renderTiles() {
 
     group.words.forEach(word => {
       const tile = createTile(word, true);
+      if (readOnly) tile.classList.add("disabled");
       row.appendChild(tile);
     });
 
@@ -233,11 +234,13 @@ function renderTiles() {
 
   remaining.forEach(word => {
     const tile = createTile(word, false);
+    if (readOnly) tile.classList.add("disabled");
     grid.appendChild(tile);
   });
 
   tileContainer.appendChild(grid);
 }
+
 
 function createTile(word, solved = false) {
   const tile = document.createElement("div");
@@ -433,29 +436,37 @@ async function loadPuzzleForWeek(year, week) {
 
 function startGameForWeek(year, wk, enforceLockout = true) {
   const isCurrentWeek = year === currentYear && wk === currentWeek;
+  const completed = localStorage.getItem("completedWeek");
+  const alreadyCompleted = enforceLockout && isCurrentWeek && completed === `${currentYear}-${currentWeek}`;
 
-  if (enforceLockout && isCurrentWeek) {
-    const completed = localStorage.getItem("completedWeek");
-    if (completed === `${currentYear}-${currentWeek}`) {
-      showFeedback("✅ You've already completed this week's puzzle.");
-      document.getElementById("submit-button").disabled = true;
-      document.getElementById("shuffle-button").disabled = true;
-      return;
-    }
-  }
-
-  document.getElementById("submit-button").disabled = false;
-  document.getElementById("shuffle-button").disabled = false;
-
+  // Reset state
   selectedTiles = [];
   solvedGroups = [];
   wrongGuesses = 0;
   previousGuesses = [];
   remaining = [];
 
-  loadPuzzleForWeek(year, wk);
-}
+  // Load puzzle
+  loadPuzzleForWeek(year, wk).then(() => {
+    if (alreadyCompleted) {
+      showFeedback("✅ You've already completed this week's puzzle.");
+      document.getElementById("submit-button").disabled = true;
+      document.getElementById("shuffle-button").disabled = true;
+      
+      const savedGroups = JSON.parse(localStorage.getItem("solvedGroups") || "[]");
+      if (savedGroups.length) {
+        solvedGroups = savedGroups;
+        remaining = Object.values(groups).flat().filter(w => !solvedGroups.some(g => g.words.includes(w)));
+      }
 
+      // Render in read-only mode
+      renderTiles(true);
+    } else {
+      // Render normally
+      renderTiles();
+    }
+  });
+}
 // ---------------------------
 // DOM CONTENT LOADED: INIT
 // ---------------------------
