@@ -410,10 +410,10 @@ function endGame(message, year = currentYear, wk = currentWeek) {
     solvedGroups.push({ name: groupName + " (Unsolved)", words });
   });
 
-  if (year === currentYear && wk === currentWeek) {
-    localStorage.setItem("completedWeek", `${currentYear}-${currentWeek}`);
-    localStorage.setItem("solvedGroups", JSON.stringify(solvedGroups));
-  }
+if (year === currentYear && wk === currentWeek) {
+  localStorage.setItem("completedWeek", `${currentYear}-${currentWeek}`);
+  localStorage.setItem(`solvedGroups-${currentYear}-${currentWeek}`, JSON.stringify(solvedGroups));
+}
 
   renderTiles();
   onGameComplete(year, wk);
@@ -436,8 +436,9 @@ async function loadPuzzleForWeek(year, week) {
 
 function startGameForWeek(year, wk, enforceLockout = true) {
   const isCurrentWeek = year === currentYear && wk === currentWeek;
-  const completed = localStorage.getItem("completedWeek");
-  const alreadyCompleted = enforceLockout && isCurrentWeek && completed === `${currentYear}-${currentWeek}`;
+  const completedWeek = localStorage.getItem("completedWeek");
+  const weekKey = `${year}-${wk}`;
+  const alreadyCompleted = enforceLockout && isCurrentWeek && completedWeek === weekKey;
 
   // Reset state
   selectedTiles = [];
@@ -448,25 +449,35 @@ function startGameForWeek(year, wk, enforceLockout = true) {
 
   // Load puzzle
   loadPuzzleForWeek(year, wk).then(() => {
-    if (alreadyCompleted) {
-      showFeedback("✅ You've already completed this week's puzzle.");
+    const savedGroupsKey = `solvedGroups-${weekKey}`;
+    const savedGroups = JSON.parse(localStorage.getItem(savedGroupsKey) || "[]");
+
+    if (savedGroups.length && (alreadyCompleted || !isCurrentWeek)) {
+      // Restore solved groups only if this week is completed or a past week
+      solvedGroups = savedGroups;
+      remaining = Object.values(groups).flat().filter(
+        w => !solvedGroups.some(g => g.words.includes(w))
+      );
+
+      // Disable interactions for past weeks or already completed current week
       document.getElementById("submit-button").disabled = true;
       document.getElementById("shuffle-button").disabled = true;
-      
-      const savedGroups = JSON.parse(localStorage.getItem("solvedGroups") || "[]");
-      if (savedGroups.length) {
-        solvedGroups = savedGroups;
-        remaining = Object.values(groups).flat().filter(w => !solvedGroups.some(g => g.words.includes(w)));
-      }
 
-      // Render in read-only mode
-      renderTiles(true);
+      renderTiles(true); // read-only
+      showFeedback(
+        isCurrentWeek
+          ? "✅ You've already completed this week's puzzle."
+          : "📅 Viewing a past week's puzzle (read-only)."
+      );
     } else {
-      // Render normally
-      renderTiles();
+      // Normal current week play
+      renderTiles(false); // interactive
+      document.getElementById("submit-button").disabled = false;
+      document.getElementById("shuffle-button").disabled = false;
     }
   });
 }
+
 // ---------------------------
 // DOM CONTENT LOADED: INIT
 // ---------------------------
