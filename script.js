@@ -159,6 +159,7 @@ function showFeedback(msg) {
   document.getElementById("feedback").textContent = msg;
 }
 
+
 function updateGuessDisplay() {
   document.getElementById("guesses-left").textContent = `Wrong guesses left: ${maxWrongGuesses - wrongGuesses}`;
 }
@@ -285,10 +286,6 @@ function initCommentBox() {
     }
   });
 }
-function showEndPrompt() {
-  const endPrompt = document.getElementById("endPrompt");
-  endPrompt?.classList.remove("hidden");
-}
 
 // ---------------------------
 // CONFETTI
@@ -327,21 +324,12 @@ function onGameComplete(year = currentYear, wk = currentWeek) {
   }
 
   // ✅ Always show end prompt, even for past weeks
+  const endPrompt = document.getElementById("endPrompt");
   const streakMessage = document.getElementById("streakMessage");
   const performanceMessage = document.getElementById("performanceMessage");
   const endPromptTitle = document.getElementById("endPromptTitle");
   const endPromptClose = document.getElementById("endPromptClose");
-
-endPromptClose?.addEventListener("click", () => {
-  endPrompt.classList.add("hidden");  // ✅ hide modal
-});
-
-window.addEventListener("click", (event) => {
-  if (event.target === endPrompt) {
-    endPrompt.classList.add("hidden");
-  }
-});
-
+  
 
   const solvedCount = solvedGroups.filter(g => !g.name.includes("(Unsolved)")).length;
 
@@ -365,7 +353,17 @@ window.addEventListener("click", (event) => {
     endPromptTitle.textContent = "Puzzle Complete!";
   }
 
-  showEndPrompt();
+  // Show the modal
+  endPrompt?.classList.remove("hidden");
+
+  // Attach one-time modal close events
+  endPromptClose?.addEventListener("click", () => endPrompt.classList.add("hidden"), { once: true });
+  window.addEventListener("click", function handleOutsideClick(event) {
+    if (event.target === endPrompt) {
+      endPrompt.classList.add("hidden");
+      window.removeEventListener("click", handleOutsideClick);
+    }
+  });
 }
 
 // ---------------------------
@@ -436,6 +434,7 @@ function startGameForWeek(year, wk, enforceLockout = true) {
 // ---------------------------
 // DOM CONTENT LOADED: INIT
 // ---------------------------
+
 window.addEventListener("DOMContentLoaded", () => {
   const endPrompt = document.getElementById("endPrompt");
   const endPromptClose = document.getElementById("endPromptClose");
