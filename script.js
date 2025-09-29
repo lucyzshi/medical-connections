@@ -495,7 +495,8 @@ window.addEventListener("DOMContentLoaded", () => {
   });
 
   // Past week selection
-  const weekPicker = document.getElementById("week-picker");
+const weekPicker = document.getElementById("week-picker");
+if (weekPicker) {
   weekPicker.addEventListener("change", () => {
     const [year, wk] = weekPicker.value.split("-").map(Number);
     startGameForWeek(year, wk, false);
