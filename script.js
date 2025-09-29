@@ -211,29 +211,6 @@ function closePrompt() {
   document.getElementById("endPrompt").classList.add("hidden");
 }
 
-function endGame(message, year = currentYear, wk = currentWeek) {
-  showFeedback(message);
-  document.querySelectorAll(".tile").forEach(t => t.classList.add("disabled"));
-  document.getElementById("shuffle-button").disabled = true;
-
-  // Show unsolved groups
-  const unsolved = Object.entries(groups).filter(([groupName]) =>
-    !solvedGroups.some(s => s.name === groupName)
-  );
-
-  unsolved.forEach(([groupName, words]) => {
-    solvedGroups.push({ name: groupName + " (Unsolved)", words });
-  });
-
-  renderTiles();
-
-
-  if (year === currentYear && wk === currentWeek) {
-    localStorage.setItem("completedWeek", `${currentYear}-${currentWeek}`);
-    localStorage.setItem("solvedGroups", JSON.stringify(solvedGroups));
-  }
-  onGameComplete();
-}
 
 function showFeedback(msg) {
   document.getElementById("feedback").textContent = msg;
@@ -474,9 +451,6 @@ if (leaderboardBtn) {
     window.location.href = "leaderboard.html";
   });
 }
-  const modal = document.getElementById("instructionsModal");
-  const btn = document.getElementById("howToPlayBtn");
-  const closeBtn = document.querySelector(".modal .close");
 
   btn.onclick = () => modal.style.display = "block";
   closeBtn.onclick = () => modal.style.display = "none";
@@ -486,11 +460,10 @@ if (leaderboardBtn) {
     }
   };
 
-window.onload = () => {
-// ---------------------------
-// WINDOW ONLOAD
-// ---------------------------
 window.addEventListener("DOMContentLoaded", () => {
+  initGame();
+});
+function initGame() {
   console.log(`Loading current week: data/${currentYear}-${currentWeek}.json`);
 
   // Populate past weeks dropdown
@@ -508,7 +481,7 @@ window.addEventListener("DOMContentLoaded", () => {
   const weekPicker = document.getElementById("week-picker");
   weekPicker.addEventListener("change", () => {
     const [year, wk] = weekPicker.value.split("-").map(Number);
-    startGameForWeek(year, wk, false); // false = don't enforce current-week lockout
+    startGameForWeek(year, wk, false); // false = allow past weeks
   });
 
   // Buttons
@@ -521,7 +494,7 @@ window.addEventListener("DOMContentLoaded", () => {
     leaderboardBtn.addEventListener("click", () => window.location.href = "leaderboard.html");
   }
 
-  // Instructions modal (single initialization)
+  // Instructions modal
   const modal = document.getElementById("instructionsModal");
   const btn = document.getElementById("howToPlayBtn");
   const closeBtn = modal.querySelector(".close");
@@ -532,10 +505,9 @@ window.addEventListener("DOMContentLoaded", () => {
     if (event.target === modal) modal.style.display = "none";
   };
 
-  // ✅ Load current week by default
+  // ✅ Load saved state if already completed current week
   const completedWeek = localStorage.getItem("completedWeek");
   if (completedWeek === `${currentYear}-${currentWeek}`) {
-    // Already completed current week: load saved state
     solvedGroups = JSON.parse(localStorage.getItem("solvedGroups") || "[]");
     remaining = [];
     renderTiles();
@@ -545,9 +517,9 @@ window.addEventListener("DOMContentLoaded", () => {
     document.getElementById("shuffle-button").disabled = true;
   }
 
-  // Load the current week puzzle fresh
-  startGameForWeek(currentYear, currentWeek, true); // true = enforce current week lockout
-});
+  // Load current week puzzle fresh if not completed
+  startGameForWeek(currentYear, currentWeek, true); // true = enforce lockout
+}
 
 // ---------------------------
 // START GAME FUNCTION
@@ -556,12 +528,11 @@ function startGameForWeek(year, wk, enforceLockout = true) {
   console.log(`Starting game for year ${year}, week ${wk}`);
   const isCurrentWeek = year === currentYear && wk === currentWeek;
 
-  // Lockout check for current week
+  // Lockout for current week
   if (enforceLockout && isCurrentWeek) {
     const completed = localStorage.getItem("completedWeek");
     if (completed === `${currentYear}-${currentWeek}`) {
-      document.getElementById("feedback").textContent =
-        "✅ You've already completed this week's puzzle.";
+      showFeedback("✅ You've already completed this week's puzzle.");
       document.getElementById("submit-button").disabled = true;
       document.getElementById("shuffle-button").disabled = true;
       return;
@@ -587,27 +558,35 @@ function startGameForWeek(year, wk, enforceLockout = true) {
 // END GAME FUNCTION
 // ---------------------------
 function endGame(message, year = currentYear, wk = currentWeek) {
+  // 1️⃣ Show feedback
   showFeedback(message);
 
-  // Disable all tiles
+  // 2️⃣ Disable tiles and shuffle
   document.querySelectorAll(".tile").forEach(t => t.classList.add("disabled"));
   document.getElementById("shuffle-button").disabled = true;
 
-  const isCurrentWeek = year === currentYear && wk === currentWeek;
+  // 3️⃣ Mark unsolved groups
+  const unsolved = Object.entries(groups).filter(([groupName]) =>
+    !solvedGroups.some(s => s.name === groupName)
+  );
+  unsolved.forEach(([groupName, words]) => {
+    solvedGroups.push({ name: groupName + " (Unsolved)", words });
+  });
 
-  // Only save solved groups / localStorage for current week
-  if (isCurrentWeek) {
+  // 4️⃣ Save state for current week
+  if (year === currentYear && wk === currentWeek) {
     localStorage.setItem("completedWeek", `${currentYear}-${currentWeek}`);
     localStorage.setItem("solvedGroups", JSON.stringify(solvedGroups));
   }
 
-  renderTiles(); // Re-render solved/unsolved tiles
+  // 5️⃣ Re-render tiles
+  renderTiles();
 
-  // Call leaderboard/confetti logic only for current week
-  if (isCurrentWeek) {
-    onGameComplete(year, wk);
-  }
+  // 6️⃣ Trigger end-of-game logic (streaks, confetti, leaderboard)
+  onGameComplete(year, wk);
 }
+
+
 
   const gameURL = encodeURIComponent("https://lucyzshi.github.io/medical-connections/");
 const message = encodeURIComponent(`Check out this fun game with a medical twist. I just completed this week's puzzle! Can you beat me? 🎉`);
