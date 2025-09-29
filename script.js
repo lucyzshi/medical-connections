@@ -285,6 +285,10 @@ function initCommentBox() {
     }
   });
 }
+function showEndPrompt() {
+  const endPrompt = document.getElementById("endPrompt");
+  endPrompt?.classList.remove("hidden");
+}
 
 // ---------------------------
 // CONFETTI
@@ -326,6 +330,18 @@ function onGameComplete(year = currentYear, wk = currentWeek) {
   const streakMessage = document.getElementById("streakMessage");
   const performanceMessage = document.getElementById("performanceMessage");
   const endPromptTitle = document.getElementById("endPromptTitle");
+  const endPromptClose = document.getElementById("endPromptClose");
+
+endPromptClose?.addEventListener("click", () => {
+  endPrompt.classList.add("hidden");  // ✅ hide modal
+});
+
+window.addEventListener("click", (event) => {
+  if (event.target === endPrompt) {
+    endPrompt.classList.add("hidden");
+  }
+});
+
 
   const solvedCount = solvedGroups.filter(g => !g.name.includes("(Unsolved)")).length;
 
@@ -421,6 +437,20 @@ function startGameForWeek(year, wk, enforceLockout = true) {
 // DOM CONTENT LOADED: INIT
 // ---------------------------
 window.addEventListener("DOMContentLoaded", () => {
+  const endPrompt = document.getElementById("endPrompt");
+  const endPromptClose = document.getElementById("endPromptClose");
+
+  // Close button
+  endPromptClose?.addEventListener("click", () => {
+    endPrompt.classList.add("hidden");
+  });
+
+  // Click outside to close
+  window.addEventListener("click", (event) => {
+    if (event.target === endPrompt) {
+      endPrompt.classList.add("hidden");
+    }
+  });
   // Populate past weeks dropdown
   populatePastWeeksDropdown(currentWeekInfo);
 
