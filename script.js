@@ -82,7 +82,7 @@ function populatePastWeeksDropdown(currentWeekInfo) {
 
   const { week: currentWeek, year: currentYear } = currentWeekInfo;
 
-  for (let i = 0; i < 5; i++) {
+  for (let i = 1; i < 5; i++) {
     let week = currentWeek - i;
     let year = currentYear;
 
@@ -98,8 +98,7 @@ function populatePastWeeksDropdown(currentWeekInfo) {
     weekPicker.appendChild(option);
   }
 
-  // Default selection: current week
-  weekPicker.value = `${currentYear}-${currentWeek}`;
+  weekPicker.value = "";
 }
 
 // Shuffle helper
@@ -529,19 +528,6 @@ window.addEventListener("DOMContentLoaded", () => {
     alert("📸 To share on Instagram, take a screenshot of your score and post it on your feed or story!");
   });
 
-  // Load saved state if completed
-  const completedWeek = localStorage.getItem("completedWeek");
-  if (completedWeek === `${currentYear}-${currentWeek}`) {
-    solvedGroups = JSON.parse(localStorage.getItem("solvedGroups") || "[]");
-    remaining = [];
-    renderTiles();
-
-    document.getElementById("feedback").textContent = "✅ You've already completed this week's puzzle.";
-    document.getElementById("submit-button").disabled = true;
-    document.getElementById("shuffle-button").disabled = true;
-  } else {
-    localStorage.removeItem("solvedGroups");
-  }
 
   // Start current week
   startGameForWeek(currentYear, currentWeek, true);
