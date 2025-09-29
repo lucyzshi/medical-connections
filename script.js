@@ -383,8 +383,15 @@ function initCommentBox() {
 // Call init after DOM loads
 window.addEventListener("DOMContentLoaded", initCommentBox);
 
+function launchConfetti() {
+  confetti({
+    particleCount: 120,
+    spread: 70,
+    origin: { y: 0.6 }
+  });
+}
+
 function onGameComplete() {
-  
 const isPerfect = wrongGuesses === 0 && solvedGroups.length === Object.keys(groups).length;
   if (isPerfect) {
     const playerName = localStorage.getItem("playerName") || prompt("Enter your name:") || "Anonymous";
@@ -400,8 +407,19 @@ const isPerfect = wrongGuesses === 0 && solvedGroups.length === Object.keys(grou
       timestamp: Date.now()
     });
   } else {
+    currentStreak = 0;
     localStorage.setItem("winStreak", 0);
   }
+  launchConfetti();
+    const streakMessage = document.getElementById("streakMessage");
+  if (isPerfect && currentStreak > 1) {
+    streakMessage.textContent = `🔥 Current streak: ${currentStreak} perfect weeks!`;
+  } else if (isPerfect) {
+    streakMessage.textContent = `🔥 Current streak: 1 perfect week!`;
+  } else {
+    streakMessage.textContent = `❌ Streak broken — try again next week!`;
+  }
+  showEndPrompt();
 }
 
 // Call onGameComplete() at the end of endGame() if all groups solved
