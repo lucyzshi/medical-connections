@@ -232,7 +232,7 @@ function endGame(message) {
 
 localStorage.setItem("completedWeek", week);
    localStorage.setItem("solvedGroups", JSON.stringify(solvedGroups));
-
+  onGameComplete();
 }
 
 function showFeedback(msg) {
@@ -400,33 +400,60 @@ function launchConfetti() {
 }
 
 function onGameComplete() {
-const isPerfect = wrongGuesses === 0 && solvedGroups.length === Object.keys(groups).length;
+  const isPerfect =
+    wrongGuesses === 0 &&
+    solvedGroups.length === Object.keys(groups).length;
+
+  let currentStreak = 0;
+
+  // Update streaks and leaderboard
   if (isPerfect) {
-    const playerName = localStorage.getItem("playerName") || prompt("Enter your name:") || "Anonymous";
+    const playerName =
+      localStorage.getItem("playerName") ||
+      prompt("Enter your name:") ||
+      "Anonymous";
     localStorage.setItem("playerName", playerName);
 
-    const currentStreak = parseInt(localStorage.getItem("winStreak") || "0") + 1;
+    currentStreak =
+      parseInt(localStorage.getItem("winStreak") || "0") + 1;
     localStorage.setItem("winStreak", currentStreak);
 
     const dbRef = ref(db, "leaderboard/" + playerName);
     set(dbRef, {
       name: playerName,
       streak: currentStreak,
-      timestamp: Date.now()
+      timestamp: Date.now(),
     });
   } else {
+    // reset streak
     currentStreak = 0;
     localStorage.setItem("winStreak", 0);
   }
+
+  // Launch confetti for any completion
   launchConfetti();
-    const streakMessage = document.getElementById("streakMessage");
-  if (isPerfect && currentStreak > 1) {
+
+  // Update streak info in modal
+  const streakMessage = document.getElementById("streakMessage");
+  if (currentStreak > 1) {
     streakMessage.textContent = `🔥 Current streak: ${currentStreak} perfect weeks!`;
-  } else if (isPerfect) {
+  } else if (currentStreak === 1) {
     streakMessage.textContent = `🔥 Current streak: 1 perfect week!`;
   } else {
     streakMessage.textContent = `❌ Streak broken — try again next week!`;
   }
+
+  // Update performance message based on completion
+  const performanceMessage = document.getElementById("performanceMessage");
+  if (isPerfect) {
+    performanceMessage.textContent = "🎉 Amazing! You solved all groups perfectly!";
+    document.getElementById("endPromptTitle").textContent = "🎉 Perfect Solve!";
+  } else {
+    performanceMessage.textContent = `You solved ${solvedGroups.length} of ${Object.keys(groups).length} groups. Great effort!`;
+    document.getElementById("endPromptTitle").textContent = "Puzzle Complete!";
+  }
+
+  // Show the modal
   showEndPrompt();
 }
 
