@@ -187,7 +187,7 @@ function markGroupAsSolved(words, groupName) {
   remaining = remaining.filter(word => !words.includes(word));
   
   words.forEach(word => {
-    const tileEl = document.querySelector(`.cell[data-word="${word}"]`);
+    const tileEl = document.querySelector(`.tile[data-word="${word}"]`);
     if (tileEl) {
       tileEl.classList.add("solved");
     }
@@ -199,7 +199,6 @@ function markGroupAsSolved(words, groupName) {
 
 if (solvedGroups.length === Object.keys(groups).length) {
   endGame("🎉 Congratulations! You solved all groups.");
-  onGameComplete();
 }
 
 }
@@ -230,7 +229,7 @@ function endGame(message) {
 
 
 
-localStorage.setItem("completedWeek", week);
+localStorage.setItem("completedWeek", `${currentYear}-${week}`);
    localStorage.setItem("solvedGroups", JSON.stringify(solvedGroups));
   onGameComplete();
 }
@@ -502,8 +501,8 @@ window.onload = () => {
   });
 
   // ✅ Only enforce "completed" lockout for current week, not past weeks
-  const completed = parseInt(localStorage.getItem("completedWeek"));
-  if (completed === currentWeek) {
+  const completed = localStorage.getItem("completedWeek");
+if (completed === `${currentYear}-${currentWeek}`) {
     document.getElementById("feedback").textContent =
       "✅ You've already completed this week's puzzle.";
     document.getElementById("submit-button").disabled = true;
@@ -525,8 +524,8 @@ function startGameForWeek(year, wk, checkCompletion = true) {
 
   // Only check localStorage lockout if it's the current week
   if (checkCompletion && year === currentYear && wk === currentWeek) {
-    const completed = parseInt(localStorage.getItem("completedWeek"));
-    if (completed === currentWeek) {
+    const completed = localStorage.getItem("completedWeek");
+    if (completed === `${currentYear}-${currentWeek}`) {
       document.getElementById("feedback").textContent =
         "✅ You've already completed this week's puzzle.";
       document.getElementById("submit-button").disabled = true;
@@ -534,7 +533,7 @@ function startGameForWeek(year, wk, checkCompletion = true) {
       return;
     }
   }
-
+  
   // ✅ Allow loading normally for past weeks
   document.getElementById("submit-button").disabled = false;
   document.getElementById("shuffle-button").disabled = false;
