@@ -402,6 +402,7 @@ function endGame(message, year = currentYear, wk = currentWeek) {
   document.querySelectorAll(".tile").forEach(t => t.classList.add("disabled"));
   document.getElementById("shuffle-button").disabled = true;
 
+  // Add unsolved groups
   const unsolved = Object.entries(groups).filter(([groupName]) =>
     !solvedGroups.some(s => s.name === groupName)
   );
@@ -410,14 +411,18 @@ function endGame(message, year = currentYear, wk = currentWeek) {
     solvedGroups.push({ name: groupName + " (Unsolved)", words });
   });
 
-if (year === currentYear && wk === currentWeek) {
-  localStorage.setItem("completedWeek", `${currentYear}-${currentWeek}`);
-  localStorage.setItem(`solvedGroups-${currentYear}-${currentWeek}`, JSON.stringify(solvedGroups));
-}
+  // Save solved groups only for the week actually being played
+  const weekKey = `${year}-${wk}`;
+  if (!(year < currentYear || (year === currentYear && wk < currentWeek))) {
+    // Only save for current week or future weeks (never save past weeks)
+    localStorage.setItem("completedWeek", weekKey);
+    localStorage.setItem(`solvedGroups-${weekKey}`, JSON.stringify(solvedGroups));
+  }
 
   renderTiles();
   onGameComplete(year, wk);
 }
+
 
 async function loadPuzzleForWeek(year, week) {
   const url = `data/${year}-${week}.json`;
