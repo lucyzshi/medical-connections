@@ -425,39 +425,6 @@ function onGameComplete(year = currentYear, wk = currentWeek) {
   });
 }
 
-// ---------------------------
-// END / START GAME FUNCTIONS
-// ---------------------------
-function endGame(message, year = currentYear, wk = currentWeek) {
-  showFeedback(message);
-
-  // Disable current UI controls immediately
-  document.getElementById("shuffle-button").disabled = true;
-  document.getElementById("submit-button").disabled = true;
-
-  // Add all groups (marking unsolved ones separately)
-  const allGroups = Object.entries(groups).map(([groupName, words]) => {
-    const solved = solvedGroups.some(s => s.name === groupName);
-    return solved
-      ? solvedGroups.find(s => s.name === groupName)
-      : { name: groupName + " (Unsolved)", words, revealed: true, unsolved: true };
-  });
-
-  // Replace solvedGroups with full solution set (revealed true for end-of-game)
-  solvedGroups = allGroups;
-
-  // Save only if current week (not past weeks)
-  const weekKey = `${year}-${wk}`;
-  if (!(year < currentYear || (year === currentYear && wk < currentWeek))) {
-    localStorage.setItem("completedWeek", weekKey);
-    localStorage.setItem(`solvedGroups-${weekKey}`, JSON.stringify(solvedGroups));
-  }
-
-  // Render read-only so tiles are shown but cannot be clicked
-  renderTiles(true);
-  onGameComplete(year, wk);
-}
-
 
 
 
@@ -477,12 +444,12 @@ async function loadPuzzleForWeek(year, week) {
 }
 
 
-  // Load puzzle
+// ---------------------------
+// START GAME FOR WEEK
+// ---------------------------
 function startGameForWeek(year, wk, enforceLockout = true) {
   const isCurrentWeek = year === currentYear && wk === currentWeek;
-  const completedWeek = localStorage.getItem("completedWeek");
   const weekKey = `${year}-${wk}`;
-  const alreadyCompleted = enforceLockout && isCurrentWeek && completedWeek === weekKey;
 
   // CLEAR STATE immediately
   selectedTiles = [];
@@ -492,35 +459,76 @@ function startGameForWeek(year, wk, enforceLockout = true) {
   remaining = [];
 
   loadPuzzleForWeek(year, wk).then(() => {
-    // Now that groups are loaded, clear solvedGroups again to prevent memory bleed
+    // Clear solvedGroups again
     solvedGroups = [];
 
-// Always try to load saved solvedGroups for the requested week
-const saved = localStorage.getItem(`solvedGroups-${weekKey}`);
-if (saved) {
-  try {
-    solvedGroups = JSON.parse(saved);
-  } catch (e) {
-    console.warn("Failed to parse saved solvedGroups:", e);
-    solvedGroups = [];
-  }
-} else {
-  solvedGroups = []; // no bleed from other weeks
-}
+    // Load saved solvedGroups for this week if available
+    const saved = localStorage.getItem(`solvedGroups-${weekKey}`);
+    if (saved) {
+      try {
+        solvedGroups = JSON.parse(saved);
+      } catch (e) {
+        console.warn("Failed to parse saved solvedGroups:", e);
+        solvedGroups = [];
+      }
+    }
 
-// Build remaining tiles
-const solvedWords = solvedGroups.flatMap(s => s.words || []);
-remaining = Object.values(groups).flat().filter(w => !solvedWords.includes(w));
+    // Build remaining tiles
+    const solvedWords = solvedGroups.flatMap(s => s.words || []);
+    remaining = Object.values(groups).flat().filter(w => !solvedWords.includes(w));
 
-// Determine interactivity
-const readOnly = (year < currentYear || (year === currentYear && wk < currentWeek));
-renderTiles(readOnly);
-document.getElementById("submit-button").disabled = readOnly;
-document.getElementById("shuffle-button").disabled = readOnly;
-showFeedback(readOnly ? "📅 Archive week — cannot change solved tiles." : "");
+    // Determine if this is a past week
+    const isArchive = year < currentYear || (year === currentYear && wk < currentWeek);
 
+    // For past weeks, tiles are interactive but we do NOT save progress
+    renderTiles(false); 
+    document.getElementById("submit-button").disabled = false;
+    document.getElementById("shuffle-button").disabled = false;
+
+    // Optional feedback for past weeks
+    if (isArchive) showFeedback("📅 Archive week — progress won’t affect streaks.");
+    else showFeedback("");
   });
 }
+
+
+// ---------------------------
+// END GAME
+// ---------------------------
+function endGame(message, year = currentYear, wk = currentWeek) {
+  showFeedback(message);
+
+  // Disable current UI controls
+  document.getElementById("shuffle-button").disabled = true;
+  document.getElementById("submit-button").disabled = true;
+
+  // Add all groups (mark unsolved ones)
+  const allGroups = Object.entries(groups).map(([groupName, words]) => {
+    const solved = solvedGroups.some(s => s.name === groupName);
+    return solved
+      ? solvedGroups.find(s => s.name === groupName)
+      : { name: groupName + " (Unsolved)", words, revealed: true, unsolved: true };
+  });
+
+  // Replace solvedGroups with full solution set
+  solvedGroups = allGroups;
+
+  const isCurrentWeek = year === currentYear && wk === currentWeek;
+
+  // Save only for current week
+  if (isCurrentWeek) {
+    const weekKey = `${year}-${wk}`;
+    localStorage.setItem("completedWeek", weekKey);
+    localStorage.setItem(`solvedGroups-${weekKey}`, JSON.stringify(solvedGroups));
+  }
+
+  // Render tiles as read-only (so solved ones are revealed)
+  renderTiles(true);
+
+  // Trigger completion modal / streak logic
+  onGameComplete(year, wk);
+}
+
 
 
 // ---------------------------
