@@ -479,9 +479,12 @@ function startGameForWeek(year, wk, enforceLockout = true) {
       }
     }
 
-    // Build remaining tiles (everything not solved yet)
-    const solvedWords = solvedGroups.flatMap(s => s.words || []);
-    remaining = Object.values(groups).flat().filter(w => !solvedWords.includes(w));
+// Build remaining tiles (everything not solved yet)
+const solvedWords = solvedGroups.flatMap(s => s.words || []);
+remaining = Object.values(groups).flat().filter(w => !solvedWords.includes(w));
+
+// Shuffle remaining tiles
+shuffleArray(remaining);
 
     // Determine if this is a past week
     const isArchive = year < currentYear || (year === currentYear && wk < currentWeek);
