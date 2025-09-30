@@ -366,10 +366,12 @@ function onGameComplete(year = currentYear, wk = currentWeek) {
   const isCurrentWeek = year === currentYear && wk === currentWeek;
 
   // Perfect means NO wrong guesses and all groups solved
-  const isPerfect = wrongGuesses === 0 && solvedGroups.filter(g => !g.name.includes("(Unsolved)")).length === Object.keys(groups).length;
+  const isPerfect = wrongGuesses === 0 &&
+    solvedGroups.filter(g => !g.name.includes("(Unsolved)")).length === Object.keys(groups).length;
 
   let currentStreak = parseInt(localStorage.getItem("winStreak") || "0");
 
+  // Only update streak and launch confetti for current week
   if (isCurrentWeek) {
     if (isPerfect) {
       const playerName = localStorage.getItem("playerName") || prompt("Enter your name:") || "Anonymous";
@@ -380,37 +382,33 @@ function onGameComplete(year = currentYear, wk = currentWeek) {
 
       const dbRef = ref(db, "leaderboard/" + playerName);
       set(dbRef, { name: playerName, streak: currentStreak, timestamp: Date.now() });
+
+      launchConfetti();
     } else {
       currentStreak = 0;
       localStorage.setItem("winStreak", 0);
     }
-
-    launchConfetti();
   }
 
-  // ✅ Always show end prompt, even for past weeks
+  // Always show end prompt
   const endPrompt = document.getElementById("endPrompt");
   const streakMessage = document.getElementById("streakMessage");
   const performanceMessage = document.getElementById("performanceMessage");
   const endPromptTitle = document.getElementById("endPromptTitle");
   const endPromptClose = document.getElementById("endPromptClose");
-  
 
   const solvedCount = solvedGroups.filter(g => !g.name.includes("(Unsolved)")).length;
-if (isCurrentWeek) {
-  if (currentStreak > 1) {
-    streakMessage.textContent = `🔥 Current streak: ${currentStreak} perfect weeks!`;
-  } else if (currentStreak === 1) {
-    streakMessage.textContent = `🔥 Current streak: 1 perfect week!`;
+
+  // Set streak message
+  if (isCurrentWeek) {
+    if (currentStreak > 1) streakMessage.textContent = `🔥 Current streak: ${currentStreak} perfect weeks!`;
+    else if (currentStreak === 1) streakMessage.textContent = `🔥 Current streak: 1 perfect week!`;
+    else streakMessage.textContent = `❌ Streak broken — try again next week!`;
   } else {
-    streakMessage.textContent = `❌ Streak broken — try again next week!`;
+    streakMessage.textContent = "📅 Archive week — streak unaffected.";
   }
-} else {
-  // Past week: never affect streak, no “broken” message
-  streakMessage.textContent = "📅 Archive week — streak unaffected.";
-}
 
-
+  // Set performance message and title
   if (isPerfect) {
     performanceMessage.textContent = "🎉 Amazing! You solved all groups perfectly!";
     endPromptTitle.textContent = "🎉 Perfect Solve!";
@@ -419,10 +417,10 @@ if (isCurrentWeek) {
     endPromptTitle.textContent = "Puzzle Complete!";
   }
 
-  // Show the modal
+  // Show modal
   endPrompt?.classList.remove("hidden");
 
-  // Attach one-time modal close events
+  // Close modal events
   endPromptClose?.addEventListener("click", () => endPrompt.classList.add("hidden"), { once: true });
   window.addEventListener("click", function handleOutsideClick(event) {
     if (event.target === endPrompt) {
@@ -431,6 +429,7 @@ if (isCurrentWeek) {
     }
   });
 }
+
 
 
 
@@ -467,7 +466,7 @@ function startGameForWeek(year, wk) {
   remaining = [];
 
   loadPuzzleForWeek(year, wk).then(() => {
-    // If current week already completed, show read-only
+    // Current week already completed: read-only
     if (isCurrentWeek && completedWeek === weekKey) {
       const saved = localStorage.getItem(`solvedGroups-${weekKey}`);
       solvedGroups = saved ? JSON.parse(saved) : [];
@@ -481,20 +480,21 @@ function startGameForWeek(year, wk) {
       return;
     }
 
-    // Load saved solvedGroups only for past weeks
+    // Past weeks: load saved solvedGroups if available, but still interactive
     if (!isCurrentWeek) {
       const saved = localStorage.getItem(`solvedGroups-${weekKey}`);
       if (saved) solvedGroups = JSON.parse(saved);
-    } else {
-      solvedGroups = []; // current week always starts fresh
     }
+
+    // Current week always starts fresh
+    if (isCurrentWeek && completedWeek !== weekKey) solvedGroups = [];
 
     // Build remaining tiles & shuffle
     const solvedWords = solvedGroups.flatMap(s => s.words || []);
     remaining = Object.values(groups).flat().filter(w => !solvedWords.includes(w));
     shuffleArray(remaining);
 
-    renderTiles(false);
+    renderTiles(false); // fully interactive
     document.getElementById("submit-button").disabled = false;
     document.getElementById("shuffle-button").disabled = false;
 
@@ -503,18 +503,17 @@ function startGameForWeek(year, wk) {
   });
 }
 
-
 // ---------------------------
 // END GAME
 // ---------------------------
 function endGame(message, year = currentYear, wk = currentWeek) {
   showFeedback(message);
 
-  // Disable current UI controls
+  // Disable buttons for this session
   document.getElementById("shuffle-button").disabled = true;
   document.getElementById("submit-button").disabled = true;
 
-  // Add all groups (mark unsolved ones)
+  // Build full group list (mark unsolved groups)
   const allGroups = Object.entries(groups).map(([groupName, words]) => {
     const solved = solvedGroups.some(s => s.name === groupName);
     return solved
@@ -522,22 +521,21 @@ function endGame(message, year = currentYear, wk = currentWeek) {
       : { name: groupName + " (Unsolved)", words, revealed: true, unsolved: true };
   });
 
-  // Replace solvedGroups with full solution set
   solvedGroups = allGroups;
 
   const isCurrentWeek = year === currentYear && wk === currentWeek;
 
-  // Save only for current week
+  // Save progress **only for current week**
   if (isCurrentWeek) {
     const weekKey = `${year}-${wk}`;
     localStorage.setItem("completedWeek", weekKey);
     localStorage.setItem(`solvedGroups-${weekKey}`, JSON.stringify(solvedGroups));
   }
 
-  // Render tiles as read-only (so solved ones are revealed)
+  // Render all tiles as read-only
   renderTiles(true);
 
-  // Trigger completion modal / streak logic
+  // Trigger modal and streak logic
   onGameComplete(year, wk);
 }
 
