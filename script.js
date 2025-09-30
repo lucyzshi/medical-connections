@@ -398,8 +398,6 @@ function onGameComplete(year = currentYear, wk = currentWeek) {
       localStorage.setItem("winStreak", 0);
     }
   }
-}
-
 
   // Always show end prompt
   const endPrompt = document.getElementById("endPrompt");
