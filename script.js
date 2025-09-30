@@ -431,10 +431,12 @@ async function startGameForWeek(year, week) {
 // ---------------------------
 // END GAME (PER WEEK STATE)
 // ---------------------------
+
 function endGame(message, year = currentYear, week = currentWeek) {
   const weekKey = getWeekKey(year, week);
   const state = weekStates[weekKey];
   showFeedback(message);
+const isCurrentWeek = year === currentYear && week === currentWeek;
 
   document.getElementById("shuffle-button").disabled = true;
   document.getElementById("submit-button").disabled = true;
@@ -450,11 +452,6 @@ function endGame(message, year = currentYear, week = currentWeek) {
 
   renderTiles(true, state);
 
-  // Save progress only for current week
-  if (year === currentYear && week === currentWeek) {
-    localStorage.setItem("completedWeek", weekKey);
-    localStorage.setItem(`solvedGroups-${weekKey}`, JSON.stringify(state.solvedGroups));
-  }
 
   if (isCurrentWeek) {
     localStorage.setItem("completedWeek", weekKey);
