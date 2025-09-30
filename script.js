@@ -495,37 +495,30 @@ function startGameForWeek(year, wk, enforceLockout = true) {
     // Now that groups are loaded, clear solvedGroups again to prevent memory bleed
     solvedGroups = [];
 
-    if (alreadyCompleted) {
-      const saved = localStorage.getItem(`solvedGroups-${weekKey}`);
-      if (saved) {
-        try {
-          solvedGroups = JSON.parse(saved);
-        } catch (e) {
-          console.warn("Failed to parse saved solvedGroups:", e);
-          solvedGroups = [];
-        }
-      }
-      const solvedWords = solvedGroups.flatMap(s => s.words || []);
-      remaining = Object.values(groups).flat().filter(w => !solvedWords.includes(w));
+// Always try to load saved solvedGroups for the requested week
+const saved = localStorage.getItem(`solvedGroups-${weekKey}`);
+if (saved) {
+  try {
+    solvedGroups = JSON.parse(saved);
+  } catch (e) {
+    console.warn("Failed to parse saved solvedGroups:", e);
+    solvedGroups = [];
+  }
+} else {
+  solvedGroups = []; // no bleed from other weeks
+}
 
-      renderTiles(true);
-      document.getElementById("submit-button").disabled = true;
-      document.getElementById("shuffle-button").disabled = true;
-      showFeedback("✅ You've already completed this week's puzzle.");
-    } else {
-      // Past week or new week: start fresh
-      remaining = Object.values(groups).flat();
-      shuffleArray(remaining);
+// Build remaining tiles
+const solvedWords = solvedGroups.flatMap(s => s.words || []);
+remaining = Object.values(groups).flat().filter(w => !solvedWords.includes(w));
 
-      solvedGroups = [];  // ensure no leftover solved groups from memory
-      previousGuesses = [];
-      wrongGuesses = 0;
+// Determine interactivity
+const readOnly = (year < currentYear || (year === currentYear && wk < currentWeek));
+renderTiles(readOnly);
+document.getElementById("submit-button").disabled = readOnly;
+document.getElementById("shuffle-button").disabled = readOnly;
+showFeedback(readOnly ? "📅 Archive week — cannot change solved tiles." : "");
 
-      renderTiles(false); // interactive
-      document.getElementById("submit-button").disabled = false;
-      document.getElementById("shuffle-button").disabled = false;
-      showFeedback("");
-    }
   });
 }
 
