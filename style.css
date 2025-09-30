@@ -108,6 +108,25 @@ h2 {
   background: linear-gradient(145deg, #c8e6c9, #e8f5e9); /* green gradient */
   animation: heartbeat 0.8s ease-in-out;
 }
+.tile.revealed {
+  background-color: #2e7d32; /* green */
+  color: white;
+  border: 2px solid #1b5e20;
+  opacity: 1;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.12);
+}
+
+/* keep disabled look but still clearly visible when revealed */
+.tile.disabled.revealed {
+  cursor: default;
+  filter: none;
+}
+
+/* keep an obvious 'solved' style for groups the player actually found */
+.tile.solved {
+  opacity: 0.95;
+  /* your existing solved styling can remain or be enhanced */
+}
 
 /* Heartbeat pulse animation */
 @keyframes heartbeat {
