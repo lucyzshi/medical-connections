@@ -442,13 +442,13 @@ async function loadPuzzleForWeek(year, week) {
     const response = await fetch(url);
     if (!response.ok) throw new Error("Game not found.");
     groups = await response.json();
-    resetGame();
   } catch {
     document.getElementById("feedback").textContent =
       "❌ No game found for this week. Please check back later.";
     document.getElementById("shuffle-button").disabled = true;
   }
 }
+
 
 
 // ---------------------------
