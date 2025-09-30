@@ -484,16 +484,17 @@ function startGameForWeek(year, wk, enforceLockout = true) {
   const weekKey = `${year}-${wk}`;
   const alreadyCompleted = enforceLockout && isCurrentWeek && completedWeek === weekKey;
 
-  // Reset state
+  // CLEAR STATE immediately
   selectedTiles = [];
   solvedGroups = [];
   wrongGuesses = 0;
   previousGuesses = [];
   remaining = [];
 
-  // Load puzzle
   loadPuzzleForWeek(year, wk).then(() => {
-    // If this is a previously completed *current* week, load the saved solvedGroups
+    // Now that groups are loaded, clear solvedGroups again to prevent memory bleed
+    solvedGroups = [];
+
     if (alreadyCompleted) {
       const saved = localStorage.getItem(`solvedGroups-${weekKey}`);
       if (saved) {
@@ -504,23 +505,19 @@ function startGameForWeek(year, wk, enforceLockout = true) {
           solvedGroups = [];
         }
       }
-
-      // Derive remaining from groups excluding any solved words
       const solvedWords = solvedGroups.flatMap(s => s.words || []);
       remaining = Object.values(groups).flat().filter(w => !solvedWords.includes(w));
 
-      // Render read-only (disable interactions)
       renderTiles(true);
       document.getElementById("submit-button").disabled = true;
       document.getElementById("shuffle-button").disabled = true;
       showFeedback("✅ You've already completed this week's puzzle.");
     } else {
-      // Normal play for current week or any past week (past weeks allowed multiple plays)
-      // Ensure remaining is correct (resetGame would normally set this, but enforce here)
+      // Past week or new week: start fresh
       remaining = Object.values(groups).flat();
       shuffleArray(remaining);
 
-      solvedGroups = [];
+      solvedGroups = [];  // ensure no leftover solved groups from memory
       previousGuesses = [];
       wrongGuesses = 0;
 
