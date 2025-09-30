@@ -165,7 +165,12 @@ function checkSelection() {
 function markGroupAsSolved(words, groupName) {
   // mark solved groups as revealed
   solvedGroups.push({ name: groupName, words, revealed: true });
+
+  // remove solved words from remaining
   remaining = remaining.filter(word => !words.includes(word));
+
+  // **shuffle remaining tiles so they appear random**
+  shuffleArray(remaining);
 
   words.forEach(word => {
     const tileEl = document.querySelector(`.tile[data-word="${word}"]`);
@@ -180,6 +185,7 @@ function markGroupAsSolved(words, groupName) {
     endGame("🎉 Congratulations! You solved all groups.");
   }
 }
+
 
 
 function showFeedback(msg) {
