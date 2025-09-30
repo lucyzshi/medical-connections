@@ -397,18 +397,19 @@ function onGameComplete(year = currentYear, wk = currentWeek) {
   
 
   const solvedCount = solvedGroups.filter(g => !g.name.includes("(Unsolved)")).length;
-
-  if (isCurrentWeek) {
-    if (currentStreak > 1) {
-      streakMessage.textContent = `🔥 Current streak: ${currentStreak} perfect weeks!`;
-    } else if (currentStreak === 1) {
-      streakMessage.textContent = `🔥 Current streak: 1 perfect week!`;
-    } else {
-      streakMessage.textContent = `❌ Streak broken — try again next week!`;
-    }
+if (isCurrentWeek) {
+  if (currentStreak > 1) {
+    streakMessage.textContent = `🔥 Current streak: ${currentStreak} perfect weeks!`;
+  } else if (currentStreak === 1) {
+    streakMessage.textContent = `🔥 Current streak: 1 perfect week!`;
   } else {
-    streakMessage.textContent = "📅 Archive week — streak not affected.";
+    streakMessage.textContent = `❌ Streak broken — try again next week!`;
   }
+} else {
+  // Past week: never affect streak, no “broken” message
+  streakMessage.textContent = "📅 Archive week — streak unaffected.";
+}
+
 
   if (isPerfect) {
     performanceMessage.textContent = "🎉 Amazing! You solved all groups perfectly!";
