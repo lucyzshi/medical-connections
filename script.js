@@ -109,6 +109,9 @@ function shuffleArray(arr) {
   }
 }
 
+
+
+
 // ---------------------------
 // GAME LOGIC FUNCTIONS
 // ---------------------------
@@ -380,35 +383,45 @@ function getActiveWeekState() {
   return weekStates[getWeekKey(currentYear, currentWeek)];
 }
 
-
+// ---------------------------
+// INIT WEEK STATE
+// ---------------------------
+function initWeekState(year, week, groups) {
+  const weekKey = `${year}-${week}`;
+  if (!weekStates[weekKey]) {
+    weekStates[weekKey] = {
+      year,
+      week,
+      groups,             // the puzzle groups from JSON
+      selectedTiles: [],
+      solvedGroups: [],
+      wrongGuesses: 0,
+      remaining: Object.values(groups).flat(),
+      previousGuesses: [],
+    };
+    shuffleArray(weekStates[weekKey].remaining);
+  }
+  return weekStates[weekKey];
+}
 
 // ---------------------------
 // START GAME FOR WEEK
 // ---------------------------
-
-async function loadPuzzleForWeek(year, week) {
-  const weekKey = `${year}-${week}`;
-  try {
-    const response = await fetch(`data/${weekKey}.json`);
-    if (!response.ok) {
-      console.warn(`Puzzle file for ${weekKey} not found.`);
-      return null;
-    }
-    const puzzle = await response.json();
-    return puzzle;
-  } catch (err) {
-    console.error("Error loading puzzle for week:", err);
-    return null;
-  }
-}
-
 async function startGameForWeek(year, week) {
   const isCurrentWeek = year === currentYear && week === currentWeek;
   const weekKey = getWeekKey(year, week);
 
-  // Load puzzle for the week
-  const weekGroups = await loadPuzzleForWeek(year, week);
-  if (!weekGroups) return;
+  // Fetch puzzle JSON from /data folder
+  let weekGroups;
+  try {
+    const response = await fetch(`data/${year}-${week}.json`);
+    if (!response.ok) throw new Error("Puzzle file not found");
+    weekGroups = await response.json();
+  } catch (err) {
+    console.error("Failed to load puzzle:", err);
+    showFeedback("❌ Could not load this week's puzzle.");
+    return;
+  }
 
   // Initialize or reuse week state
   const state = initWeekState(year, week, weekGroups);
@@ -442,7 +455,6 @@ async function startGameForWeek(year, week) {
   document.getElementById("submit-button").disabled = isLocked;
   document.getElementById("shuffle-button").disabled = isLocked;
 }
-
 
 
 // ---------------------------
@@ -620,5 +632,5 @@ document.getElementById("shuffle-button").addEventListener("click", () => {
 
 
   // Start current week
-  startGameForWeek(currentYear, currentWeek, true);
+  startGameForWeek(currentYear, currentWeek);
 });
