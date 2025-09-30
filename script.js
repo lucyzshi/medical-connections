@@ -476,18 +476,6 @@ async function loadPuzzleForWeek(year, week) {
   }
 }
 
-function startGameForWeek(year, wk, enforceLockout = true) {
-  const isCurrentWeek = year === currentYear && wk === currentWeek;
-  const completedWeek = localStorage.getItem("completedWeek");
-  const weekKey = `${year}-${wk}`;
-  const alreadyCompleted = enforceLockout && isCurrentWeek && completedWeek === weekKey;
-
-  // Reset state
-  selectedTiles = [];
-  solvedGroups = [];
-  wrongGuesses = 0;
-  previousGuesses = [];
-  remaining = [];
 
   // Load puzzle
 function startGameForWeek(year, wk, enforceLockout = true) {
