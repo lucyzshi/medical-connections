@@ -107,13 +107,26 @@ h2 {
 }
 
 /* Subtle green pulse for solved/revealed tiles */
+/* Solved / Revealed Tiles */
 .tile.solved,
 .tile.revealed {
   animation: subtleGreenPulse 1s ease-in-out 2; /* pulse twice and stop */
   background-color: #d1fae5; /* light green base */
   border-color: #10b981;     /* emerald accent */
-  opacity: 0.95;
+  opacity: 0.7;              /* slightly faded to show inactive */
+  color: #065f46;            /* darker green text for contrast */
+  pointer-events: none;       /* disable interaction */
 }
+
+
+/* Keep hover effects off for solved tiles */
+.tile.solved:hover,
+.tile.revealed:hover {
+  transform: none;
+  box-shadow: 
+    inset 2px 2px 4px rgba(0,0,0,0.05);
+}
+
 
 @keyframes subtleGreenPulse {
   0%   { transform: scale(1); background-color: #d1fae5; }
