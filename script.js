@@ -331,8 +331,25 @@ function initCommentBox() {
 // CONFETTI
 // ---------------------------
 function launchConfetti() {
-  confetti({ particleCount: 120, spread: 70, origin: { y: 0.6 } });
+  const duration = 5000; // 5 seconds
+  const end = Date.now() + duration;
+
+  (function frame() {
+    // burst from random x positions
+    confetti({
+      particleCount: 8,
+      startVelocity: 40,
+      spread: 90,
+      origin: { x: Math.random(), y: Math.random() - 0.2 },
+      scalar: 1.5 // larger pieces
+    });
+
+    if (Date.now() < end) {
+      requestAnimationFrame(frame);
+    }
+  })();
 }
+
 
 // ---------------------------
 // ON GAME COMPLETE
@@ -411,7 +428,8 @@ function onGameComplete(year = currentYear, wk = currentWeek) {
 // ---------------------------
 function endGame(message, year = currentYear, wk = currentWeek) {
   showFeedback(message);
-  document.querySelectorAll(".tile").forEach(t => t.classList.add("disabled"));
+
+  // Disable current UI controls immediately
   document.getElementById("shuffle-button").disabled = true;
   document.getElementById("submit-button").disabled = true;
 
@@ -420,10 +438,11 @@ function endGame(message, year = currentYear, wk = currentWeek) {
     const solved = solvedGroups.some(s => s.name === groupName);
     return solved
       ? solvedGroups.find(s => s.name === groupName)
-      : { name: groupName + " (Unsolved)", words, unsolved: true };
+      : { name: groupName + " (Unsolved)", words, revealed: true, unsolved: true };
   });
 
-  solvedGroups = allGroups; // replace with full solution set
+  // Replace solvedGroups with full solution set (revealed true for end-of-game)
+  solvedGroups = allGroups;
 
   // Save only if current week (not past weeks)
   const weekKey = `${year}-${wk}`;
@@ -432,9 +451,11 @@ function endGame(message, year = currentYear, wk = currentWeek) {
     localStorage.setItem(`solvedGroups-${weekKey}`, JSON.stringify(solvedGroups));
   }
 
-  renderTiles(); // render all as grouped rows
+  // Render read-only so tiles are shown but cannot be clicked
+  renderTiles(true);
   onGameComplete(year, wk);
 }
+
 
 
 
@@ -467,19 +488,56 @@ function startGameForWeek(year, wk, enforceLockout = true) {
   remaining = [];
 
   // Load puzzle
+function startGameForWeek(year, wk, enforceLockout = true) {
+  const isCurrentWeek = year === currentYear && wk === currentWeek;
+  const completedWeek = localStorage.getItem("completedWeek");
+  const weekKey = `${year}-${wk}`;
+  const alreadyCompleted = enforceLockout && isCurrentWeek && completedWeek === weekKey;
+
+  // Reset state
+  selectedTiles = [];
+  solvedGroups = [];
+  wrongGuesses = 0;
+  previousGuesses = [];
+  remaining = [];
+
+  // Load puzzle
   loadPuzzleForWeek(year, wk).then(() => {
+    // If this is a previously completed *current* week, load the saved solvedGroups
     if (alreadyCompleted) {
-      // Disable interactions only for already completed current week
+      const saved = localStorage.getItem(`solvedGroups-${weekKey}`);
+      if (saved) {
+        try {
+          solvedGroups = JSON.parse(saved);
+        } catch (e) {
+          console.warn("Failed to parse saved solvedGroups:", e);
+          solvedGroups = [];
+        }
+      }
+
+      // Derive remaining from groups excluding any solved words
+      const solvedWords = solvedGroups.flatMap(s => s.words || []);
+      remaining = Object.values(groups).flat().filter(w => !solvedWords.includes(w));
+
+      // Render read-only (disable interactions)
+      renderTiles(true);
       document.getElementById("submit-button").disabled = true;
       document.getElementById("shuffle-button").disabled = true;
-
-      renderTiles(true); // read-only
       showFeedback("✅ You've already completed this week's puzzle.");
     } else {
-      // Normal play for current week or any past week
+      // Normal play for current week or any past week (past weeks allowed multiple plays)
+      // Ensure remaining is correct (resetGame would normally set this, but enforce here)
+      remaining = Object.values(groups).flat();
+      shuffleArray(remaining);
+
+      solvedGroups = [];
+      previousGuesses = [];
+      wrongGuesses = 0;
+
       renderTiles(false); // interactive
       document.getElementById("submit-button").disabled = false;
       document.getElementById("shuffle-button").disabled = false;
+      showFeedback("");
     }
   });
 }
