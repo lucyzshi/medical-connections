@@ -209,28 +209,30 @@ function renderTiles(readOnly = false) {
   if (!readOnly) selectedTiles = [];
 
   // Solved Groups at top
-  solvedGroups.forEach(group => {
-    const groupWrapper = document.createElement("div");
-    groupWrapper.className = "group-wrapper";
+solvedGroups.forEach((group, index) => {
+  const groupWrapper = document.createElement("div");
+  groupWrapper.className = "group-wrapper";
 
-    const label = document.createElement("div");
-    label.className = "group-label";
-    label.textContent = group.name;
-    groupWrapper.appendChild(label);
+  const label = document.createElement("div");
+  label.className = "group-label";
+  label.textContent = group.name;
+  groupWrapper.appendChild(label);
 
-    const row = document.createElement("div");
-    row.className = "solved-row";
+  const row = document.createElement("div");
+  row.className = "solved-row";
 
-    group.words.forEach(word => {
-      // pass solved = true, revealed = !!group.revealed
-      const tile = createTile(word, true, !!group.revealed);
-      if (readOnly) tile.classList.add("disabled");
-      row.appendChild(tile);
-    });
-
-    groupWrapper.appendChild(row);
-    tileContainer.appendChild(groupWrapper);
+  group.words.forEach(word => {
+    const tile = createTile(word, true, !!group.revealed);
+    if (readOnly) tile.classList.add("disabled");
+    // add stagger delay
+    tile.style.animationDelay = `${index * 0.2}s`;
+    row.appendChild(tile);
   });
+
+  groupWrapper.appendChild(row);
+  tileContainer.appendChild(groupWrapper);
+});
+
 
   const grid = document.createElement("div");
   grid.className = "unsolved-grid";
