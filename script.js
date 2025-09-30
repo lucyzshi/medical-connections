@@ -385,6 +385,13 @@ function getActiveWeekState() {
 // ---------------------------
 // START GAME FOR WEEK
 // ---------------------------
+
+async function loadPuzzleForWeek(year, week) {
+  const response = await fetch(`puzzles/${year}-${week}.json`);
+  if (!response.ok) return null;
+  return await response.json();
+}
+
 async function startGameForWeek(year, week) {
   const isCurrentWeek = year === currentYear && week === currentWeek;
   const weekKey = getWeekKey(year, week);
