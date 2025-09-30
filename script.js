@@ -387,9 +387,19 @@ function getActiveWeekState() {
 // ---------------------------
 
 async function loadPuzzleForWeek(year, week) {
-  const response = await fetch(`puzzles/${year}-${week}.json`);
-  if (!response.ok) return null;
-  return await response.json();
+  const weekKey = `${year}-${week}`;
+  try {
+    const response = await fetch(`data/${weekKey}.json`);
+    if (!response.ok) {
+      console.warn(`Puzzle file for ${weekKey} not found.`);
+      return null;
+    }
+    const puzzle = await response.json();
+    return puzzle;
+  } catch (err) {
+    console.error("Error loading puzzle for week:", err);
+    return null;
+  }
 }
 
 async function startGameForWeek(year, week) {
