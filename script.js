@@ -112,133 +112,112 @@ function shuffleArray(arr) {
 // ---------------------------
 // GAME LOGIC FUNCTIONS
 // ---------------------------
-function handleTileClick(tile) {
+function handleTileClick(tile, state) {
   const word = tile.dataset.word;
-  if (tile.classList.contains("disabled") || tile.classList.contains("solved")) return;
+  if (!tile || tile.classList.contains("disabled") || tile.classList.contains("solved")) return;
 
   if (tile.classList.contains("selected")) {
     tile.classList.remove("selected");
-    selectedTiles = selectedTiles.filter(w => w !== word);
+    state.selectedTiles = state.selectedTiles.filter(w => w !== word);
   } else {
-    if (selectedTiles.length >= 4) return;
+    if (state.selectedTiles.length >= 4) return;
     tile.classList.add("selected");
-    selectedTiles.push(word);
+    state.selectedTiles.push(word);
   }
 }
 
-function checkSelection() {
-  const currentGuess = [...selectedTiles].sort().join(",");
 
-  if (previousGuesses.includes(currentGuess)) {
+function checkSelection() {
+  const state = getActiveWeekState();
+  if (!state) return;
+
+  const currentGuess = [...state.selectedTiles].sort().join(",");
+
+  if (state.previousGuesses.includes(currentGuess)) {
     showFeedback("⚠️ You've already tried this combination.");
     return;
   }
 
-  previousGuesses.push(currentGuess);
+  state.previousGuesses.push(currentGuess);
 
-  const match = Object.entries(groups).find(([groupName, words]) =>
-    words.every(w => selectedTiles.includes(w)) &&
-    selectedTiles.every(w => words.includes(w))
+  const match = Object.entries(state.groups).find(([groupName, words]) =>
+    words.every(w => state.selectedTiles.includes(w)) &&
+    state.selectedTiles.every(w => words.includes(w))
   );
 
   if (match) {
-    markGroupAsSolved(match[1], match[0]);
+    markGroupAsSolved(match[1], match[0], state);
   } else {
-    const closeMatch = Object.values(groups).some(words => {
-      const intersection = words.filter(w => selectedTiles.includes(w));
+    const closeMatch = Object.values(state.groups).some(words => {
+      const intersection = words.filter(w => state.selectedTiles.includes(w));
       return intersection.length === 3;
     });
 
-    wrongGuesses++;
-    updateGuessDisplay();
+    state.wrongGuesses++;
+    updateGuessDisplayForState(state);
 
     if (closeMatch) showFeedback("🟡 So close! You're one away from a correct group.");
     else showFeedback("❌ Incorrect group.");
 
-    if (wrongGuesses >= maxWrongGuesses) endGame("💥 Game over. You've used all your guesses.");
+    if (state.wrongGuesses >= maxWrongGuesses) {
+      endGame("💥 Game over. You've used all your guesses.", currentYear, currentWeek);
+    }
 
-    selectedTiles = [];
-    renderTiles();
+    state.selectedTiles = [];
+    renderTiles(false, state);
   }
 }
 
-function markGroupAsSolved(words, groupName) {
-  // mark solved groups as revealed
-  solvedGroups.push({ name: groupName, words, revealed: true });
+function markGroupAsSolved(words, groupName, state) {
+  state.solvedGroups.push({ name: groupName, words, revealed: true });
+  state.remaining = state.remaining.filter(word => !words.includes(word));
 
-  // remove solved words from remaining
-  remaining = remaining.filter(word => !words.includes(word));
-
-  // **shuffle remaining tiles so they appear random**
-  shuffleArray(remaining);
+  shuffleArray(state.remaining);
 
   words.forEach(word => {
     const tileEl = document.querySelector(`.tile[data-word="${word}"]`);
     if (tileEl) tileEl.classList.add("solved");
   });
 
-  selectedTiles = [];
+  state.selectedTiles = [];
   showFeedback(`✅ Correct! Group: ${groupName}`);
-  renderTiles();
+  renderTiles(false, state);
 
-  if (solvedGroups.length === Object.keys(groups).length) {
-    endGame("🎉 Congratulations! You solved all groups.");
+  if (state.solvedGroups.length === Object.keys(state.groups).length) {
+    endGame("🎉 Congratulations! You solved all groups.", currentYear, currentWeek);
   }
 }
 
 
-
-function showFeedback(msg) {
-  document.getElementById("feedback").textContent = msg;
-}
-
-
-function updateGuessDisplay() {
-  document.getElementById("guesses-left").textContent = `Wrong guesses left: ${maxWrongGuesses - wrongGuesses}`;
-}
-
-function resetGame() {
-  selectedTiles = [];
-  solvedGroups = [];
-  wrongGuesses = 0;
-  document.getElementById("shuffle-button").disabled = false;
-  updateGuessDisplay();
-  remaining = Object.values(groups).flat();
-  shuffleArray(remaining);
-  renderTiles();
-}
-
-function renderTiles(readOnly = false) {
+function renderTiles(readOnly = false, state) {
+  const { solvedGroups, remaining } = state;
   const tileContainer = document.getElementById("tile-container");
   tileContainer.innerHTML = "";
 
-  if (!readOnly) selectedTiles = [];
+  if (!readOnly) state.selectedTiles = [];
 
-  // Solved Groups at top
-solvedGroups.forEach((group, index) => {
-  const groupWrapper = document.createElement("div");
-  groupWrapper.className = "group-wrapper";
+  solvedGroups.forEach((group, index) => {
+    const groupWrapper = document.createElement("div");
+    groupWrapper.className = "group-wrapper";
 
-  const label = document.createElement("div");
-  label.className = "group-label";
-  label.textContent = group.name;
-  groupWrapper.appendChild(label);
+    const label = document.createElement("div");
+    label.className = "group-label";
+    label.textContent = group.name;
+    groupWrapper.appendChild(label);
 
-  const row = document.createElement("div");
-  row.className = "solved-row";
+    const row = document.createElement("div");
+    row.className = "solved-row";
 
-  group.words.forEach(word => {
-    const tile = createTile(word, true, !!group.revealed);
-    if (readOnly) tile.classList.add("disabled");
-    // add stagger delay
-    tile.style.animationDelay = `${index * 0.2}s`;
-    row.appendChild(tile);
+    group.words.forEach(word => {
+      const tile = createTile(word, true, !!group.revealed);
+      if (readOnly) tile.classList.add("disabled");
+      tile.style.animationDelay = `${index * 0.2}s`;
+      row.appendChild(tile);
+    });
+
+    groupWrapper.appendChild(row);
+    tileContainer.appendChild(groupWrapper);
   });
-
-  groupWrapper.appendChild(row);
-  tileContainer.appendChild(groupWrapper);
-});
-
 
   const grid = document.createElement("div");
   grid.className = "unsolved-grid";
@@ -250,6 +229,34 @@ solvedGroups.forEach((group, index) => {
   });
 
   tileContainer.appendChild(grid);
+}
+
+function shuffleRemainingTiles(state) {
+  shuffleArray(state.remaining);
+  renderTiles(false, state);
+}
+
+function updateGuessDisplayForState(state) {
+  document.getElementById("guesses-left").textContent = `Wrong guesses left: ${maxWrongGuesses - state.wrongGuesses}`;
+}
+
+
+function showFeedback(msg) {
+  document.getElementById("feedback").textContent = msg;
+}
+
+
+function resetGame(state) {
+  state.selectedTiles = [];
+  state.solvedGroups = [];
+  state.wrongGuesses = 0;
+  document.getElementById("shuffle-button").disabled = false;
+  updateGuessDisplayForState(state);
+
+  state.remaining = Object.values(state.groups).flat();
+  shuffleArray(state.remaining);
+
+  renderTiles(false, state);
 }
 
 
@@ -270,11 +277,6 @@ function createTile(word, solved = false, revealed = false) {
   return tile;
 }
 
-
-function shuffleRemainingTiles() {
-  shuffleArray(remaining);
-  renderTiles();
-}
 
 // ---------------------------
 // FIREBASE VISITOR COUNTER
@@ -360,22 +362,124 @@ function launchConfetti() {
 
 
 // ---------------------------
-// ON GAME COMPLETE
+// WEEK-ISOLATED STATE
 // ---------------------------
-function onGameComplete(year = currentYear, wk = currentWeek) {
-  const isCurrentWeek = year === currentYear && wk === currentWeek;
+const weekStates = {}; // store state by weekKey
 
-  // 🎉 Always celebrate completion
+
+function getWeekKey(year, week) {
+  return `${year}-${week}`;
+}
+
+function getActiveWeekState() {
+  const weekPicker = document.getElementById("week-picker");
+  if (weekPicker && weekPicker.value) {
+    const [year, week] = weekPicker.value.split("-").map(Number);
+    return weekStates[getWeekKey(year, week)];
+  }
+  return weekStates[getWeekKey(currentYear, currentWeek)];
+}
+
+
+
+// ---------------------------
+// START GAME FOR WEEK
+// ---------------------------
+async function startGameForWeek(year, week) {
+  const isCurrentWeek = year === currentYear && week === currentWeek;
+  const weekKey = getWeekKey(year, week);
+
+  // Load puzzle for the week
+  const weekGroups = await loadPuzzleForWeek(year, week);
+  if (!weekGroups) return;
+
+  // Initialize or reuse week state
+  const state = initWeekState(year, week, weekGroups);
+
+  // Restore solved groups from localStorage if current week
+  if (isCurrentWeek) {
+    const saved = localStorage.getItem(`solvedGroups-${weekKey}`);
+    if (saved) state.solvedGroups = JSON.parse(saved);
+  }
+
+  // Remove solved words from remaining
+  const solvedWords = state.solvedGroups.flatMap(g => g.words || []);
+  state.remaining = Object.values(weekGroups).flat().filter(w => !solvedWords.includes(w));
+  shuffleArray(state.remaining);
+
+  // Determine read-only state and button availability
+  const completedWeek = localStorage.getItem("completedWeek");
+  const isLocked = isCurrentWeek && completedWeek === weekKey;
+
+  renderTiles(isLocked, state);
+
+  showFeedback(
+    isLocked
+      ? "✅ You've already completed this week's puzzle!"
+      : isCurrentWeek
+        ? ""
+        : "📅 Archive week — progress won’t affect streaks."
+  );
+
+  // Buttons: only disable for a completed current week
+  document.getElementById("submit-button").disabled = isLocked;
+  document.getElementById("shuffle-button").disabled = isLocked;
+}
+
+
+
+// ---------------------------
+// END GAME (PER WEEK STATE)
+// ---------------------------
+function endGame(message, year = currentYear, week = currentWeek) {
+  const weekKey = getWeekKey(year, week);
+  const state = weekStates[weekKey];
+  showFeedback(message);
+
+  document.getElementById("shuffle-button").disabled = true;
+  document.getElementById("submit-button").disabled = true;
+
+  // Build full group list marking unsolved
+  const allGroups = Object.entries(state.groups).map(([groupName, words]) => {
+    const solved = state.solvedGroups.some(s => s.name === groupName);
+    return solved
+      ? state.solvedGroups.find(s => s.name === groupName)
+      : { name: groupName + " (Unsolved)", words, revealed: true, unsolved: true };
+  });
+  state.solvedGroups = allGroups;
+
+  renderTiles(true, state);
+
+  // Save progress only for current week
+  if (year === currentYear && week === currentWeek) {
+    localStorage.setItem("completedWeek", weekKey);
+    localStorage.setItem(`solvedGroups-${weekKey}`, JSON.stringify(state.solvedGroups));
+  }
+
+  if (isCurrentWeek) {
+    localStorage.setItem("completedWeek", weekKey);
+    localStorage.setItem(`solvedGroups-${weekKey}`, JSON.stringify(state.solvedGroups));
+    // Firebase streak logic...
+}
+
+  // Trigger modal and streak logic
+  onGameComplete(year, week, state);
+}
+
+// ---------------------------
+// ON GAME COMPLETE (PER WEEK STATE)
+// ---------------------------
+function onGameComplete(year = currentYear, week = currentWeek, state) {
+  const isCurrentWeek = year === currentYear && week === currentWeek;
+
   launchConfetti();
 
-  // Perfect = NO wrong guesses AND all groups solved
   const isPerfect =
-    wrongGuesses === 0 &&
-    solvedGroups.filter(g => !g.name.includes("(Unsolved)")).length === Object.keys(groups).length;
+    state.wrongGuesses === 0 &&
+    state.solvedGroups.filter(g => !g.name.includes("(Unsolved)")).length === Object.keys(state.groups).length;
 
   let currentStreak = parseInt(localStorage.getItem("winStreak") || "0");
 
-  // ✅ Only update streak for the current week
   if (isCurrentWeek) {
     if (isPerfect) {
       const playerName =
@@ -388,48 +492,35 @@ function onGameComplete(year = currentYear, wk = currentWeek) {
       localStorage.setItem("winStreak", currentStreak);
 
       const dbRef = ref(db, "leaderboard/" + playerName);
-      set(dbRef, {
-        name: playerName,
-        streak: currentStreak,
-        timestamp: Date.now(),
-      });
+      set(dbRef, { name: playerName, streak: currentStreak, timestamp: Date.now() });
     } else {
       currentStreak = 0;
       localStorage.setItem("winStreak", 0);
     }
   }
 
-  // Always show end prompt
+  // Update modal messages
   const endPrompt = document.getElementById("endPrompt");
   const streakMessage = document.getElementById("streakMessage");
   const performanceMessage = document.getElementById("performanceMessage");
   const endPromptTitle = document.getElementById("endPromptTitle");
   const endPromptClose = document.getElementById("endPromptClose");
 
-  const solvedCount = solvedGroups.filter(g => !g.name.includes("(Unsolved)")).length;
+  const solvedCount = state.solvedGroups.filter(g => !g.name.includes("(Unsolved)")).length;
 
-  // Set streak message
-  if (isCurrentWeek) {
-    if (currentStreak > 1) streakMessage.textContent = `🔥 Current streak: ${currentStreak} perfect weeks!`;
-    else if (currentStreak === 1) streakMessage.textContent = `🔥 Current streak: 1 perfect week!`;
-    else streakMessage.textContent = `❌ Streak broken — try again next week!`;
-  } else {
-    streakMessage.textContent = "📅 Archive week — streak unaffected.";
-  }
+  streakMessage.textContent = isCurrentWeek
+    ? (currentStreak > 1 ? `🔥 Current streak: ${currentStreak} perfect weeks!`
+      : currentStreak === 1 ? `🔥 Current streak: 1 perfect week!`
+      : `❌ Streak broken — try again next week!`)
+    : "📅 Archive week — streak unaffected.";
 
-  // Set performance message and title
-  if (isPerfect) {
-    performanceMessage.textContent = "🎉 Amazing! You solved all groups perfectly!";
-    endPromptTitle.textContent = "🎉 Perfect Solve!";
-  } else {
-    performanceMessage.textContent = `You solved ${solvedCount} of ${Object.keys(groups).length} groups. Great effort!`;
-    endPromptTitle.textContent = "Puzzle Complete!";
-  }
+  performanceMessage.textContent = isPerfect
+    ? "🎉 Amazing! You solved all groups perfectly!"
+    : `You solved ${solvedCount} of ${Object.keys(state.groups).length} groups. Great effort!`;
 
-  // Show modal
+  endPromptTitle.textContent = isPerfect ? "🎉 Perfect Solve!" : "Puzzle Complete!";
   endPrompt?.classList.remove("hidden");
 
-  // Close modal events
   endPromptClose?.addEventListener("click", () => endPrompt.classList.add("hidden"), { once: true });
   window.addEventListener("click", function handleOutsideClick(event) {
     if (event.target === endPrompt) {
@@ -438,117 +529,6 @@ function onGameComplete(year = currentYear, wk = currentWeek) {
     }
   });
 }
-
-
-
-
-
-async function loadPuzzleForWeek(year, week) {
-  const url = `data/${year}-${week}.json`;
-
-  try {
-    const response = await fetch(url);
-    if (!response.ok) throw new Error("Game not found.");
-    groups = await response.json();
-  } catch {
-    document.getElementById("feedback").textContent =
-      "❌ No game found for this week. Please check back later.";
-    document.getElementById("shuffle-button").disabled = true;
-  }
-}
-
-
-
-// ---------------------------
-// START GAME FOR WEEK
-// ---------------------------
-function startGameForWeek(year, wk) {
-  const isCurrentWeek = year === currentYear && wk === currentWeek;
-  const weekKey = `${year}-${wk}`;
-  const completedWeek = localStorage.getItem("completedWeek");
-
-  // 1️⃣ Clear all state
-  selectedTiles = [];
-  solvedGroups = [];
-  wrongGuesses = 0;
-  previousGuesses = [];
-  remaining = [];
-
-  // 2️⃣ Load puzzle
-  loadPuzzleForWeek(year, wk).then(() => {
-    if (!groups || Object.keys(groups).length === 0) return;
-
-    // 3️⃣ Load week-specific solvedGroups
-    const saved = localStorage.getItem(`solvedGroups-${weekKey}`);
-    solvedGroups = saved ? JSON.parse(saved) : [];
-
-    // 4️⃣ Build remaining tiles
-    const solvedWords = solvedGroups.flatMap(s => s.words || []);
-    remaining = Object.values(groups).flat().filter(w => !solvedWords.includes(w));
-    shuffleArray(remaining);
-
-    // 5️⃣ Render based on week type
-    if (isCurrentWeek && completedWeek === weekKey) {
-      renderTiles(true);
-      showFeedback("✅ You've already completed this week's puzzle!");
-      document.getElementById("submit-button").disabled = true;
-      document.getElementById("shuffle-button").disabled = true;
-    } else if (!isCurrentWeek) {
-      renderTiles(false);
-      showFeedback("📅 Archive week — progress won’t affect streaks.");
-      document.getElementById("submit-button").disabled = false;
-      document.getElementById("shuffle-button").disabled = false;
-    } else {
-      renderTiles(false);
-      showFeedback("");
-      document.getElementById("submit-button").disabled = false;
-      document.getElementById("shuffle-button").disabled = false;
-    }
-  }).catch(err => {
-    console.error("startGameForWeek -> loadPuzzleForWeek error:", err);
-    showFeedback("❌ Failed to load puzzle.");
-  });
-}
-
-
-// ---------------------------
-// END GAME
-// ---------------------------
-function endGame(message, year = currentYear, wk = currentWeek) {
-  showFeedback(message);
-
-  // Disable buttons for this session
-  document.getElementById("shuffle-button").disabled = true;
-  document.getElementById("submit-button").disabled = true;
-
-  // Build full group list (mark unsolved groups)
-  const allGroups = Object.entries(groups).map(([groupName, words]) => {
-    const solved = solvedGroups.some(s => s.name === groupName);
-    return solved
-      ? solvedGroups.find(s => s.name === groupName)
-      : { name: groupName + " (Unsolved)", words, revealed: true, unsolved: true };
-  });
-
-  solvedGroups = allGroups;
-
-  const isCurrentWeek = year === currentYear && wk === currentWeek;
-
-  // Save progress **only for current week**
-  if (isCurrentWeek) {
-    const weekKey = `${year}-${wk}`;
-    localStorage.setItem("completedWeek", weekKey);
-    localStorage.setItem(`solvedGroups-${weekKey}`, JSON.stringify(solvedGroups));
-  }
-
-  // Render all tiles as read-only
-  renderTiles(true);
-
-  // Trigger modal and streak logic
-  onGameComplete(year, wk);
-}
-
-
-
 // ---------------------------
 // DOM CONTENT LOADED: INIT
 // ---------------------------
@@ -584,26 +564,29 @@ window.addEventListener("DOMContentLoaded", () => {
   // Initialize comment box
   initCommentBox();
 
-  // Tile click delegation
-  const tileContainer = document.getElementById("tile-container");
-  tileContainer.addEventListener("click", (e) => {
-    const tile = e.target.closest(".tile");
-    if (!tile || tile.classList.contains("disabled") || tile.classList.contains("solved")) return;
-    handleTileClick(tile);
-  });
+document.getElementById("tile-container").addEventListener("click", (e) => {
+  const tile = e.target.closest(".tile");
+  if (!tile) return;
+  const state = getActiveWeekState();
+  handleTileClick(tile, state);
+});
+
 
   // Past week selection
   const weekPicker = document.getElementById("week-picker");
   if (weekPicker) {
     weekPicker.addEventListener("change", () => {
       const [year, wk] = weekPicker.value.split("-").map(Number);
-      startGameForWeek(year, wk, false);
+      startGameForWeek(year, wk);
     });
   }
 
   // Buttons
   document.getElementById("submit-button").addEventListener("click", checkSelection);
-  document.getElementById("shuffle-button").addEventListener("click", shuffleRemainingTiles);
+document.getElementById("shuffle-button").addEventListener("click", () => {
+  const state = getActiveWeekState();
+  shuffleRemainingTiles(state);
+});
 
   // Leaderboard button
   const leaderboardBtn = document.getElementById("leaderboard-button");
