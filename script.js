@@ -466,21 +466,20 @@ function startGameForWeek(year, wk, enforceLockout = true) {
   remaining = [];
 
   loadPuzzleForWeek(year, wk).then(() => {
-    // Clear solvedGroups again
-    solvedGroups = [];
-
-    // Load saved solvedGroups for this week if available
-    const saved = localStorage.getItem(`solvedGroups-${weekKey}`);
-    if (saved) {
-      try {
-        solvedGroups = JSON.parse(saved);
-      } catch (e) {
-        console.warn("Failed to parse saved solvedGroups:", e);
-        solvedGroups = [];
+    // Only load saved solved groups if it’s the current week
+    if (isCurrentWeek) {
+      const saved = localStorage.getItem(`solvedGroups-${weekKey}`);
+      if (saved) {
+        try {
+          solvedGroups = JSON.parse(saved);
+        } catch (e) {
+          console.warn("Failed to parse saved solvedGroups:", e);
+          solvedGroups = [];
+        }
       }
     }
 
-    // Build remaining tiles
+    // Build remaining tiles (everything not solved yet)
     const solvedWords = solvedGroups.flatMap(s => s.words || []);
     remaining = Object.values(groups).flat().filter(w => !solvedWords.includes(w));
 
