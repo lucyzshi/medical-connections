@@ -163,7 +163,8 @@ function checkSelection() {
 }
 
 function markGroupAsSolved(words, groupName) {
-  solvedGroups.push({ name: groupName, words });
+  // mark solved groups as revealed
+  solvedGroups.push({ name: groupName, words, revealed: true });
   remaining = remaining.filter(word => !words.includes(word));
 
   words.forEach(word => {
@@ -179,6 +180,7 @@ function markGroupAsSolved(words, groupName) {
     endGame("🎉 Congratulations! You solved all groups.");
   }
 }
+
 
 function showFeedback(msg) {
   document.getElementById("feedback").textContent = msg;
@@ -220,7 +222,8 @@ function renderTiles(readOnly = false) {
     row.className = "solved-row";
 
     group.words.forEach(word => {
-      const tile = createTile(word, true);
+      // pass solved = true, revealed = !!group.revealed
+      const tile = createTile(word, true, !!group.revealed);
       if (readOnly) tile.classList.add("disabled");
       row.appendChild(tile);
     });
@@ -233,7 +236,7 @@ function renderTiles(readOnly = false) {
   grid.className = "unsolved-grid";
 
   remaining.forEach(word => {
-    const tile = createTile(word, false);
+    const tile = createTile(word, false, false);
     if (readOnly) tile.classList.add("disabled");
     grid.appendChild(tile);
   });
@@ -242,14 +245,23 @@ function renderTiles(readOnly = false) {
 }
 
 
-function createTile(word, solved = false) {
+
+function createTile(word, solved = false, revealed = false) {
   const tile = document.createElement("div");
   tile.className = "tile";
-  if (solved) tile.classList.add("solved", "disabled");
   tile.textContent = word;
   tile.dataset.word = word;
+
+  if (solved) tile.classList.add("solved");
+  if (revealed) {
+    tile.classList.add("revealed", "disabled");
+  } else if (solved) {
+    tile.classList.add("disabled");
+  }
+
   return tile;
 }
+
 
 function shuffleRemainingTiles() {
   shuffleArray(remaining);
@@ -401,27 +413,29 @@ function endGame(message, year = currentYear, wk = currentWeek) {
   showFeedback(message);
   document.querySelectorAll(".tile").forEach(t => t.classList.add("disabled"));
   document.getElementById("shuffle-button").disabled = true;
+  document.getElementById("submit-button").disabled = true;
 
-  // Add unsolved groups
-  const unsolved = Object.entries(groups).filter(([groupName]) =>
-    !solvedGroups.some(s => s.name === groupName)
-  );
-
-  unsolved.forEach(([groupName, words]) => {
-    solvedGroups.push({ name: groupName + " (Unsolved)", words });
+  // Add all groups (marking unsolved ones separately)
+  const allGroups = Object.entries(groups).map(([groupName, words]) => {
+    const solved = solvedGroups.some(s => s.name === groupName);
+    return solved
+      ? solvedGroups.find(s => s.name === groupName)
+      : { name: groupName + " (Unsolved)", words, unsolved: true };
   });
 
-  // Save solved groups only for the week actually being played
+  solvedGroups = allGroups; // replace with full solution set
+
+  // Save only if current week (not past weeks)
   const weekKey = `${year}-${wk}`;
   if (!(year < currentYear || (year === currentYear && wk < currentWeek))) {
-    // Only save for current week or future weeks (never save past weeks)
     localStorage.setItem("completedWeek", weekKey);
     localStorage.setItem(`solvedGroups-${weekKey}`, JSON.stringify(solvedGroups));
   }
 
-  renderTiles();
+  renderTiles(); // render all as grouped rows
   onGameComplete(year, wk);
 }
+
 
 
 async function loadPuzzleForWeek(year, week) {
