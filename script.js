@@ -460,44 +460,40 @@ async function startGameForWeek(year, week) {
 // ---------------------------
 // END GAME (PER WEEK STATE)
 // ---------------------------
-
 function endGame(message, year = currentYear, week = currentWeek) {
   const weekKey = getWeekKey(year, week);
   const state = weekStates[weekKey];
-  showFeedback(message);
-const isCurrentWeek = year === currentYear && week === currentWeek;
+  const isCurrentWeek = year === currentYear && week === currentWeek;
 
+  // Disable buttons
   document.getElementById("shuffle-button").disabled = true;
   document.getElementById("submit-button").disabled = true;
 
-  // Build full group list marking unsolved
-  const allGroups = Object.entries(state.groups).map(([groupName, words]) => {
+  // Build solved + unsolved groups
+  state.solvedGroups = Object.entries(state.groups).map(([groupName, words]) => {
     const solved = state.solvedGroups.some(s => s.name === groupName);
     return solved
       ? state.solvedGroups.find(s => s.name === groupName)
       : { name: groupName + " (Unsolved)", words, revealed: true, unsolved: true };
   });
-  state.solvedGroups = allGroups;
 
   renderTiles(true, state);
 
-
+  // Only update streak for current week
   if (isCurrentWeek) {
     localStorage.setItem("completedWeek", weekKey);
     localStorage.setItem(`solvedGroups-${weekKey}`, JSON.stringify(state.solvedGroups));
-    // Firebase streak logic...
-}
+  }
 
-  // Trigger modal and streak logic
+  // Trigger modal
   onGameComplete(year, week, state);
 }
 
 // ---------------------------
 // ON GAME COMPLETE (PER WEEK STATE)
 // ---------------------------
-function onGameComplete(year = currentYear, week = currentWeek, state) {
+function onGameComplete(year, week, state) {
   const isCurrentWeek = year === currentYear && week === currentWeek;
-
   launchConfetti();
 
   const isPerfect =
@@ -525,36 +521,26 @@ function onGameComplete(year = currentYear, week = currentWeek, state) {
     }
   }
 
-  // Update modal messages
-  const endPrompt = document.getElementById("endPrompt");
+  // Modal messages
   const streakMessage = document.getElementById("streakMessage");
   const performanceMessage = document.getElementById("performanceMessage");
-  const endPromptTitle = document.getElementById("endPromptTitle");
-  const endPromptClose = document.getElementById("endPromptClose");
-
   const solvedCount = state.solvedGroups.filter(g => !g.name.includes("(Unsolved)")).length;
 
-  streakMessage.textContent = isCurrentWeek
-    ? (currentStreak > 1 ? `🔥 Current streak: ${currentStreak} perfect weeks!`
-      : currentStreak === 1 ? `🔥 Current streak: 1 perfect week!`
-      : `❌ Streak broken — try again next week!`)
-    : "📅 Archive week — streak unaffected.";
+  if (isCurrentWeek) {
+    streakMessage.textContent = currentStreak > 1
+      ? `🔥 Current streak: ${currentStreak} perfect weeks!`
+      : currentStreak === 1
+        ? `🔥 Current streak: 1 perfect week!`
+        : `❌ Streak broken — try again next week!`;
+  } else {
+    streakMessage.textContent = `📅 Archive week — progress won’t affect streaks.`;
+  }
 
   performanceMessage.textContent = isPerfect
     ? "🎉 Amazing! You solved all groups perfectly!"
     : `You solved ${solvedCount} of ${Object.keys(state.groups).length} groups. Great effort!`;
-
-  endPromptTitle.textContent = isPerfect ? "🎉 Perfect Solve!" : "Puzzle Complete!";
-  endPrompt?.classList.remove("hidden");
-
-  endPromptClose?.addEventListener("click", () => endPrompt.classList.add("hidden"), { once: true });
-  window.addEventListener("click", function handleOutsideClick(event) {
-    if (event.target === endPrompt) {
-      endPrompt.classList.add("hidden");
-      window.removeEventListener("click", handleOutsideClick);
-    }
-  });
 }
+
 // ---------------------------
 // DOM CONTENT LOADED: INIT
 // ---------------------------
