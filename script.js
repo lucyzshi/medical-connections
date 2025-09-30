@@ -365,30 +365,41 @@ function launchConfetti() {
 function onGameComplete(year = currentYear, wk = currentWeek) {
   const isCurrentWeek = year === currentYear && wk === currentWeek;
 
-  // Perfect means NO wrong guesses and all groups solved
-  const isPerfect = wrongGuesses === 0 &&
+  // 🎉 Always celebrate completion
+  launchConfetti();
+
+  // Perfect = NO wrong guesses AND all groups solved
+  const isPerfect =
+    wrongGuesses === 0 &&
     solvedGroups.filter(g => !g.name.includes("(Unsolved)")).length === Object.keys(groups).length;
 
   let currentStreak = parseInt(localStorage.getItem("winStreak") || "0");
 
-  // Only update streak and launch confetti for current week
+  // ✅ Only update streak for the current week
   if (isCurrentWeek) {
     if (isPerfect) {
-      const playerName = localStorage.getItem("playerName") || prompt("Enter your name:") || "Anonymous";
+      const playerName =
+        localStorage.getItem("playerName") ||
+        prompt("Enter your name:") ||
+        "Anonymous";
       localStorage.setItem("playerName", playerName);
 
       currentStreak += 1;
       localStorage.setItem("winStreak", currentStreak);
 
       const dbRef = ref(db, "leaderboard/" + playerName);
-      set(dbRef, { name: playerName, streak: currentStreak, timestamp: Date.now() });
-
-      launchConfetti();
+      set(dbRef, {
+        name: playerName,
+        streak: currentStreak,
+        timestamp: Date.now(),
+      });
     } else {
       currentStreak = 0;
       localStorage.setItem("winStreak", 0);
     }
   }
+}
+
 
   // Always show end prompt
   const endPrompt = document.getElementById("endPrompt");
@@ -458,7 +469,7 @@ function startGameForWeek(year, wk) {
   const weekKey = `${year}-${wk}`;
   const completedWeek = localStorage.getItem("completedWeek");
 
-  // CLEAR STATE
+  // Always clear state before loading a new week
   selectedTiles = [];
   solvedGroups = [];
   wrongGuesses = 0;
@@ -466,42 +477,46 @@ function startGameForWeek(year, wk) {
   remaining = [];
 
   loadPuzzleForWeek(year, wk).then(() => {
-    // Current week already completed: read-only
-    if (isCurrentWeek && completedWeek === weekKey) {
+    if (isCurrentWeek) {
+      if (completedWeek === weekKey) {
+        // Lock the current week if already completed
+        const saved = localStorage.getItem(`solvedGroups-${weekKey}`);
+        solvedGroups = saved ? JSON.parse(saved) : [];
+        const solvedWords = solvedGroups.flatMap(s => s.words || []);
+        remaining = Object.values(groups).flat().filter(w => !solvedWords.includes(w));
+        shuffleArray(remaining);
+        renderTiles(true);
+        showFeedback("✅ You've already completed this week's puzzle!");
+        document.getElementById("submit-button").disabled = true;
+        document.getElementById("shuffle-button").disabled = true;
+        return;
+      } else {
+        // Current week, not yet completed → always start fresh
+        solvedGroups = [];
+      }
+    } else {
+      // Archive week → load its own saved solvedGroups if present
       const saved = localStorage.getItem(`solvedGroups-${weekKey}`);
       solvedGroups = saved ? JSON.parse(saved) : [];
-      const solvedWords = solvedGroups.flatMap(s => s.words || []);
-      remaining = Object.values(groups).flat().filter(w => !solvedWords.includes(w));
-      shuffleArray(remaining);
-      renderTiles(true);
-      showFeedback("✅ You've already completed this week's puzzle!");
-      document.getElementById("submit-button").disabled = true;
-      document.getElementById("shuffle-button").disabled = true;
-      return;
     }
 
-    // Past weeks: load saved solvedGroups if available, but still interactive
-    if (!isCurrentWeek) {
-      const saved = localStorage.getItem(`solvedGroups-${weekKey}`);
-      if (saved) solvedGroups = JSON.parse(saved);
-    }
-
-    // Current week always starts fresh
-    if (isCurrentWeek && completedWeek !== weekKey) solvedGroups = [];
-
-    // Build remaining tiles & shuffle
+    // Build remaining words
     const solvedWords = solvedGroups.flatMap(s => s.words || []);
     remaining = Object.values(groups).flat().filter(w => !solvedWords.includes(w));
     shuffleArray(remaining);
 
-    renderTiles(false); // fully interactive
+    renderTiles(false); // interactive always
     document.getElementById("submit-button").disabled = false;
     document.getElementById("shuffle-button").disabled = false;
 
-    if (!isCurrentWeek) showFeedback("📅 Archive week — progress won’t affect streaks.");
-    else showFeedback("");
+    if (!isCurrentWeek) {
+      showFeedback("📅 Archive week — progress won’t affect streaks.");
+    } else {
+      showFeedback("");
+    }
   });
 }
+
 
 // ---------------------------
 // END GAME
