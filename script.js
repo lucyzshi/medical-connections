@@ -439,10 +439,11 @@ async function loadPuzzleForWeek(year, week) {
   }
 }
 
-async function startGameForWeek(year, wk, enforceLockout = true) {
-  const weekKey = `${year}-${wk}`;
+function startGameForWeek(year, wk, enforceLockout = true) {
   const isCurrentWeek = year === currentYear && wk === currentWeek;
   const completedWeek = localStorage.getItem("completedWeek");
+  const weekKey = `${year}-${wk}`;
+  const alreadyCompleted = enforceLockout && isCurrentWeek && completedWeek === weekKey;
 
   // Reset state
   selectedTiles = [];
@@ -451,40 +452,22 @@ async function startGameForWeek(year, wk, enforceLockout = true) {
   previousGuesses = [];
   remaining = [];
 
-  // Load puzzle for the requested week
-  await loadPuzzleForWeek(year, wk);
+  // Load puzzle
+  loadPuzzleForWeek(year, wk).then(() => {
+    if (alreadyCompleted) {
+      // Disable interactions only for already completed current week
+      document.getElementById("submit-button").disabled = true;
+      document.getElementById("shuffle-button").disabled = true;
 
-  // Load saved solved groups for this week if any
-  const savedGroupsKey = `solvedGroups-${weekKey}`;
-  const savedGroups = JSON.parse(localStorage.getItem(savedGroupsKey) || "[]");
-
-  // Determine if current week was already completed
-  const isCurrentWeekCompleted = isCurrentWeek && savedGroups.length > 0 && completedWeek === weekKey;
-
-  if (!isCurrentWeek || isCurrentWeekCompleted) {
-    // Past week or already completed current week → read-only
-    solvedGroups = savedGroups;
-    remaining = Object.values(groups).flat().filter(
-      w => !solvedGroups.some(g => g.words.includes(w))
-    );
-
-    renderTiles(true); // read-only
-    document.getElementById("submit-button").disabled = true;
-    document.getElementById("shuffle-button").disabled = true;
-
-    showFeedback(
-      !isCurrentWeek
-        ? "📅 Viewing a past week's puzzle (read-only)."
-        : "✅ You've already completed this week's puzzle."
-    );
-  } else {
-    // Current week, interactive play
-    remaining = Object.values(groups).flat();
-    shuffleArray(remaining);
-    renderTiles(false);
-    document.getElementById("submit-button").disabled = false;
-    document.getElementById("shuffle-button").disabled = false;
-  }
+      renderTiles(true); // read-only
+      showFeedback("✅ You've already completed this week's puzzle.");
+    } else {
+      // Normal play for current week or any past week
+      renderTiles(false); // interactive
+      document.getElementById("submit-button").disabled = false;
+      document.getElementById("shuffle-button").disabled = false;
+    }
+  });
 }
 
 
