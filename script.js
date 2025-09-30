@@ -454,11 +454,26 @@ async function loadPuzzleForWeek(year, week) {
 // ---------------------------
 // START GAME FOR WEEK
 // ---------------------------
-function startGameForWeek(year, wk, enforceLockout = true) {
+function startGameForWeek(year, wk) {
   const isCurrentWeek = year === currentYear && wk === currentWeek;
   const weekKey = `${year}-${wk}`;
+  const completedWeek = localStorage.getItem("completedWeek");
 
-  // CLEAR STATE immediately
+  // If this is the current week and already completed, render read-only
+  if (isCurrentWeek && completedWeek === weekKey) {
+    const saved = localStorage.getItem(`solvedGroups-${weekKey}`);
+    solvedGroups = saved ? JSON.parse(saved) : [];
+    const solvedWords = solvedGroups.flatMap(s => s.words || []);
+    remaining = Object.values(groups).flat().filter(w => !solvedWords.includes(w));
+
+    renderTiles(true);
+    showFeedback("✅ You've already completed this week's puzzle!");
+    document.getElementById("submit-button").disabled = true;
+    document.getElementById("shuffle-button").disabled = true;
+    return;
+  }
+
+  // CLEAR STATE
   selectedTiles = [];
   solvedGroups = [];
   wrongGuesses = 0;
@@ -466,36 +481,27 @@ function startGameForWeek(year, wk, enforceLockout = true) {
   remaining = [];
 
   loadPuzzleForWeek(year, wk).then(() => {
-    // Only load saved solved groups if it’s the current week
-    if (isCurrentWeek) {
+    solvedGroups = [];
+
+    // Load saved solvedGroups if any (only relevant for past weeks)
+    if (!isCurrentWeek) {
       const saved = localStorage.getItem(`solvedGroups-${weekKey}`);
       if (saved) {
-        try {
-          solvedGroups = JSON.parse(saved);
-        } catch (e) {
-          console.warn("Failed to parse saved solvedGroups:", e);
-          solvedGroups = [];
-        }
+        try { solvedGroups = JSON.parse(saved); } 
+        catch (e) { solvedGroups = []; }
       }
     }
 
-// Build remaining tiles (everything not solved yet)
-const solvedWords = solvedGroups.flatMap(s => s.words || []);
-remaining = Object.values(groups).flat().filter(w => !solvedWords.includes(w));
+    // Build remaining tiles
+    const solvedWords = solvedGroups.flatMap(s => s.words || []);
+    remaining = Object.values(groups).flat().filter(w => !solvedWords.includes(w));
+    shuffleArray(remaining); // always shuffle
 
-// Shuffle remaining tiles
-shuffleArray(remaining);
-
-    // Determine if this is a past week
-    const isArchive = year < currentYear || (year === currentYear && wk < currentWeek);
-
-    // For past weeks, tiles are interactive but we do NOT save progress
     renderTiles(false); 
     document.getElementById("submit-button").disabled = false;
     document.getElementById("shuffle-button").disabled = false;
 
-    // Optional feedback for past weeks
-    if (isArchive) showFeedback("📅 Archive week — progress won’t affect streaks.");
+    if (!isCurrentWeek) showFeedback("📅 Archive week — progress won’t affect streaks.");
     else showFeedback("");
   });
 }
