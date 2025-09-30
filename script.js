@@ -459,20 +459,6 @@ function startGameForWeek(year, wk) {
   const weekKey = `${year}-${wk}`;
   const completedWeek = localStorage.getItem("completedWeek");
 
-  // If this is the current week and already completed, render read-only
-  if (isCurrentWeek && completedWeek === weekKey) {
-    const saved = localStorage.getItem(`solvedGroups-${weekKey}`);
-    solvedGroups = saved ? JSON.parse(saved) : [];
-    const solvedWords = solvedGroups.flatMap(s => s.words || []);
-    remaining = Object.values(groups).flat().filter(w => !solvedWords.includes(w));
-
-    renderTiles(true);
-    showFeedback("✅ You've already completed this week's puzzle!");
-    document.getElementById("submit-button").disabled = true;
-    document.getElementById("shuffle-button").disabled = true;
-    return;
-  }
-
   // CLEAR STATE
   selectedTiles = [];
   solvedGroups = [];
@@ -481,23 +467,34 @@ function startGameForWeek(year, wk) {
   remaining = [];
 
   loadPuzzleForWeek(year, wk).then(() => {
-    solvedGroups = [];
-
-    // Load saved solvedGroups if any (only relevant for past weeks)
-    if (!isCurrentWeek) {
+    // If current week already completed, show read-only
+    if (isCurrentWeek && completedWeek === weekKey) {
       const saved = localStorage.getItem(`solvedGroups-${weekKey}`);
-      if (saved) {
-        try { solvedGroups = JSON.parse(saved); } 
-        catch (e) { solvedGroups = []; }
-      }
+      solvedGroups = saved ? JSON.parse(saved) : [];
+      const solvedWords = solvedGroups.flatMap(s => s.words || []);
+      remaining = Object.values(groups).flat().filter(w => !solvedWords.includes(w));
+      shuffleArray(remaining);
+      renderTiles(true);
+      showFeedback("✅ You've already completed this week's puzzle!");
+      document.getElementById("submit-button").disabled = true;
+      document.getElementById("shuffle-button").disabled = true;
+      return;
     }
 
-    // Build remaining tiles
+    // Load saved solvedGroups only for past weeks
+    if (!isCurrentWeek) {
+      const saved = localStorage.getItem(`solvedGroups-${weekKey}`);
+      if (saved) solvedGroups = JSON.parse(saved);
+    } else {
+      solvedGroups = []; // current week always starts fresh
+    }
+
+    // Build remaining tiles & shuffle
     const solvedWords = solvedGroups.flatMap(s => s.words || []);
     remaining = Object.values(groups).flat().filter(w => !solvedWords.includes(w));
-    shuffleArray(remaining); // always shuffle
+    shuffleArray(remaining);
 
-    renderTiles(false); 
+    renderTiles(false);
     document.getElementById("submit-button").disabled = false;
     document.getElementById("shuffle-button").disabled = false;
 
