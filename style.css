@@ -64,15 +64,17 @@ h2 {
 }
 
 /* Tiles */
+/* ----------------- Tiles ----------------- */
+/* ----------------- Tiles ----------------- */
 .tile {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 1.25rem;          /* pill shape */
-  padding: 0.75rem 1.25rem;        /* keeps tiles compact */
+  border-radius: 1.25rem;          
+  padding: 0.75rem 1.25rem;        
   text-align: center;
   font-weight: 500;
-  font-size: clamp(0.8rem, 1.5vw, 1.2rem); /* responsive font scaling */
+  font-size: clamp(0.8rem, 1.5vw, 1.2rem); 
   line-height: 1.2;
   background: linear-gradient(145deg, #e6f1fb, #ffffff);
   box-shadow:
@@ -82,9 +84,9 @@ h2 {
   transition: transform 0.2s ease, box-shadow 0.2s ease;
   word-wrap: break-word;
   overflow-wrap: break-word;
-  min-width: 0;                 /* ensures pills don’t collapse */
-  max-width: 100%;                /* keeps pills from being too wide */
-  box-sizing: border-box;          /* include padding in width */
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
   margin: 0;
 }
 
@@ -97,72 +99,45 @@ h2 {
 }
 
 .tile.selected {
-  background: linear-gradient(145deg, #bbdefb, #e3f2fd); /* stronger medical blue */
+  background: linear-gradient(145deg, #bbdefb, #e3f2fd);
   box-shadow:
     inset 1px 1px 4px rgba(255, 255, 255, 0.6),
     inset -2px -2px 5px rgba(0, 0, 0, 0.1),
     0 10px 20px rgba(0, 0, 0, 0.35);
 }
 
-.tile.solved {
-  animation: solvedPulse 1.2s ease-in-out infinite;
-  background-color: #e0f2fe; /* light blue */
-  border-color: #3b82f6;     /* blue accent */
-}
-
-@keyframes solvedPulse {
-  0%, 100% { box-shadow: 0 0 5px #3b82f6; transform: scale(1); }
-  50% { box-shadow: 0 0 20px #60a5fa; transform: scale(1.05); }
-}
-
+/* Subtle green pulse for solved/revealed tiles */
+.tile.solved,
 .tile.revealed {
-  animation: revealPop 0.6s ease forwards;
-  background-color: #d1fae5; /* light green highlight */
+  animation: subtleGreenPulse 1s ease-in-out 2; /* pulse twice and stop */
+  background-color: #d1fae5; /* light green base */
   border-color: #10b981;     /* emerald accent */
-}
-
-@keyframes revealPop {
-  0%   { transform: scale(0.6); opacity: 0; }
-  60%  { transform: scale(1.1); opacity: 1; }
-  100% { transform: scale(1);   opacity: 1; }
-}
-
-
-/* keep disabled look but still clearly visible when revealed */
-.tile.disabled.revealed {
-  cursor: default;
-  filter: none;
-}
-
-/* keep an obvious 'solved' style for groups the player actually found */
-.tile.solved {
   opacity: 0.95;
-  /* your existing solved styling can remain or be enhanced */
 }
 
-/* Heartbeat pulse animation */
-@keyframes heartbeat {
-  0%   { transform: scale(1); }
-  25%  { transform: scale(1.12); }
-  40%  { transform: scale(0.95); }
-  60%  { transform: scale(1.08); }
-  100% { transform: scale(1); }
+@keyframes subtleGreenPulse {
+  0%   { transform: scale(1); background-color: #d1fae5; }
+  50%  { transform: scale(1.03); background-color: #a7f3d0; } /* slightly brighter green */
+  100% { transform: scale(1); background-color: #d1fae5; }
 }
 
+/* Keep disabled look but visible */
 .tile.disabled {
   opacity: 0.5;
   pointer-events: none;
+  cursor: default;
+}
+
+/* Slight shake for wrong guesses */
+.cell.wrong {
+  animation: shake 0.4s;
+  border-color: #e53935;
 }
 
 @keyframes shake {
   0%, 100% { transform: translateX(0); }
   25% { transform: translateX(-5px); }
   75% { transform: translateX(5px); }
-}
-
-.cell.wrong {
-  animation: shake 0.4s;
-  border-color: #e53935; /* red warning */
 }
 
 
