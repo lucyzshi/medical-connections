@@ -1,0 +1,6 @@
+{
+  "Findings in Brucellosis": ["Undulating Fever",	"Unpasteurized Dairy",	"Osteoarticular",	"Intracellular Survival"],
+  "Findings in Leptospirosis": ["Rat Urine",	"Conjunctival Suffusion",	"Jaundice", "Spirochete"],
+  "Findings in Toxoplasmosis": ["Cat Feces", "Parasite", "Congenital Infection", "Retinitis"],
+  "Findings in Rabies": ["Infected Bite", "Hydrophobia", "Virus", "Negri Bodies"]
+}
