@@ -363,6 +363,15 @@ function launchConfetti() {
   })();
 }
 
+    function showCompletionBanner() {
+  const banner = document.getElementById("completion-banner");
+  banner.classList.remove("hidden");
+  setTimeout(() => banner.classList.add("show"), 50); // slide down
+  setTimeout(() => {
+    banner.classList.remove("show"); // slide back up
+    setTimeout(() => banner.classList.add("hidden"), 700);
+  }, 3000); // visible for 3s
+}
 
 // ---------------------------
 // WEEK-ISOLATED STATE
@@ -539,6 +548,10 @@ function onGameComplete(year, week, state) {
   performanceMessage.textContent = isPerfect
     ? "🎉 Amazing! You solved all groups perfectly!"
     : `You solved ${solvedCount} of ${Object.keys(state.groups).length} groups. Great effort!`;
+
+ if (isPerfect) {
+    showCompletionBanner();   // <-- Banner shows only on a perfect game
+  }
 }
 
 // ---------------------------
