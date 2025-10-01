@@ -571,6 +571,13 @@ function onGameComplete(year, week, state) {
   if (isPerfect) {
     showCompletionBanner(); // 🎯 Banner only on a perfect game
   }
+  const endPrompt = document.getElementById("endPrompt");
+if (endPrompt) {
+  endPrompt.classList.remove("hidden");
+  endPrompt.scrollIntoView({ behavior: "smooth", block: "center" });
+}
+
+
 }
 
 
@@ -579,26 +586,16 @@ function onGameComplete(year, week, state) {
 // ---------------------------
 
 window.addEventListener("DOMContentLoaded", () => {
-  const endPrompt = document.getElementById("endPrompt");
-  const endPromptClose = document.getElementById("endPromptClose");
-  const modal = document.getElementById("instructionsModal");
-  const btn = document.getElementById("howToPlayBtn");
-  const closeBtn = modal?.querySelector(".close");
+const modal = document.getElementById("instructionsModal");
+const btn = document.getElementById("howToPlayBtn");
+const closeBtn = modal?.querySelector(".close");
+const endPrompt = document.getElementById("endPrompt");
+const endPromptClose = document.getElementById("endPromptClose");
 
-  // Close endPrompt
-  endPromptClose?.addEventListener("click", () => {
-    endPrompt.classList.add("hidden");
-  });
+endPromptClose?.addEventListener("click", () => endPrompt?.classList.add("hidden"));
+btn?.addEventListener("click", () => modal?.style.display = "block");
+closeBtn?.addEventListener("click", () => modal?.style.display = "none");
 
-  // Click outside to close
-  window.addEventListener("click", (event) => {
-    if (event.target === endPrompt) endPrompt.classList.add("hidden");
-    if (event.target === modal) modal.style.display = "none";
-  });
-
-  // Instructions modal
-  btn?.addEventListener("click", () => modal.style.display = "block");
-  closeBtn?.addEventListener("click", () => modal.style.display = "none");
 
   // Populate past weeks dropdown
   populatePastWeeksDropdown(currentWeekInfo);
@@ -609,12 +606,13 @@ window.addEventListener("DOMContentLoaded", () => {
   // Initialize comment box
   initCommentBox();
 
-document.getElementById("tile-container").addEventListener("click", (e) => {
+const tileContainer = document.getElementById("tile-container");
+tileContainer?.addEventListener("click", (e) => {
   const tile = e.target.closest(".tile");
   if (!tile) return;
-  const state = getActiveWeekState();
-  handleTileClick(tile, state);
+  handleTileClick(tile, getActiveWeekState());
 });
+
 
 
   // Past week selection
