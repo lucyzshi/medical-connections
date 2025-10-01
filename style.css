@@ -278,6 +278,30 @@ button:disabled {
   color: #0f0;
 }
 
+#completion-banner {
+  position: fixed;
+  top: -80px;          /* start off-screen */
+  left: 50%;
+  transform: translateX(-50%);
+  background: gold;
+  color: black;
+  font-size: 2rem;
+  font-weight: bold;
+  padding: 1rem 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+  transition: top 0.7s ease;
+  z-index: 9999;
+}
+
+#completion-banner.show {
+  top: 20px;           /* slide down into view */
+}
+
+.hidden {
+  display: none;
+}
+
 /* ===== Comments Section ===== */
 #comments-section {
   max-width: 600px;
