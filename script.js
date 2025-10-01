@@ -592,10 +592,15 @@ const closeBtn = modal?.querySelector(".close");
 const endPrompt = document.getElementById("endPrompt");
 const endPromptClose = document.getElementById("endPromptClose");
 
-endPromptClose?.addEventListener("click", () => endPrompt?.classList.add("hidden"));
-btn?.addEventListener("click", () => modal?.style.display = "block");
-closeBtn?.addEventListener("click", () => modal?.style.display = "none");
-
+btn?.addEventListener("click", () => {
+  if (modal) modal.style.display = "block";
+});
+closeBtn?.addEventListener("click", () => {
+  if (modal) modal.style.display = "none";
+});
+endPromptClose?.addEventListener("click", () => {
+  if (endPrompt) endPrompt.classList.add("hidden");
+});
 
   // Populate past weeks dropdown
   populatePastWeeksDropdown(currentWeekInfo);
