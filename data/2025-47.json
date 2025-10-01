@@ -1,0 +1,6 @@
+{
+  "Findings in Hemochromatosis": ["HFE mutation",	"Bronze Skin",	"Arthritis",	"Iron Accumulation"],
+  "Findings in Wilson's Disease": ["Dysarthria",	"Kayser-Fleischer",	"Copper Accumulation", "Fulminant Liver Failure"],
+  "Findings in Polycythemia Vera": ["JAK2 mutation", "Erythromelalgia", "Plethora", "Erythrocytosis"],
+  "Findings in Alpha-1 Antitrypsin deficiency": ["SERPINA1", "Emphysema", "Panniculitis", "AAT Accumulation"]
+}
