@@ -341,7 +341,7 @@ function initCommentBox() {
 }
 
 // ---------------------------
-// CONFETTI
+// CELEBRATION
 // ---------------------------
 function launchConfetti() {
   const duration = 5000; // 5 seconds
@@ -363,15 +363,20 @@ function launchConfetti() {
   })();
 }
 
-    function showCompletionBanner() {
+function showCompletionBanner() {
   const banner = document.getElementById("completion-banner");
   banner.classList.remove("hidden");
-  setTimeout(() => banner.classList.add("show"), 50); // slide down
+
+  // trigger unroll
+  setTimeout(() => banner.classList.add("show"), 50);
+
+  // hide after 3 seconds
   setTimeout(() => {
-    banner.classList.remove("show"); // slide back up
-    setTimeout(() => banner.classList.add("hidden"), 700);
-  }, 3000); // visible for 3s
+    banner.classList.remove("show");
+    setTimeout(() => banner.classList.add("hidden"), 600);
+  }, 3000);
 }
+
 
 // ---------------------------
 // WEEK-ISOLATED STATE
@@ -503,11 +508,19 @@ function endGame(message, year = currentYear, week = currentWeek) {
 // ---------------------------
 function onGameComplete(year, week, state) {
   const isCurrentWeek = year === currentYear && week === currentWeek;
-  launchConfetti();
+
+  const solvedCount = state.solvedGroups.filter(
+    g => !g.name.includes("(Unsolved)")
+  ).length;
 
   const isPerfect =
     state.wrongGuesses === 0 &&
-    state.solvedGroups.filter(g => !g.name.includes("(Unsolved)")).length === Object.keys(state.groups).length;
+    solvedCount === Object.keys(state.groups).length;
+
+  // 🎊 Confetti only if at least 1 group solved
+  if (solvedCount > 0) {
+    launchConfetti();
+  }
 
   let currentStreak = parseInt(localStorage.getItem("winStreak") || "0");
 
@@ -523,7 +536,11 @@ function onGameComplete(year, week, state) {
       localStorage.setItem("winStreak", currentStreak);
 
       const dbRef = ref(db, "leaderboard/" + playerName);
-      set(dbRef, { name: playerName, streak: currentStreak, timestamp: Date.now() });
+      set(dbRef, {
+        name: playerName,
+        streak: currentStreak,
+        timestamp: Date.now()
+      });
     } else {
       currentStreak = 0;
       localStorage.setItem("winStreak", 0);
@@ -533,12 +550,12 @@ function onGameComplete(year, week, state) {
   // Modal messages
   const streakMessage = document.getElementById("streakMessage");
   const performanceMessage = document.getElementById("performanceMessage");
-  const solvedCount = state.solvedGroups.filter(g => !g.name.includes("(Unsolved)")).length;
 
   if (isCurrentWeek) {
-    streakMessage.textContent = currentStreak > 1
-      ? `🔥 Current streak: ${currentStreak} perfect weeks!`
-      : currentStreak === 1
+    streakMessage.textContent =
+      currentStreak > 1
+        ? `🔥 Current streak: ${currentStreak} perfect weeks!`
+        : currentStreak === 1
         ? `🔥 Current streak: 1 perfect week!`
         : `❌ Streak broken — try again next week!`;
   } else {
@@ -547,12 +564,15 @@ function onGameComplete(year, week, state) {
 
   performanceMessage.textContent = isPerfect
     ? "🎉 Amazing! You solved all groups perfectly!"
-    : `You solved ${solvedCount} of ${Object.keys(state.groups).length} groups. Great effort!`;
+    : solvedCount > 0
+      ? `You solved ${solvedCount} of ${Object.keys(state.groups).length} groups. Great effort!`
+      : "No groups solved this time — try again tomorrow!";
 
- if (isPerfect) {
-    showCompletionBanner();   // <-- Banner shows only on a perfect game
+  if (isPerfect) {
+    showCompletionBanner(); // 🎯 Banner only on a perfect game
   }
 }
+
 
 // ---------------------------
 // DOM CONTENT LOADED: INIT
