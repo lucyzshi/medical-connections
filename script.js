@@ -162,9 +162,13 @@ function checkSelection() {
     if (closeMatch) showFeedback("🟡 So close! You're one away from a correct group.");
     else showFeedback("❌ Incorrect group.");
 
-    if (state.wrongGuesses >= maxWrongGuesses) {
-      endGame("💥 Game over. You've used all your guesses.", currentYear, currentWeek);
-    }
+if (state.wrongGuesses >= maxWrongGuesses) {
+  endGame(
+    "💥 Game over. You've used all your guesses.",
+    state.year,
+    state.week
+  );
+}
 
     state.selectedTiles = [];
     renderTiles(false, state);
@@ -186,9 +190,14 @@ function markGroupAsSolved(words, groupName, state) {
   showFeedback(`✅ Correct! Group: ${groupName}`);
   renderTiles(false, state);
 
-  if (state.solvedGroups.length === Object.keys(state.groups).length) {
-    endGame("🎉 Congratulations! You solved all groups.", currentYear, currentWeek);
-  }
+if (state.solvedGroups.length === Object.keys(state.groups).length) {
+  endGame(
+    "🎉 Congratulations! You solved all groups.",
+    state.year,
+    state.week
+  );
+}
+
 }
 
 
@@ -474,7 +483,7 @@ async function startGameForWeek(year, week) {
 // ---------------------------
 // END GAME (PER WEEK STATE)
 // ---------------------------
-function endGame(message, year = currentYear, week = currentWeek) {
+function endGame(message, year, week) {
   const weekKey = getWeekKey(year, week);
   const state = weekStates[weekKey];
   const isCurrentWeek = year === currentYear && week === currentWeek;
@@ -568,9 +577,10 @@ function onGameComplete(year, week, state) {
       ? `You solved ${solvedCount} of ${Object.keys(state.groups).length} groups. Great effort!`
       : "No groups solved this time — try again tomorrow!";
 
-  if (isPerfect) {
-    showCompletionBanner(); // 🎯 Banner only on a perfect game
-  }
+if (isCurrentWeek && isPerfect) {
+  showCompletionBanner(); // 🎯 Banner only on a perfect game
+}
+  
   const endPrompt = document.getElementById("endPrompt");
 if (endPrompt) {
   endPrompt.classList.remove("hidden");
