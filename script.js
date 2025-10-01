@@ -74,11 +74,19 @@ function formatWeekRange(year, week) {
   const options = { timeZone: 'UTC', month: "short", day: "numeric" };
   return `${start.toLocaleDateString("en-US", options)} – ${end.toLocaleDateString("en-US", options)}, ${year}`;
 }
+
 function populatePastWeeksDropdown(currentWeekInfo) {
   const weekPicker = document.getElementById("week-picker");
   if (!weekPicker) return; // Exit if the dropdown doesn't exist
 
   weekPicker.innerHTML = ""; // Clear existing options
+
+  const placeholderOption = document.createElement("option");
+  placeholderOption.value = "";
+  placeholderOption.textContent = "Play a past week";
+  placeholderOption.disabled = true;  // Prevent it from being selected as a valid week
+  placeholderOption.selected = true;  // Show it by default
+  weekPicker.appendChild(placeholderOption);
 
   const { week: currentWeek, year: currentYear } = currentWeekInfo;
 
@@ -97,8 +105,6 @@ function populatePastWeeksDropdown(currentWeekInfo) {
     option.textContent = `${formatWeekRange(year, week)}`;
     weekPicker.appendChild(option);
   }
-
-  weekPicker.value = "";
 }
 
 // Shuffle helper
