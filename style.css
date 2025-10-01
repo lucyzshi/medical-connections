@@ -280,27 +280,55 @@ button:disabled {
 
 #completion-banner {
   position: fixed;
-  top: -80px;          /* start off-screen */
+  top: 20px;
   left: 50%;
-  transform: translateX(-50%);
-  background: gold;
-  color: black;
-  font-size: 2rem;
+  transform: translateX(-50%) scaleY(0); /* start squished vertically */
+  transform-origin: top center;
+  background: linear-gradient(135deg, #4a90e2, #007bff); /* match your buttons */
+  color: #fff;
+  font-size: 1.6rem;
   font-weight: bold;
-  padding: 1rem 2rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.2);
-  transition: top 0.7s ease;
+  padding: 1rem 3rem;
+  border-radius: 6px;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.25);
   z-index: 9999;
+  text-align: center;
+  display: inline-block;
+  transition: transform 0.6s ease-out;
+  position: fixed;
 }
 
+/* Ribbon tails */
+#completion-banner::before,
+#completion-banner::after {
+  content: "";
+  position: absolute;
+  bottom: -20px;
+  width: 25px;
+  height: 20px;
+  background: inherit; /* same gradient */
+  z-index: -1;
+}
+
+#completion-banner::before {
+  left: 0;
+  clip-path: polygon(0 0, 100% 0, 0 100%);
+}
+
+#completion-banner::after {
+  right: 0;
+  clip-path: polygon(0 0, 100% 0, 100% 100%);
+}
+
+/* Active state: unroll into view */
 #completion-banner.show {
-  top: 20px;           /* slide down into view */
+  transform: translateX(-50%) scaleY(1);
 }
 
 .hidden {
   display: none;
 }
+
 
 /* ===== Comments Section ===== */
 #comments-section {
