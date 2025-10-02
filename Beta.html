@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Clinical Connections</title>
+</head>
+<body>
+  <h1>Assemble the cases correctly to solve the puzzle</h1>
+
+  <!-- Bank Section -->
+  <div class="bank">
+    <div class="tabs">
+      <div class="tab active" data-tab="history">History</div>
+      <div class="tab" data-tab="exam">Exam</div>
+      <div class="tab" data-tab="labs">Labs</div>
+      <div class="tab" data-tab="imaging">Imaging</div>
+    </div>
+
+    <div class="tab-content active" id="history"></div>
+    <div class="tab-content" id="exam"></div>
+    <div class="tab-content" id="labs"></div>
+    <div class="tab-content" id="imaging"></div>
+  </div>
+
+  <!-- Cases Section -->
+  <div class="cases">
+    <div class="case">
+      <h3>Case 1</h3>
+      <div class="drop-zone" data-type="history">History</div>
+      <div class="drop-zone" data-type="exam">Exam</div>
+      <div class="drop-zone" data-type="labs">Labs</div>
+      <div class="drop-zone" data-type="imaging">Imaging</div>
+      <label for="diagnosis-case1">Your Diagnosis:</label>
+      <input type="text" id="diagnosis-case1" placeholder="Enter diagnosis here">
+    </div>
+    <div class="case">
+      <h3>Case 2</h3>
+      <div class="drop-zone" data-type="history">History</div>
+      <div class="drop-zone" data-type="exam">Exam</div>
+      <div class="drop-zone" data-type="labs">Labs</div>
+      <div class="drop-zone" data-type="imaging">Imaging</div>
+      <label for="diagnosis-case1">Your Diagnosis:</label>
+      <input type="text" id="diagnosis-case1" placeholder="Enter diagnosis here">
+    </div>
+    <div class="case">
+      <h3>Case 3</h3>
+      <div class="drop-zone" data-type="history">History</div>
+      <div class="drop-zone" data-type="exam">Exam</div>
+      <div class="drop-zone" data-type="labs">Labs</div>
+      <div class="drop-zone" data-type="imaging">Imaging</div>
+      <label for="diagnosis-case1">Your Diagnosis:</label>
+      <input type="text" id="diagnosis-case1" placeholder="Enter diagnosis here">
+    </div>
+  </div>
+
+  <button id="submitBtn" style="margin-top: 2em;">Submit All Cases</button>
+</body>
+</html>
