@@ -60,7 +60,33 @@
 
   <button id="submitBtn" style="margin-top: 2em;">Submit All Cases</button>
 
-  <script type="module" src="script2.js"></script>
+
+<script>
+// Placeholder for bank population
+const bankItems = {
+  history: ["Chest pain 2h", "Fever & chills", "Weight loss"],
+  exam: ["Diaphoretic", "Murmur", "RUQ tenderness"],
+  labs: ["Troponin elevated", "LFTs abnormal", "Leukocytosis"],
+  imaging: ["CXR infiltrate", "Echo EF 35%", "CT abdomen mass"]
+};
+
+const bankSelect = document.getElementById('bank-type');
+const bankItemsContainer = document.getElementById('bank-items');
+
+function populateBank() {
+  const type = bankSelect.value;
+  bankItemsContainer.innerHTML = '';
+  bankItems[type].forEach(clue => {
+    const div = document.createElement('div');
+    div.classList.add('tile');
+    div.textContent = clue;
+    bankItemsContainer.appendChild(div);
+  });
+}
+
+bankSelect.addEventListener('change', populateBank);
+populateBank();
+</script>
     
 </body>
 </html>
