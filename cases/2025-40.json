@@ -1,0 +1,24 @@
+{
+    "Acute heart failure": [
+      {"text": "80y M presents with 3 days of progressive SOB", "category": "HPI"}
+      {"text": "HTN, CAD", "category": "history"}
+      {"text": "T 98.6F HR 100 BP 140/90 RR 24 SpO2 86% RA Exam: bibasilar crackles, pitting edema", "category": "exam"}
+      {"text": "
+  
+      
+    },
+    "Pulmonary Embolism": {
+      "HPI": "55F presents with 1d SOB and chest pain",
+      "history": "Colon CA",
+      "exam": "Vitals T 98.2F, HR 120, BP 110/70, RR 28, SpO2 85% RA Exam: Tachypnea, tachycardia, no crackles",
+      "labs/imaging": "Troponin 200 EKG ST elevations CXR normal"
+    },
+    "Reactive Airway Disease": {
+      "HPI": "30y M presents with worsening SOB x2d after recent viral URI",
+      "history": "asthma"
+      "exam": "Vitals: T 98.4F, HR 105, BP 125/75, RR 26, SpO2 92% RA Exam: diffuse wheezes, no crackles",
+      "labs/imaging": "AST/ALT 450/500 Bilirubin 3.5 Ultrasound liver enlargement"
+    }
+}
+    
+  
