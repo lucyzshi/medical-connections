@@ -1,0 +1,63 @@
+body {
+  font-family: sans-serif;
+  margin: 0;
+  padding: 1rem;
+  min-height: 100vh;
+  background-color: #f9fbff;
+  
+  /* Neural connections style */
+  background-image: 
+    linear-gradient(45deg, rgba(255,0,0,0.1) 1px, transparent 1px),
+    linear-gradient(-45deg, rgba(255,0,0,0.1) 1px, transparent 1px);
+  background-size: 80px 80px; /* spacing between connections */
+  
+  display: flex;
+  justify-content: center;
+}
+
+    .bank {
+      width: 80%;
+      margin: 1em 0;
+    }
+
+.tab {
+  background: linear-gradient(145deg, #e6f1fb, #ffffff);
+  box-shadow:
+    inset 2px 2px 4px rgba(255, 255, 255, 0.8),
+    inset -2px -2px 4px rgba(0, 0, 0, 0.05),
+    0 6px 16px rgba(0, 0, 0, 0.25);
+  border-radius: 1rem;
+  padding: 0.5rem 1rem;
+  cursor: pointer;
+  margin-right: 0.5rem;
+}
+.tab.active {
+  background: linear-gradient(145deg, #bbdefb, #e3f2fd);
+  font-weight: bold;
+}
+
+    }
+    .tab-content {
+      display: none;
+      padding: 1em;
+      border: 1px solid #ccc;
+    }
+    .tab-content.active {
+      display: block;
+    }
+    .cases {
+      display: flex;
+      gap: 1em;
+      margin-top: 2em;
+    }
+    .case {
+      border: 2px solid #444;
+      padding: 1em;
+      width: 30%;
+    }
+    .drop-zone {
+      border: 1px dashed #aaa;
+      padding: 0.5em;
+      margin: 0.5em 0;
+      min-height: 40px;
+    }
