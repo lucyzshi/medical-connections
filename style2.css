@@ -49,28 +49,35 @@ h1 {
 
 .bank-items {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;       /* wrap to new line if needed */
   gap: 0.5rem;
-  max-height: 60vh;
+  justify-content: center; /* center tiles horizontally */
+  max-height: 200px;     /* scroll if needed */
   overflow-y: auto;
 }
+
 
 /* Tiles in bank */
 .tile {
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 1.25rem;          
-  padding: 0.75rem 1.25rem;        
+  border-radius: 1rem;
+  padding: 0.75rem;       /* remove horizontal-heavy padding */
+  width: 100px;           /* fixed width */
+  height: 100px;          /* fixed height for square look */
+  font-size: clamp(0.8rem, 1.2vw, 1rem);
   text-align: center;
   font-weight: 500;
-  font-size: clamp(0.8rem, 1.5vw, 1rem); 
   background: linear-gradient(145deg, #e6f1fb, #ffffff);
   box-shadow:
     inset 2px 2px 4px rgba(255, 255, 255, 0.8),
     inset -2px -2px 4px rgba(0, 0, 0, 0.05),
     0 6px 16px rgba(0, 0, 0, 0.25);
   cursor: grab;
+  flex: 0 0 auto;         /* prevent stretching */
+  word-wrap: break-word;
+  overflow-wrap: break-word;
 }
 
 /* ===== Cases (Right Column) ===== */
@@ -150,4 +157,11 @@ button:hover {
   .cases-container {
     flex-direction: column;
   }
+  .tile {
+    width: 80px;
+    height: 80px;
+    font-size: 0.75rem;
+  }
+}
+
 }
