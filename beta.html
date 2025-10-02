@@ -10,23 +10,26 @@
   <h2>Assemble the cases correctly to solve the puzzle</h2>
 
   <!-- Bank Section -->
-  <div class="bank">
-    <div class="tabs">
-      <div class="tab active" data-tab="history">History</div>
-      <div class="tab" data-tab="exam">Exam</div>
-      <div class="tab" data-tab="labs">Labs</div>
-      <div class="tab" data-tab="imaging">Imaging</div>
-    </div>
+  <div class="bank-container">
+    <div class="bank-header">Clue Bank</div>
+    
+    <label>Type:</label>
+    <select class="bank-select" id="bank-type">
+      <option value="history">History</option>
+      <option value="exam">Exam</option>
+      <option value="labs">Labs</option>
+      <option value="imaging">Imaging</option>
+    </select>
 
-    <div class="tab-content active" id="history"></div>
-    <div class="tab-content" id="exam"></div>
-    <div class="tab-content" id="labs"></div>
-    <div class="tab-content" id="imaging"></div>
+    <div class="bank-items" id="bank-items">
+      <!-- Tiles populated by JS -->
+      <div class="tile">Loading clues...</div>
+    </div>
   </div>
 
-  <!-- Cases Section -->
-  <div class="cases">
-    <div class="case">
+  <!-- ===== Cases (Right) ===== -->
+  <div class="cases-container">
+    <div class="case" id="case1">
       <h3>Case 1</h3>
       <div class="drop-zone" data-type="history">History</div>
       <div class="drop-zone" data-type="exam">Exam</div>
@@ -35,7 +38,7 @@
       <label for="diagnosis-case1">Your Diagnosis:</label>
       <input type="text" id="diagnosis-case1" placeholder="Enter diagnosis here">
     </div>
-    <div class="case">
+    <div class="case" id="case2">
       <h3>Case 2</h3>
       <div class="drop-zone" data-type="history">History</div>
       <div class="drop-zone" data-type="exam">Exam</div>
@@ -44,7 +47,7 @@
       <label for="diagnosis-case1">Your Diagnosis:</label>
       <input type="text" id="diagnosis-case1" placeholder="Enter diagnosis here">
     </div>
-    <div class="case">
+    <div class="case" id="case3">
       <h3>Case 3</h3>
       <div class="drop-zone" data-type="history">History</div>
       <div class="drop-zone" data-type="exam">Exam</div>
