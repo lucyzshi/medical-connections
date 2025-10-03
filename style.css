@@ -105,6 +105,7 @@ h2 {
     0 10px 20px rgba(0, 0, 0, 0.35);
 }
 
+
 /* Subtle green pulse for solved/revealed tiles */
 /* Solved / Revealed Tiles */
 .tile.solved,
@@ -131,6 +132,36 @@ h2 {
   0%   { transform: scale(1); background-color: #d1fae5; }
   50%  { transform: scale(1.03); background-color: #a7f3d0; } /* slightly brighter green */
   100% { transform: scale(1); background-color: #d1fae5; }
+}
+
+/* Sparkle effect for solved tiles */
+.tile.solved {
+  position: relative;   /* allow pseudo-elements to be placed */
+  overflow: visible;    /* so sparkles can extend outside */
+}
+
+.tile.solved::before,
+.tile.solved::after {
+  content: "";
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 140%;
+  height: 140%;
+  background: radial-gradient(circle, rgba(255,255,255,0.9) 15%, transparent 70%);
+  transform: translate(-50%, -50%) scale(0);
+  border-radius: 50%;
+  pointer-events: none;
+  animation: sparkle 0.8s ease-out forwards;
+}
+
+.tile.solved::after {
+  animation-delay: 0.2s; /* stagger the second burst */
+}
+
+@keyframes sparkle {
+  0%   { transform: translate(-50%, -50%) scale(0) rotate(0deg); opacity: 1; }
+  50%  { transform: translate(-50%, -50%) scale(1.2) rotate(45deg); opacity: 0.8; }
+  100% { transform: translate(-50%, -50%) scale(0) rotate(90deg); opacity: 0; }
 }
 
 /* Keep disabled look but visible */
