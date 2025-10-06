@@ -1,0 +1,6 @@
+{
+  "Findings on CT of IPF": ["Clustered Cystic Spaces",	"Thick Walls",	"Lower Lobe Predominance",	"Traction Bronchiectasis"],
+  "Findings on CT of ARDS": ["Diffuse Hazy Opacities",	"Crazy Paving",	"Air Bronchograms", "Dependent Consolidation"],
+  "Findings on CT of Pulmonary Edema": ["Perihilar Hazy Opacities", "Interlobular Thickening", "Pleural Effusions", "Cardiomegaly"],
+  "Findings on CT of Centrilobular Emphysema": ["Thin Walls", "Bullae", "Upper Lobe Predominance", "Flat Diaphragms"]
+}
