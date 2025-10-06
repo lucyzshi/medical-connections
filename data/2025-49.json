@@ -1,0 +1,6 @@
+{
+  "Findings in Pneumonia": ["+ Egophony",	"Increased Fremitus",	"Fever",	"Bronchial"],
+  "Findings in Pleural Effusion": ["Tracheal deviation",	"Decreased Fremitus",	"Dullness", "Asymmetric Chest Expansion"],
+  "Findings in Emphysema": ["Wheeze", "Prolonged Expiration", "Hyperresonant", "Increased AP diameter"],
+  "Findings in Normal Patient": ["Vesicular", "Normal Fremitus", "Resonant", "No Crackles"]
+}
