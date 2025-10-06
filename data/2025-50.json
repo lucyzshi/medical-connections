@@ -1,0 +1,6 @@
+{
+  "Findings and Risk Factors for HepA": ["Fecal-oral",	"Self-limited",	"No HCC",	"Contaminated Food"],
+  "Findings and Risk Factors for HepB": ["Perinatal",	"HCC without Cirrhosis",	"Partial DS DNA", "PAN"],
+  "Findings and Risk Factors for HepC": ["Unsafe Transfusion", "Mixed Cryloglobulinemia", "HCC after Cirrhosis", "Porphyria Cutanea Tarda"],
+  "Findings in EBV": ["Heterophile Ab", "Atypical Lymphocytes", "Splenic Rupture Risk", "DS DNA Virus"]
+}
