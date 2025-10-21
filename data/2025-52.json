@@ -1,0 +1,6 @@
+{
+  "Findings in Warm AIHA": ["Coombs+",	"Microspherocytes",	"Normal Plt",	"Splenomegaly"],
+  "Findings in HIT": ["PF4 Ab",	"SRA+",	"Plt 30-100K", "Macrovascular Thrombosis"],
+  "Findings in ITP": ["Plt <30K", "Bleeding Risk", "GpIIb/IIIa Ab", "Megakaryocytes"],
+  "Findings in TTP": ["Schistocytes", "Decreased ADAMSTS13", "Renal Dysfunction", "Microvascular Thrombosis"]
+}
