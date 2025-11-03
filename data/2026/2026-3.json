@@ -1,0 +1,6 @@
+{
+  "Findings with Digoxin toxicity": ["Hyperkalemia",	"PR prolongation",	"Bidirectional VT",	"Yellow-Green Halos"],
+  "Findings with Acetaminophen toxicity": ["RUQ pain",	"LFT elevation",	"Asymptomatic Early", "Jaundice"],
+  "Findings with Opiate Overdose": ["Resp Acidosis", "Miosis", "Hypothermia",	"Hypoactive Bowel"],
+  "Findings with Salicylate Toxicity": ["Resp Alkalosis", "Tachyarrhthmias", "Tinnitus", "High AGMA"]
+}
