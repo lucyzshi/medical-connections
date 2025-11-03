@@ -1,0 +1,6 @@
+{
+  "Methotrexate Mechanism, Side Effects, and Treatment": ["Block DNA Synthesis",	"Hepatotoxic",	"Nephrotoxic",	"Leucovorin"],
+  "Ifosfamide Mechanism, Side Effects, and Treatment": ["DNA crosslink",	"Hemorrhagic Cystitis",	"Mesna", "Methylene Blue"],
+  "CAR T-Cell Mechanism, Side Effects, and Treatment": ["Target Tumor Ag", "Engineer T-cell", "Neurotoxicity", "Tocilizumab"],
+  "Pebrolizumab Mechanism, Side Effects, and Treatment": ["Anti-PD1", "Enhance T-cell", "Hepatitis", "Steroids"]
+}
