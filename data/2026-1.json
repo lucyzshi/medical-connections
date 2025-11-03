@@ -1,0 +1,6 @@
+{
+  "Findings in DIC": ["Widespread Microthrombi",	"D-Dimer >5",	"Low Factor VIII",	"Factor Consumption"],
+  "Findings in HIT": ["PF4 Ab",	"Catheter Site Thrombosis",	"Drug Exposure", "Normal Fibrinogen"],
+  "Findings in Liver Failure": ["Loss of Factor Synthesis", "Bleeding Predominant", "Macrocytosis", "Splenic Sequestration"],
+  "Findings in Antiphospholipid Syndrome": ["Recurrent Miscarriages", "Autoimmune Disease", "plt >100", "Recurrent Thrombosis"]
+}
