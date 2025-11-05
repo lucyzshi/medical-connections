@@ -1,0 +1,6 @@
+{
+  "Findings in Right Heart Failure/Pulm HTN": ["Loud P2", "RV heave", "Tricuspid Regurgitation", "R Axis Deviation"],
+  "Findings in Constrictive Pericarditis": ["Prominent Y Descent", "History of Radiation", "Knock", "Thick Pericardium"],
+  "Findings in Cardiac Tamponade": ["Acute Onset", "Absent Y Descent", "Muffled Heart Sounds", "Pulsus Paradoxus"],
+  "Findings in Cardiac Amyloid": ["S4", "Conduction Abnormality", "Thick Myocardium", "Biatrial Enlargement"]
+}
