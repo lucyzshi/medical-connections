@@ -1,0 +1,6 @@
+{
+  "Findings in Cirrhosis": ["Spider Angioma",	"Palmar Erythema",	"Testicular Atrophy",	"Thrombocytopenia"],
+  "Findings in Venous Stasis": ["Normal ADH",	"Hemosiderin",	"Inverted Champagne Bottle", "Decreased Hair Growth"],
+  "Findings in Heart Failure": ["Gallop", "Pulsus Alternans", "Elevated BNP", "Orthopnea"],
+  "Findings in Nephrotic Syndrome": ["Frothy Urine", "Periorbital Edema", "Hyperlipidemia", "Hypocalcemia"]
+}
