@@ -1,0 +1,6 @@
+{
+  "Findings in Hepatocellular Carcinoma": ["High AFP",	"Cirrhosis",	"Vascular Mets",	"Hematogenous Spread"],
+  "Findings in Pancreatic Cancer": ["Migratory Thromboplebitis",	"Painless Jaundice",	"Palpable Gallbladder", "High CA 19-9"],
+  "Findings in Ovarian Cancer": ["High CA-125", "Pleural Effusions", "Peritoneal Spread", "Associated Nulliparity"],
+  "Findings in Colorectal Cancer": ["High CEA", "Apple Core Imaging", "Iron Deficiency Anemia", "Associated Red Meat"]
+}

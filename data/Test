@@ -1,6 +1,0 @@
-{
-  "Landmark AFib trials": ["AFFIRM",	"RACE II",	"CABANA",	"ARISTOTLE"],
-  "Landmark Pulmonary/Crit Care trials": ["ARDSNet", "TORCH",	"FLAME",	"Rivers"],
-  "Landmark Heart Failure trials": ["TOPCAT",	"COPERNICUS",	"PARAGON",	"EMPEROR-preserved"],
-  "Landmark HTN trials": ["HYVET", "SPRINT", "ALLHAT", "ASCOT-BPLA"]
-}
