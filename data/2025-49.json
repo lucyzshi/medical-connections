@@ -1,0 +1,6 @@
+{
+  "Findings with Ethylene Glycol Toxicity": ["High Osmolar Gap",	"Ca Oxalate Crystals",	"HypoCa",	"Renal Failure"],
+  "Findings with Acetaminophen toxicity": ["Normal Acid Base",	"LFT elevation",	"Asymptomatic Early", "Liver Failure"],
+  "Findings with Opiate Overdose": ["Resp Acidosis", "Miosis", "Hypothermia",	"Hypoactive Bowel"],
+  "Findings with Salicylate Toxicity": ["Resp Alkalosis", "HypoK", "Tinnitus", "Mixed Acid Base"]
+}
