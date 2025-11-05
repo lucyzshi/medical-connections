@@ -1,0 +1,6 @@
+{
+  "Findings in Primary Hyperparathyroidism": ["High PTH",	"Nephrolithiasis",	"Osteoporosis",	"Osteitis Fibrosa Cystica"],
+  "Findings in Malignancy-related HyperCa": ["High PTHrP",	"Ca >14mg/dL",	"Acute Onset", "History of Lung SCC"],
+  "Findings in Sarcoidosis": ["High 1,25-OH Vit D", "Macrophage Conversion", "High GI Ca Absorption", "Normal Osteoclast Activity"],
+  "Findings in Immobilization": ["Normal Labs", "Decrease Osteoblast Activity", "Asymptomatic", "History of Spinal Cord Injury"]
+}
