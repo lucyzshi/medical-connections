@@ -1,0 +1,6 @@
+{
+  "Findings in Dengue": ["+ Tourniquet Test",	"High Fever",	"Retro-orbital Pain",	"Virus"],
+  "Findings in Typhoid": ["Gradual Fever",	"Gram - bacillus",	"Relative Bradycardia", "Rose Spots"],
+  "Findings in Leptospirosis": ["Conjunctival Suffusion", "Renal Failure", "Stagnant Water", "Spirochete"],
+  "Findings in Malaria": ["Splenomegaly", "Retinal Hemorrhage", "Cyclic Fever", "Parasite"]
+}
