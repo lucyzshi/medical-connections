@@ -1,0 +1,6 @@
+{
+  "Diseases that can cause a low gamma gap": ["Agammaglobulinemia",	"CVID",	"IgA deficiency",	"Protein losing enteropathy"],
+  "Diseases that can cause a high monoclonal gamma gap": ["Multiple Myeloma",	"Waldenstrom Macroglobulinemia",	"MGUS", "Amyloidosis"],
+  "Diseases that can cause a high polyclonal gamma gap": ["HIV", "Liver Disease", "Hepatitis C", "Sarcoidosis"],
+  "Diseases that don't affect gamma gap": ["HTN", "Osteoarthritis", "Iron Deficiency", "Diabetes Mellitus"]
+}
