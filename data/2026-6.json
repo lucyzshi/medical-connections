@@ -1,0 +1,6 @@
+{
+  "Findings in Psoriasis": ["Extensor surfaces",	"Silvery scale",	"Auspitz sign",	"Nail Pitting"],
+  "Findings in Atopic Dermatitis": ["Flexor Surfaces",	"Dennie-Morgan lines",	"Atopy", "Lichenification"],
+  "Findings in Tinea": ["Fungus", "Central Clearing", "KOH+", "Peripheral scale"],
+  "Findings in Seborrheic Dermatitis": ["Malassezia", "Greasy scale", "Nasolabial folds", "Yeast"]
+}
