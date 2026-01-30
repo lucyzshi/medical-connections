@@ -1,0 +1,6 @@
+{
+  "Characteristics of Pleural EFfusion from Empyema": ["Neutrophil predominant",	"Loculated",	"pH <7.2",	"Low Glucose"],
+  "Characteristics of Pleural EFfusion from Hemothorax": ["Traumatic",	"Acute",	"RBC predominant", "Eosinophils later"],
+  "Characteristics of Pleural EFfusion from TB": ["Lymphocyte predominant", "pH 7.3-7.45", "High ADA", "Chronic"],
+  "Characteristics of Pleural EFfusion from Heart Failure": ["Transudate", "Low protein", "Low LDH", "Bilateral"]
+}
