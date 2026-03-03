@@ -1,0 +1,6 @@
+ {
+  "EKG findings in Hypocalcemia": ["Prolonged QT", "Prolonged ST",	"Normal T wave",	"Normal QRS"],
+  "EKG findings in Hypercalcemia": ["Short QT",	"Widened T wave",	"Osborn waves",	"J waves"],
+  "EKG findings in Hyperkalemia": ["Peaked T wave",	"AV block",	"Prolonged PR",	"Wide QRS"],
+  "EKG findings in Hypokalemia": ["U waves", "ST depression", "T wave inversions", "Ectopy"]
+}
