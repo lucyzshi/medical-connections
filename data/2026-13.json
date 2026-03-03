@@ -1,0 +1,6 @@
+ {
+  "Symptoms of Opiate withdrawal": ["Yawning", "Diarrhea",	"Abdominal pain",	"Piloerection"],
+  "Symptoms of Alcohol withdrawal": ["Tachycardia",	"Anxiety",	"Seizures",	"Hallucinations"],
+  "Symptoms of Nicotine withdrawal": ["Increased Appetite",	"Decreased HR",	"Irritability",	"Restlessness"],
+  "Symptoms/Findings in Steroid withdrawal": ["Loss of Appetite", "Hypotension", "Fever", "Hyponatremia"]
+}
