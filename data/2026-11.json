@@ -1,0 +1,6 @@
+{
+  "Signs of Severe Aortic Stenosis": ["Crescendo-decrescendo", "Syncope", "Pulsus Parvus", "Paradoxical Split S2"],
+  "Signs of Aortic Regurgitation": ["Wide Pulse Pressure", "Water Hammer", "Decrescendo", "Austin Flint"],
+  "Signs of Mitral Stenosis": ["Mid-diastolic", "Malar flush", "Loud S1", "Opening Snap"],
+  "Signs of Mitral Regurgitation": ["Mid-systolic click", "Holosystolic", "Soft S1", "Axillary Radiation"]
+}
