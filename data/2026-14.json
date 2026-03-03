@@ -1,0 +1,6 @@
+{
+  "Findings in Secretory Diarrhea": ["Large Watery Stool",	"Persists with Fasting",	"Nocturnal Stool", "Low Stool Osm Gap"],
+  "Findings in Osmotic Diarrhea": ["Relieved by Fasting", "Bloating", "Flatulence", "High Stool Osm Gap"],
+  "Findings in Inflammatory Diarrhea": ["Elevated Fecal Calprotectin", "Fecal Leukocytes", "Bloody Stool", "Tenesmus"],
+  "Findings in Malabsorptive Diarrhea": ["Common Weight Loss", "High Fecal Fat", "Vitamin Deficiencies", "Reduced Fecal Elastase"]
+}
