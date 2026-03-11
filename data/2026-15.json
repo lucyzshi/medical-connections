@@ -1,0 +1,6 @@
+{
+  "Medication options for alcohol withdrawal": ["Gabapentin",	"Hepatotoxic",	"Barbituates",	"Benzodiazepines"],
+  "medication opiate withdrawal": ["Clonidine",	"Buprenorphine",	"Methadone", "Oxycodone"],
+  "": ["Target Tumor Ag", "Engineer T-cell", "Neurotoxicity", "Tocilizumab"],
+  "Pebrolizumab Mechanism, Side Effects, and Treatment": ["Anti-PD1", "Enhance T-cell", "Hepatitis", "Steroids"]
+}
