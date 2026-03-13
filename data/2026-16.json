@@ -1,0 +1,6 @@
+{
+  "Findings in eGPA": ["p-ANCA", "Eosinophils", "Nasal Polyps", "Myocarditis"],
+  "Findings in GPA": ["c-ANCA", "Pulmonary Nodules", "Oral Ulcers", "Saddle Nose Deformity"],
+  "Findings in IgA Vasculitis": ["Age <10", "Raised Purpura", "Abdominal Pain", "Immune Complex Deposit"],
+  "Findings in Takayasu Arteritis": ["Claudication",	"Pulseless",	"Pulmonary Hypertension",	"Age 10-40"]
+}
