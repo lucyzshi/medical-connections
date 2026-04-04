@@ -1,0 +1,6 @@
+ {
+  "Ultrasound Findings in Decompensated Heart Failure": ["B-Lines", "<50% Sniff Test", "Jellyfish Sign", "Increased MV septal dist"],
+  "Ultrasound Findings in Normal Lungs": ["A-Lines", "Batwing Sign", "Lung Sliding", "Curtain Sign"],
+  "Ultrasound Findings in Decompensated Cirrhosis": ["Floating Bowel Loops", "Increased Optic N Sheath Diam", "Dog Ear Sign", "Anechoic Morrison's Pouch"],
+  "Findings in Gout": ["Recurrent",	"Nephrolithiasis",	"Monoarthritis",	"Monosodium urate"]
+}
