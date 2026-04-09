@@ -1,0 +1,6 @@
+{
+  "Findings in S Aureus Endocarditis": ["Tricuspid Regurg",	"IVDU",	"Pulm Emboli",	"Fulminant"],
+  "Findings in HACEK Endocarditis": ["Poor Dentition",	"Subacute",	"Culture Neg", "Aortic Regurg"],
+  "Findings in Rheumatic Fever": ["Prior Strep", "Chorea", "Arthritis", "Erythema Marginatum"],
+  "Findings in Nonbacterial Thrombotic Endocarditis (NBTE)": ["Malignancy", "SLE", "Hypercoagulability", "Silent until Emboli"]
+}
