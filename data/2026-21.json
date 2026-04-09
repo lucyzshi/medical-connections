@@ -1,0 +1,6 @@
+{
+  "Findings in Idiopathic Pulmonary Fibrosis (IPF)": ["UIP",	"Smoker",	"Older Adults",	"Basilar Honeycombing"],
+  "Findings in Hypersensitivity Pneumonitis": ["Bird Exposure",	"Type III/IV Reaction",	"Centrilobular nodules", "Hot Tub"],
+  "Findings in Sarcoidosis": ["Hilar Lymphadenopathy", "Hypercalcemia", "Granulomas", "Erythema Nodosum"],
+  "Findings in Cryptogenic Organizing Pneumonia (COP)": ["Post-infection", "Reversed Halo Sign", "Masson Bodies", "Migratory Consolidations"]
+}
