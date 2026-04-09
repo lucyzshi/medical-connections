@@ -1,0 +1,6 @@
+{
+  "Findings in CVID": ["Enlarged Tonsils",	"Decreased IgG/IgA",	"Lymphadenopathy",	"Sinopulmonary Infections"],
+  "Findings in AIDS": ["Decreased T Cells",	"PCP",	"Toxoplasma", "Kaposi"],
+  "Findings in X-Linked Agammaglobulinemia": ["Absent B cells", "BTK mutation", "Decreased IgG/IgA/IgM", "Male"],
+  "Findings in Asplenia": ["Howell-Jolly Bodies", "Thrombocytosis", "Sickle Cell Anemia", "Trauma"]
+}
