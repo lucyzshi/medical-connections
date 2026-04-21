@@ -1,14 +1,3 @@
-{
-  "week1": [
-    { "text": "World War II ends", "year": 1945 },
-    { "text": "First man lands on the moon", "year": 1969 },
-    { "text": "Fall of the Berlin Wall", "year": 1989 },
-    { "text": "Launch of the iPhone", "year": 2007 },
-    { "text": "COVID-19 declared a pandemic", "year": 2020 }
-  ]
-}
-
-
 // app.js
 let events = [];
 let currentIndex = 0;
@@ -23,14 +12,123 @@ const submitBtn = document.getElementById("submitBtn");
 const nextBtn = document.getElementById("nextBtn");
 const finalEl = document.getElementById("final");
 
-async function loadPuzzle() {
-  const res = await fetch("puzzles.json");
-  const data = await res.json();
+function getCurrentISOWeekInfo() {
+  const now = new Date();
+  const dayNum = now.getUTCDay() || 7;
+  now.setUTCDate(now.getUTCDate() + 4 - dayNum);
+  const yearStart = new Date(Date.UTC(now.getUTCFullYear(), 0, 1));
+  const week = Math.ceil((((now - yearStart) / 86400000) + 1) / 7);
+  return { year: now.getUTCFullYear(), week };
+}
+const currentWeekInfo = getCurrentISOWeekInfo();
+const currentWeek = currentWeekInfo.week;
+const currentYear = currentWeekInfo.year;
 
-  // simple weekly selection (can expand later)
-  events = data.week1;
+// ISO week helpers
+function getISOWeeksInYear(year) {
+  const dec28 = new Date(Date.UTC(year, 11, 28));
+  const day = dec28.getUTCDay() || 7;
+  dec28.setUTCDate(dec28.getUTCDate() + 4 - day);
+  const startOfYear = new Date(Date.UTC(dec28.getUTCFullYear(), 0, 1));
+  return Math.ceil((((dec28 - startOfYear) / 86400000) + 1) / 7);
+}
 
-  loadEvent();
+function getStartOfISOWeek(year, week) {
+  const jan4 = new Date(Date.UTC(year, 0, 4));
+  const jan4Day = jan4.getUTCDay() || 7;
+  const startOfWeek1 = new Date(jan4);
+  startOfWeek1.setUTCDate(jan4.getUTCDate() - jan4Day + 1);
+  const startDate = new Date(startOfWeek1);
+  startDate.setUTCDate(startOfWeek1.getUTCDate() + (week - 1) * 7);
+  return startDate;
+}
+
+function formatWeekRange(year, week) {
+  const start = getStartOfISOWeek(year, week);
+  const end = new Date(start);
+  end.setUTCDate(start.getUTCDate() + 6);
+  const options = { timeZone: 'UTC', month: "short", day: "numeric" };
+  return `${start.toLocaleDateString("en-US", options)} – ${end.toLocaleDateString("en-US", options)}, ${year}`;
+}
+
+function populatePastWeeksDropdown(currentWeekInfo) {
+const weekPicker = document.getElementById("week-picker");
+
+weekPicker?.addEventListener("change", (e) => {
+  const value = e.target.value;
+  if (!value) return;
+
+  const [year, week] = value.split("-").map(Number);
+
+  currentIndex = 0;
+  totalScore = 0;
+  history = [];
+
+  document.getElementById("game").classList.remove("hidden");
+  finalEl.classList.add("hidden");
+
+  loadPuzzle(year, week);
+});
+  
+  const placeholderOption = document.createElement("option");
+  placeholderOption.value = "";
+  placeholderOption.textContent = "Play a past week";
+  placeholderOption.disabled = true;  // Prevent it from being selected as a valid week
+  placeholderOption.selected = true;  // Show it by default
+  weekPicker.appendChild(placeholderOption);
+
+  const { week: currentWeek, year: currentYear } = currentWeekInfo;
+
+  for (let i = 1; i < 6; i++) {
+    let week = currentWeek - i;
+    let year = currentYear;
+
+    // Handle previous year wrap-around
+    if (week <= 0) {
+      year -= 1;
+      week += getISOWeeksInYear(year);
+    }
+
+    const option = document.createElement("option");
+    option.value = `${year}-${week}`;
+    option.textContent = `${formatWeekRange(year, week)}`;
+    weekPicker.appendChild(option);
+  }
+}
+
+async function loadPuzzle(year = currentYear, week = currentWeek) {
+  // zero-pad week (01, 02, etc.)
+  const Week = String(week).padStart(2, "0");
+
+  const filePath = `discovery/${year}-${Week}.json`;
+
+  try {
+    const res = await fetch(filePath);
+
+    if (!res.ok) throw new Error("File not found");
+
+    const data = await res.json();
+
+    events = data.events;
+    currentPuzzleId = `${year}-${Week}`;
+
+    loadEvent();
+  } catch (err) {
+    console.error("Error loading puzzle:", err);
+
+    // fallback: try previous week
+    loadPreviousWeek(year, week);
+  }
+}
+function loadPreviousWeek(year, week) {
+  week -= 1;
+
+  if (week <= 0) {
+    year -= 1;
+    week = getISOWeeksInYear(year);
+  }
+
+  loadPuzzle(year, week);
 }
 
 function loadEvent() {
@@ -108,7 +206,13 @@ function showFinal() {
   });
 
   html += `</div><button onclick="location.reload()">Play Again</button>`;
-
+  
+localStorage.setItem(currentPuzzleId, JSON.stringify({
+  currentIndex,
+  totalScore,
+  history
+}));
+  
   finalEl.innerHTML = html;
 }
 
