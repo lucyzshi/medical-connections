@@ -1,167 +1,44 @@
 body {
-  font-family: sans-serif;
-  margin: 0;
-  padding: 1rem;
-  min-height: 100vh;
-  background-color: #f9fbff;
-  background-image: 
-    linear-gradient(45deg, rgba(255,0,0,0.05) 1px, transparent 1px),
-    linear-gradient(-45deg, rgba(255,0,0,0.05) 1px, transparent 1px);
-  background-size: 80px 80px;
-  display: flex;
-  justify-content: center;
+  font-family: Arial, sans-serif;
+  background: #f5f5f5;
 }
 
-main {
-  max-width: 1200px;
-  width: 100%;
-  display: flex;
-  gap: 2rem;
-}
-
-h1 {
-  text-align: center;
-  margin-bottom: 1rem;
-}
-
-
-.bank-container {
-  width: 25%;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  margin-bottom: 2rem;
-}
-
-.bank-header {
-  font-weight: bold;
-  margin-bottom: 0.5rem;
+.container {
+  max-width: 600px;
+  margin: 50px auto;
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
   text-align: center;
 }
 
-.bank-select {
-  width: 100%;
-  padding: 0.5rem;
-  border-radius: 0.5rem;
-  border: 1px solid #ccc;
-  margin-bottom: 0.5rem;
-}
-
-.bank-items {
-  display: flex;
-  flex-wrap: wrap;       /* wrap to new line if needed */
-  gap: 0.5rem;
-  justify-content: center; /* center tiles horizontally */
-  max-height: 200px;     /* scroll if needed */
-  overflow-y: auto;
-}
-
-
-/* Tiles in bank */
-.tile {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 1rem;
-  padding: 0.75rem;       /* remove horizontal-heavy padding */
-  width: 100px;           /* fixed width */
-  height: 100px;          /* fixed height for square look */
-  font-size: clamp(0.8rem, 1.2vw, 1rem);
+input {
+  padding: 10px;
+  font-size: 16px;
+  width: 150px;
   text-align: center;
-  font-weight: 500;
-  background: linear-gradient(145deg, #e6f1fb, #ffffff);
-  box-shadow:
-    inset 2px 2px 4px rgba(255, 255, 255, 0.8),
-    inset -2px -2px 4px rgba(0, 0, 0, 0.05),
-    0 6px 16px rgba(0, 0, 0, 0.25);
-  cursor: grab;
-  flex: 0 0 auto;         /* prevent stretching */
-  word-wrap: break-word;
-  overflow-wrap: break-word;
+  margin-top: 10px;
 }
 
-/* ===== Cases (Right Column) ===== */
-.cases-container {
-  width: 70%;
-  display: flex;
-  gap: 1rem;
-  justify-content: center;
-}
-
-.case {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.case h3 {
-  text-align: center;
-}
-
-.drop-zone {
-  border: 2px dashed #aaa;
-  border-radius: 1rem;
-  padding: 0.75rem;
-  min-height: 60px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: linear-gradient(145deg, #f5faff, #ffffff);
-}
-
-/* Diagnosis Input */
-.case input {
-  padding: 0.5rem;
-  border-radius: 1rem;
-  border: 1px solid #ccc;
-  font-size: 1rem;
-  width: 90%;
-  margin: 0 auto;
-  display: block;
-}
-
-/* Submit Button */
 button {
-  margin-top: 1rem;
-  padding: 0.75rem 1.5rem;
-  border-radius: 6px;
-  background-color: #4a90e2;
-  color: white;
-  border: none;
+  padding: 10px 18px;
+  margin: 10px 5px;
+  font-size: 16px;
   cursor: pointer;
 }
 
-button:hover {
-  background-color: #357ab7;
+.hidden {
+  display: none;
 }
 
-/* Scrollable bank */
-.bank-items::-webkit-scrollbar {
-  width: 6px;
+#feedback {
+  margin-top: 20px;
+  font-weight: bold;
 }
 
-.bank-items::-webkit-scrollbar-thumb {
-  background: #bbb;
-  border-radius: 3px;
+.summary {
+  text-align: left;
+  margin-top: 20px;
 }
 
-/* Responsive */
-@media (max-width: 1024px) {
-  main {
-    flex-direction: column;
-  }
-  .bank-container, .cases-container {
-    width: 100%;
-  }
-  .cases-container {
-    flex-direction: column;
-  }
-  .tile {
-    width: 80px;
-    height: 80px;
-    font-size: 0.75rem;
-  }
-}
-
-}
