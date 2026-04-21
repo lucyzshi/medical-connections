@@ -1,101 +1,81 @@
+// index.html
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Clinical Connections</title>
-  <link rel="stylesheet" href="style2.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Guess the Year</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-  <h1>Clinical Connections</h1>
-  <h2>Assemble the cases correctly to solve the puzzle</h2>
+  <div class="container">
+    <h1>Guess the Year</h1>
 
-  <!-- Bank Section -->
-  <div class="bank-container">
-    <div class="bank-header">Clue Bank</div>
-    
-    <label>Type:</label>
-    <select class="bank-select" id="bank-type">
-      <option value="history">History</option>
-      <option value="exam">Exam</option>
-      <option value="labs">Labs</option>
-      <option value="imaging">Imaging</option>
-    </select>
+    <div id="progress"></div>
 
-    <div class="bank-items" id="bank-items">
-      <!-- Tiles populated by JS -->
-      <div class="tile">Loading clues...</div>
+    <div id="game">
+      <p id="event"></p>
+
+      <input type="number" id="guess" placeholder="Enter year" />
+
+      <div class="buttons">
+        <button id="submitBtn">Submit</button>
+        <button id="nextBtn" class="hidden">Next</button>
+      </div>
+
+      <div id="feedback"></div>
     </div>
+
+    <div id="final" class="hidden"></div>
   </div>
 
-  <!-- ===== Cases (Right) ===== -->
-  <div class="cases-container">
-    <div class="case" id="case1">
-      <h3>Case 1</h3>
-      <div class="drop-zone" data-type="history">History</div>
-      <div class="drop-zone" data-type="exam">Exam</div>
-      <div class="drop-zone" data-type="labs">Labs</div>
-      <div class="drop-zone" data-type="imaging">Imaging</div>
-      <label for="diagnosis-case1">Your Diagnosis:</label>
-      <input type="text" id="diagnosis-case1" placeholder="Enter diagnosis here">
-    </div>
-    <div class="case" id="case2">
-      <h3>Case 2</h3>
-      <div class="drop-zone" data-type="history">History</div>
-      <div class="drop-zone" data-type="exam">Exam</div>
-      <div class="drop-zone" data-type="labs">Labs</div>
-      <div class="drop-zone" data-type="imaging">Imaging</div>
-      <label for="diagnosis-case1">Your Diagnosis:</label>
-      <input type="text" id="diagnosis-case1" placeholder="Enter diagnosis here">
-    </div>
-    <div class="case" id="case3">
-      <h3>Case 3</h3>
-      <div class="drop-zone" data-type="history">History</div>
-      <div class="drop-zone" data-type="exam">Exam</div>
-      <div class="drop-zone" data-type="labs">Labs</div>
-      <div class="drop-zone" data-type="imaging">Imaging</div>
-      <label for="diagnosis-case1">Your Diagnosis:</label>
-      <input type="text" id="diagnosis-case1" placeholder="Enter diagnosis here">
-    </div>
-      <div class="case" id="case4">
-      <h3>Case 3</h3>
-      <div class="drop-zone" data-type="history">History</div>
-      <div class="drop-zone" data-type="exam">Exam</div>
-      <div class="drop-zone" data-type="labs">Labs</div>
-      <div class="drop-zone" data-type="imaging">Imaging</div>
-      <label for="diagnosis-case1">Your Diagnosis:</label>
-      <input type="text" id="diagnosis-case1" placeholder="Enter diagnosis here">
-    </div>
-  </div>
-
-  <button id="submitBtn" style="margin-top: 2em;">Submit All Cases</button>
-
-
-<script>
-// Placeholder for bank population
-const bankItems = {
-  history: ["Chest pain 2h", "Fever & chills", "Weight loss"],
-  exam: ["Diaphoretic", "Murmur", "RUQ tenderness"],
-  labs: ["Troponin elevated", "LFTs abnormal", "Leukocytosis"],
-  imaging: ["CXR infiltrate", "Echo EF 35%", "CT abdomen mass"]
-};
-
-const bankSelect = document.getElementById('bank-type');
-const bankItemsContainer = document.getElementById('bank-items');
-
-function populateBank() {
-  const type = bankSelect.value;
-  bankItemsContainer.innerHTML = '';
-  bankItems[type].forEach(clue => {
-    const div = document.createElement('div');
-    div.classList.add('tile');
-    div.textContent = clue;
-    bankItemsContainer.appendChild(div);
-  });
-}
-
-bankSelect.addEventListener('change', populateBank);
-populateBank();
-</script>
-    
+  <script src="app.js"></script>
 </body>
 </html>
+
+
+// styles.css
+body {
+  font-family: Arial, sans-serif;
+  background: #f5f5f5;
+}
+
+.container {
+  max-width: 600px;
+  margin: 50px auto;
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  text-align: center;
+}
+
+input {
+  padding: 10px;
+  font-size: 16px;
+  width: 150px;
+  text-align: center;
+  margin-top: 10px;
+}
+
+button {
+  padding: 10px 18px;
+  margin: 10px 5px;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.hidden {
+  display: none;
+}
+
+#feedback {
+  margin-top: 20px;
+  font-weight: bold;
+}
+
+.summary {
+  text-align: left;
+  margin-top: 20px;
+}
+
