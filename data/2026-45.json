@@ -1,6 +1,6 @@
 {
-  "Methotrexate Mechanism, Side Effects, and Treatment": ["Block DNA Synthesis",	"Hepatotoxic",	"Nephrotoxic",	"Leucovorin"],
-  "Bleomycin Mechanism, Side Effects, and Treatment": ["Damage DNA",	"Pulmonary Fibrosis",	"Skin Hyperpigmentation", "Bind to Iron"],
-  "CAR T-Cell Mechanism, Side Effects, and Treatment": ["Target Tumor Ag", "Engineer T-cell", "Neurotoxicity", "Tocilizumab"],
-  "Pebrolizumab Mechanism, Side Effects, and Treatment": ["Anti-PD1", "Enhance T-cell", "Hepatitis", "Steroids"]
+  "Drug, Mechanism, Side Effects": ["Block DNA Synthesis",	"Hepatotoxic",	"Nephrotoxic",	"Methotrexate"],
+  "Drug, Mechanism, Side Effects": ["Damage DNA",	"Pulmonary Fibrosis",	"Skin Hyperpigmentation", "Bleomycin"],
+  "Drug, Mechanism, Side Effects, and Treatment": ["Target Tumor Ag", "CAR T-Cell", "Neurotoxicity", "Tocilizumab"],
+  "Drug Mechanism, Side Effects": ["Anti-PD1", "Enhance T-cell", "Hepatitis", "Pebrolizumab"]
 }
