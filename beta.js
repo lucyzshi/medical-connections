@@ -3,6 +3,7 @@ let events = [];
 let currentIndex = 0;
 let totalScore = 0;
 let history = [];
+let currentPuzzleId = "";
 
 const eventEl = document.getElementById("event");
 const guessInput = document.getElementById("guess");
@@ -50,6 +51,8 @@ function formatWeekRange(year, week) {
   const options = { timeZone: 'UTC', month: "short", day: "numeric" };
   return `${start.toLocaleDateString("en-US", options)} – ${end.toLocaleDateString("en-US", options)}, ${year}`;
 }
+
+if (!weekPicker) return;
 
 function populatePastWeeksDropdown(currentWeekInfo) {
 const weekPicker = document.getElementById("week-picker");
@@ -127,7 +130,8 @@ function loadPreviousWeek(year, week) {
     year -= 1;
     week = getISOWeeksInYear(year);
   }
-
+populatePastWeeksDropdown(currentWeekInfo);
+  
   loadPuzzle(year, week);
 }
 
