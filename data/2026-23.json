@@ -1,0 +1,6 @@
+{
+  "Findings in MEN1": ["Pituitary Adenoma",	"Parathyroid Hyperplasia",	"Gastrinoma",	"Lipoma"],
+  "Findings in MEN2b": ["RET mutation",	"Medullary Thyroid CA",	"Pheochromocytoma", "Marfanoid Habitus"],
+  "Findings in Lynch Syndrome": ["Colorectal CA", "Endometrial CA", "Stomach CA", "Mismatch Repair Mutation"],
+  "Findings in Li-Fraumeni": ["Sarcoma", "Glioblastoma", "Leukemia", "Adrenal CA"]
+}
