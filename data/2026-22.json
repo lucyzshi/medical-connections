@@ -1,0 +1,6 @@
+{
+  "Findings in DKA": ["Kussmaul breathing",	"pH <7.3",	"T1DM>T2DM",	"Insulin Deficiency"],
+  "Findings in HHS": ["Dehydration",	"Elderly",	"Neuro Changes", "Insulin Resistance"],
+  "Findings in Starvation Ketosis": ["Normal Glucose", "Ketones", "Carb Deficiency", "Prolonged Fast"],
+  "Findings in Insulinoma": ["Low Glucose", "Diaphoresis", "High C-peptide", "Weight Gain"]
+}
