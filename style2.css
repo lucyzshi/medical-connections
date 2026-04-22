@@ -1,7 +1,9 @@
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-  background: #f3f4f6;
-  margin: 0;
+  background: linear-gradient(
+    to bottom,
+    #f5f1e6,
+    #f3f4f6
+  );
 }
 
 /* Page layout */
@@ -13,11 +15,34 @@ body {
 }
 
 /* Title */
+/* Ancient Roman/Greek inspired title */
 .title {
-  font-size: 32px;
-  font-weight: 700;
-  margin-bottom: 30px;
+  font-family: "Cinzel", "Trajan Pro", Georgia, serif;
+  font-size: 38px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: #1f2937;
+  margin-bottom: 10px;
 }
+
+/* Classical gold accent */
+.accent {
+  color: #b08d57;
+  position: relative;
+}
+
+/* subtle engraved underline */
+.accent::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  bottom: -6px;
+  width: 100%;
+  height: 2px;
+  background: #b08d57;
+  opacity: 0.5;
+}
+
 
 /* Card box */
 .card {
