@@ -1,0 +1,6 @@
+{
+  "Findings in Diamond-Blackfan Anemia": ["Isolated Anemia",	"Triphalangeal thumbs",	"Infant",	"Micrognathia"],
+  "Findings in MDS": ["Elderly",	"Hypercellular Marrow",	"Dysplastic Cells", "Splenomegaly"],
+  "Findings in Fanconi Anemia": ["Pancytopenia", "Cafe-au-lait", "Hyperpigmentation", "Radial Hypoplasia"],
+  "Findings in Shwachman-Diamond syndrome": ["Steatorrhea", "Neutropenia", "Vit D def", "Chondrodysplasia"]
+}
