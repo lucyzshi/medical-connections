@@ -103,7 +103,7 @@ async function loadPuzzle(year = currentYear, week = currentWeek) {
   // zero-pad week (01, 02, etc.)
   const Week = String(week).padStart(2, "0");
 
-  const filePath = `discovery/${year}-${Week}.json`;
+  const filePath = `Discovery/${year}-${Week}.json`;
 
   try {
     const res = await fetch(filePath);
