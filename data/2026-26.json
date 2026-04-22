@@ -1,0 +1,6 @@
+{
+  "Findings in Psoriasis": ["Extensor",	"Oil Drop Sign",	"Sharp border",	"Silvery scale"],
+  "Findings in Atopic Dermatitis": ["Periorbital halo",	"Flexor",	"Irregular Patch", "Allergic rhinitis"],
+  "Findings in Seborrheic Dermatitis": ["Malassezia", "Greasy scale", "HIV association", "Nasolabial folds"],
+  "Findings in Tinea": ["Groin involvement", "Central clearing", "Peripheral scale", "Dermatophyte"]
+}
