@@ -1,4 +1,4 @@
-// app.js
+
 let events = [];
 let currentIndex = 0;
 let totalScore = 0;
