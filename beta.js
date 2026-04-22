@@ -52,10 +52,10 @@ function formatWeekRange(year, week) {
   return `${start.toLocaleDateString("en-US", options)} – ${end.toLocaleDateString("en-US", options)}, ${year}`;
 }
 
-if (!weekPicker) return;
-
 function populatePastWeeksDropdown(currentWeekInfo) {
 const weekPicker = document.getElementById("week-picker");
+  
+if (!weekPicker) return;
 
 weekPicker?.addEventListener("change", (e) => {
   const value = e.target.value;
