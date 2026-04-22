@@ -140,6 +140,10 @@ function loadEvent() {
   eventEl.textContent = e.text;
   progressEl.textContent = `Event ${currentIndex + 1} of ${events.length}`;
 
+  // 👇 ADD THIS PART HERE
+  const progressPercent = (currentIndex / events.length) * 100;
+  document.getElementById("progress-bar").style.width = `${progressPercent}%`;
+
   guessInput.value = "";
   guessInput.disabled = false;
 
@@ -193,9 +197,20 @@ nextBtn.addEventListener("click", () => {
   }
 });
 
+guessInput.addEventListener("keydown", (e) => {
+  if (
+    e.key === "Enter" &&
+    !guessInput.disabled &&
+    !submitBtn.classList.contains("hidden")
+  ) {
+    submitBtn.click();
+  }
+});
+
 function showFinal() {
   document.getElementById("game").classList.add("hidden");
   finalEl.classList.remove("hidden");
+  document.getElementById("progress-bar").style.width = "100%";
 
   let html = `<h2>Final Score: ${totalScore} / ${events.length * 100}</h2>`;
   html += `<div class="summary">`;
