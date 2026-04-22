@@ -7,27 +7,26 @@
   <link rel="stylesheet" href="style2.css" />
 </head>
 <body>
-  <div class="container">
-    <h1>Discovery Rounds</h1>
+ <div class="container">
+  <h1 class="title">Discovery Rounds</h1>
 
-    <div id="progress"></div>
+  <div class="card">
+    <div id="progress" class="progress"></div>
 
-    <div id="game">
-      <p id="event"></p>
+    <p id="event" class="event"></p>
 
-      <input type="number" id="guess" placeholder="Enter year" />
+    <input type="number" id="guess" placeholder="Enter year" />
 
-      <div class="buttons">
-        <button id="submitBtn">Submit</button>
-        <button id="nextBtn" class="hidden">Next</button>
-      </div>
-
-      <div id="feedback"></div>
+    <div class="buttons">
+      <button id="submitBtn">Submit</button>
+      <button id="nextBtn" class="hidden">Next</button>
     </div>
 
-    <div id="final" class="hidden"></div>
+    <div id="feedback"></div>
   </div>
-  
+
+  <div id="final" class="hidden"></div>
+</div>
   <script type="module" src="beta.js"></script>
 </body>
 </html>
