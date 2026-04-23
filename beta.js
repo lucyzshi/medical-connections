@@ -180,8 +180,7 @@ submitBtn.addEventListener("click", () => {
   const correct = events[currentIndex].year;
   const diff = Math.abs(guess - correct);
 
-  const score = calculateScore(diff); // ✅ THIS WAS MISSING
-  totalScore += score;
+  const score = calculateScore(diff);
 
   const textFeedback = getFeedback(diff, guess, correct);
 
