@@ -140,7 +140,6 @@ function loadEvent() {
   eventEl.textContent = e.text;
   progressEl.textContent = `Event ${currentIndex + 1} of ${events.length}`;
 
-  // 👇 ADD THIS PART HERE
   const progressPercent = (currentIndex / events.length) * 100;
   document.getElementById("progress-bar").style.width = `${progressPercent}%`;
 
@@ -151,6 +150,12 @@ function loadEvent() {
 
   submitBtn.classList.remove("hidden");
   nextBtn.classList.add("hidden");
+
+  if (currentIndex === events.length - 1) {
+  nextBtn.textContent = "Finish";
+} else {
+  nextBtn.textContent = "Next";
+}
 }
 
 function getFeedback(diff) {
@@ -188,13 +193,15 @@ submitBtn.addEventListener("click", () => {
 });
 
 nextBtn.addEventListener("click", () => {
-  currentIndex++;
-
-  if (currentIndex < events.length) {
-    loadEvent();
-  } else {
+  // ✅ If this is the last event → go to final screen
+  if (currentIndex === events.length - 1) {
     showFinal();
+    return;
   }
+
+  // Otherwise go to next event
+  currentIndex++;
+  loadEvent();
 });
 
 guessInput.addEventListener("keydown", (e) => {
@@ -215,15 +222,20 @@ function showFinal() {
   let html = `<h2>Final Score: ${totalScore} / ${events.length * 100}</h2>`;
   html += `<div class="summary">`;
 
-  history.forEach((h, i) => {
-    html += `
-      <p>
-        <strong>${i + 1}. ${h.event}</strong><br>
-        Your guess: ${h.guess} | Correct: ${h.correct} | Score: ${h.score}
-      </p>
-    `;
-  });
+history.forEach((h, i) => {
+  const isCorrect = h.guess === h.correct;
 
+  html += `
+    <p>
+      <strong>${i + 1}. ${h.event}</strong><br>
+      Your guess: ${h.guess} | 
+      Correct: ${h.correct} | 
+      <span style="color:${isCorrect ? 'green' : 'red'}">
+        ${isCorrect ? 'Correct' : 'Off'}
+      </span>
+    </p>
+  `;
+});
   html += `</div><button onclick="location.reload()">Play Again</button>`;
   
 localStorage.setItem(currentPuzzleId, JSON.stringify({
