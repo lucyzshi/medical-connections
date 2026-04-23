@@ -181,6 +181,7 @@ submitBtn.addEventListener("click", () => {
   const diff = Math.abs(guess - correct);
 
   const score = calculateScore(diff);
+    totalScore += score
 
   const textFeedback = getFeedback(diff, guess, correct);
 
