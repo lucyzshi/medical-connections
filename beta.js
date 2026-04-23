@@ -140,7 +140,7 @@ function loadEvent() {
   eventEl.textContent = e.text;
   progressEl.textContent = `Event ${currentIndex + 1} of ${events.length}`;
 
-  const progressPercent = (currentIndex / events.length) * 100;
+const progressPercent = ((currentIndex + 1) / events.length) * 100;
   document.getElementById("progress-bar").style.width = `${progressPercent}%`;
 
   guessInput.value = "";
@@ -157,13 +157,6 @@ function loadEvent() {
   nextBtn.textContent = "Next";
 }
 }
-
-submitBtn.addEventListener("click", () => {
-  const guess = parseInt(guessInput.value);
-  if (isNaN(guess)) return;
-
-  const correct = events[currentIndex].year;
-  const diff = Math.abs(guess - correct);
 function calculateScore(diff) {
   return Math.round(100 * Math.exp(-diff / 15));
 }
@@ -182,10 +175,19 @@ function calculateScore(diff) {
   if (diff <= 40) return `Way off — ${diff} years ${direction}`;
   return `Far off — ${diff} years ${direction}`;
 }
-  
-const textFeedback = getFeedback(diff, guess, correct);
-  
-feedbackEl.textContent = `${textFeedback} | Correct: ${correct} | +${score} pts`;
+submitBtn.addEventListener("click", () => {
+  const guess = parseInt(guessInput.value);
+  if (isNaN(guess)) return;
+
+  const correct = events[currentIndex].year;
+  const diff = Math.abs(guess - correct);
+
+  const score = calculateScore(diff); // ✅ THIS WAS MISSING
+  totalScore += score;
+
+  const textFeedback = getFeedback(diff, guess, correct);
+
+  feedbackEl.textContent = `${textFeedback} | Correct: ${correct} | +${score} pts`;
 
   history.push({
     event: events[currentIndex].text,
