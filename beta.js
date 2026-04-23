@@ -200,16 +200,19 @@ submitBtn.addEventListener("click", () => {
 });
 
 nextBtn.addEventListener("click", () => {
-  // ✅ If this is the last event → go to final screen
-  if (currentIndex === events.length - 1) {
-    showFinal();
-    return;
-  }
+  // Must submit first
+  if (!guessInput.disabled) return;
 
-  // Otherwise go to next event
-  currentIndex++;
-  loadEvent();
+  const isLast = currentIndex === events.length - 1;
+
+  if (isLast) {
+    showFinal();
+  } else {
+    currentIndex++;
+    loadEvent();
+  }
 });
+
 
 guessInput.addEventListener("keydown", (e) => {
   if (
