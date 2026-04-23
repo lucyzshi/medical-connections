@@ -130,7 +130,6 @@ function loadPreviousWeek(year, week) {
     year -= 1;
     week = getISOWeeksInYear(year);
   }
-populatePastWeeksDropdown(currentWeekInfo);
   
   loadPuzzle(year, week);
 }
@@ -161,9 +160,7 @@ function calculateScore(diff) {
   return Math.round(100 * Math.exp(-diff / 15));
 }
 
-  totalScore += score;
-
-  function getFeedback(diff, guess, correct) {
+function getFeedback(diff, guess, correct) {
   if (diff === 0) return "Perfect!";
 
   const direction = guess > correct ? "late" : "early";
@@ -175,6 +172,7 @@ function calculateScore(diff) {
   if (diff <= 40) return `Way off — ${diff} years ${direction}`;
   return `Far off — ${diff} years ${direction}`;
 }
+
 submitBtn.addEventListener("click", () => {
   const guess = parseInt(guessInput.value);
   if (isNaN(guess)) return;
@@ -256,4 +254,5 @@ localStorage.setItem(currentPuzzleId, JSON.stringify({
   finalEl.innerHTML = html;
 }
 
+populatePastWeeksDropdown(currentWeekInfo);
 loadPuzzle();
