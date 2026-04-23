@@ -158,27 +158,34 @@ function loadEvent() {
 }
 }
 
-function getFeedback(diff) {
-  if (diff === 0) return "Perfect!";
-  if (diff <= 5) return "Very close";
-  if (diff <= 15) return "Close";
-  if (diff <= 30) return "Not bad";
-  return "Way off";
-}
-
 submitBtn.addEventListener("click", () => {
   const guess = parseInt(guessInput.value);
   if (isNaN(guess)) return;
 
   const correct = events[currentIndex].year;
   const diff = Math.abs(guess - correct);
-  const score = Math.max(0, 100 - diff);
+function calculateScore(diff) {
+  return Math.round(100 * Math.exp(-diff / 15));
+}
 
   totalScore += score;
 
-  const textFeedback = getFeedback(diff);
+  function getFeedback(diff, guess, correct) {
+  if (diff === 0) return "Perfect!";
 
-  feedbackEl.textContent = `${textFeedback} | Correct: ${correct} | Score: ${score}`;
+  const direction = guess > correct ? "late" : "early";
+
+  if (diff <= 2) return `Almost exact — ${diff} years ${direction}`;
+  if (diff <= 5) return `Very close — ${diff} years ${direction}`;
+  if (diff <= 10) return `Close — ${diff} years ${direction}`;
+  if (diff <= 20) return `Not bad — ${diff} years ${direction}`;
+  if (diff <= 40) return `Way off — ${diff} years ${direction}`;
+  return `Far off — ${diff} years ${direction}`;
+}
+  
+const textFeedback = getFeedback(diff, guess, correct);
+  
+feedbackEl.textContent = `${textFeedback} | Correct: ${correct} | +${score} pts`;
 
   history.push({
     event: events[currentIndex].text,
