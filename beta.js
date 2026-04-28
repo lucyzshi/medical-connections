@@ -97,7 +97,9 @@ function loadRound() {
 
   currentClueIndex = 0;
 
-  eventEl.textContent = `Clue 1: ${round.clues[0]}`;
+  eventEl.innerHTML = "";
+  addClue(0);
+
   progressEl.textContent = `Round ${currentRoundIndex + 1} of ${rounds.length}`;
 
   updateProgressBar();
@@ -110,18 +112,29 @@ function loadRound() {
   nextBtn.classList.add("hidden");
   clueBtn.classList.remove("hidden");
 }
-
 // Reveal next clue
 if (clueBtn) {
-  clueBtn.addEventListener("click", () => {
-    const round = rounds[currentRoundIndex];
+clueBtn.addEventListener("click", () => {
+  const round = rounds[currentRoundIndex];
 
-    if (currentClueIndex < round.clues.length - 1) {
-      currentClueIndex++;
-      eventEl.textContent = `Clue ${currentClueIndex + 1}: ${round.clues[currentClueIndex]}`;
-    }
-  });
+  if (currentClueIndex < round.clues.length - 1) {
+    currentClueIndex++;
+    addClue(currentClueIndex);
+  }
+});
 }
+
+function addClue(index) {
+  const round = rounds[currentRoundIndex];
+
+  const clueDiv = document.createElement("div");
+  clueDiv.className = "clue";
+  clueDiv.textContent = `Clue ${index + 1}: ${round.clues[index]}`;
+
+  eventEl.appendChild(clueDiv);
+}
+
+clueDiv.scrollIntoView({ behavior: "smooth", block: "nearest" });
 
 // Score function
 function calculateScore(isCorrect, clueIndex) {
