@@ -20,6 +20,21 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 const analytics = getAnalytics(app);
 
+function logVisit(Connections) {
+  const sessionKey = `visited-${Connections}`;
+
+  if (sessionStorage.getItem(sessionKey)) return;
+  sessionStorage.setItem(sessionKey, "true");
+
+  // increment game-specific counter
+  const gameRef = ref(db, `visits/${Connections}`);
+  runTransaction(gameRef, current => (current || 0) + 1);
+
+  // increment total counter
+  const totalRef = ref(db, `visits/total`);
+  runTransaction(totalRef, current => (current || 0) + 1);
+}
+
 // ---------------------------
 // GLOBAL VARIABLES
 // ---------------------------
