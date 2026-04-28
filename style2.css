@@ -87,6 +87,26 @@ body {
   font-weight: 500;
   margin-bottom: 25px;
 }
+.clue {
+  background: #f9fafb;
+  border-left: 4px solid #6366f1;
+  padding: 10px 12px;
+  margin: 8px 0;
+  border-radius: 6px;
+  font-size: 15px;
+  text-align: left;
+}
+.clue {
+  animation: fadeIn 0.25s ease-in;
+}
+.clue:not(:last-child) {
+  opacity: 0.7;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
 
 /* Input */
 input {
