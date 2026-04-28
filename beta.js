@@ -181,32 +181,41 @@ submitBtn.addEventListener("click", () => {
   const guessRaw = guessInput.value;
   if (!guessRaw) return;
 
+  const round = rounds[currentRoundIndex];
+
   const guess = normalize(guessRaw);
-  const answers = rounds[currentRoundIndex].answer.map(normalize);
+  const answers = round.answer.map(normalize);
 
-const isCorrect = isCloseMatch(guessRaw, rounds[currentRoundIndex].answer);
+  const isCorrect = isCloseMatch
+    ? isCloseMatch(guessRaw, round.answer)
+    : answers.includes(guess);
 
-  const score = calculateScore(isCorrect, currentClueIndex);
-  totalScore += score;
+  // ❗ If correct → end round
+  if (isCorrect) {
+    const score = calculateScore(true, currentClueIndex);
+    totalScore += score;
 
-feedbackEl.textContent = isCorrect
-  ? `Correct! +${score} point${score === 1 ? "" : "s"}`
-  : `Incorrect. Answer: ${rounds[currentRoundIndex].answer[0]}`;
+    feedbackEl.textContent = `Correct! +${score} point${score === 1 ? "" : "s"}`;
 
-  history.push({
-    cluesUsed: currentClueIndex + 1,
-    guess,
-    correct: rounds[currentRoundIndex].answer[0],
-    score
-  });
+    history.push({
+      cluesUsed: currentClueIndex + 1,
+      guess: guessRaw,
+      correct: round.answer[0],
+      score
+    });
 
-  guessInput.disabled = true;
-  submitBtn.classList.add("hidden");
-  clueBtn.classList.add("hidden");
-  nextBtn.classList.remove("hidden");
+    guessInput.disabled = true;
+    submitBtn.classList.add("hidden");
+    clueBtn.classList.add("hidden");
+    nextBtn.classList.remove("hidden");
 
-  nextBtn.textContent =
-    currentRoundIndex === rounds.length - 1 ? "Finish" : "Next";
+    return;
+  }
+
+  // ❗ If wrong → DO NOT advance round
+  feedbackEl.textContent = `Not quite—try the next clue.`;
+
+  guessInput.value = "";
 });
 
 // Next round
