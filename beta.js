@@ -1,3 +1,40 @@
+// ---------------------------
+// FIREBASE IMPORTS & INIT
+// ---------------------------
+import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
+import { getDatabase, ref, push, set, runTransaction, get } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-database.js";
+import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-analytics.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBnc5HI3Qti60AXXDCpL9B-YfBQNYW4MXM",
+  authDomain: "leaderboard-7580a.firebaseapp.com",
+  databaseURL: "https://leaderboard-7580a-default-rtdb.firebaseio.com",
+  projectId: "leaderboard-7580a",
+  storageBucket: "leaderboard-7580a.appspot.com",
+  messagingSenderId: "1065369349992",
+  appId: "1:1065369349992:web:f8cc82b10ada7d286730dd",
+  measurementId: "G-QT1C8X36P8"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+const analytics = getAnalytics(app);
+
+function logVisit(DiscoveryRounds) {
+  const sessionKey = `visited-${DiscoveryRounds}`;
+
+  if (sessionStorage.getItem(sessionKey)) return;
+  sessionStorage.setItem(sessionKey, "true");
+
+  // increment game-specific counter
+  const gameRef = ref(db, `visits/${DiscoveryRounds}`);
+  runTransaction(gameRef, current => (current || 0) + 1);
+
+  // increment total counter
+  const totalRef = ref(db, `visits/total`);
+  runTransaction(totalRef, current => (current || 0) + 1);
+}
+
 let rounds = [];
 let currentRoundIndex = 0;
 let currentClueIndex = 0;
