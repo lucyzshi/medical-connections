@@ -125,9 +125,8 @@ clueBtn.addEventListener("click", () => {
 function calculateScore(isCorrect, clueIndex) {
   if (!isCorrect) return 0;
 
-  if (clueIndex === 0) return 100;
-  if (clueIndex === 1) return 70;
-  return 40;
+  // clueIndex: 0,1,2 → points: 3,2,1
+  return 3 - clueIndex;
 }
 
 // Normalize answers
@@ -188,9 +187,9 @@ const isCorrect = isCloseMatch(guessRaw, rounds[currentRoundIndex].answer);
   const score = calculateScore(isCorrect, currentClueIndex);
   totalScore += score;
 
-  feedbackEl.textContent = isCorrect
-    ? `Correct! +${score} pts`
-    : `Incorrect. Answer: ${rounds[currentRoundIndex].answer[0]}`;
+feedbackEl.textContent = isCorrect
+  ? `Correct! +${score} point${score === 1 ? "" : "s"}`
+  : `Incorrect. Answer: ${rounds[currentRoundIndex].answer[0]}`;
 
   history.push({
     cluesUsed: currentClueIndex + 1,
@@ -238,7 +237,7 @@ function showFinal() {
   finalEl.classList.remove("hidden");
   document.getElementById("progress-bar").style.width = "100%";
 
-  let html = `<h2>Final Score: ${totalScore} / ${rounds.length * 100}</h2>`;
+  let html = `<h2>Final Score: ${totalScore} / ${rounds.length * 3}</h2>`;
   html += `<div class="summary">`;
 
   history.forEach((h, i) => {
