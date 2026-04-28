@@ -183,7 +183,7 @@ submitBtn.addEventListener("click", () => {
   const guess = normalize(guessRaw);
   const answers = rounds[currentRoundIndex].answer.map(normalize);
 
-  const isCorrect = answers.includes(guess);
+const isCorrect = isCloseMatch(guessRaw, rounds[currentRoundIndex].answer);
 
   const score = calculateScore(isCorrect, currentClueIndex);
   totalScore += score;
