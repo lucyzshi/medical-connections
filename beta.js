@@ -112,14 +112,16 @@ function loadRound() {
 }
 
 // Reveal next clue
-clueBtn.addEventListener("click", () => {
-  const round = rounds[currentRoundIndex];
+if (clueBtn) {
+  clueBtn.addEventListener("click", () => {
+    const round = rounds[currentRoundIndex];
 
-  if (currentClueIndex < round.clues.length - 1) {
-    currentClueIndex++;
-    eventEl.textContent = `Clue ${currentClueIndex + 1}: ${round.clues[currentClueIndex]}`;
-  }
-});
+    if (currentClueIndex < round.clues.length - 1) {
+      currentClueIndex++;
+      eventEl.textContent = `Clue ${currentClueIndex + 1}: ${round.clues[currentClueIndex]}`;
+    }
+  });
+}
 
 // Score function
 function calculateScore(isCorrect, clueIndex) {
