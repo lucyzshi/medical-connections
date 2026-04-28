@@ -132,9 +132,9 @@ function addClue(index) {
   clueDiv.textContent = `Clue ${index + 1}: ${round.clues[index]}`;
 
   eventEl.appendChild(clueDiv);
-}
-
+  
 clueDiv.scrollIntoView({ behavior: "smooth", block: "nearest" });
+}
 
 // Score function
 function calculateScore(isCorrect, clueIndex) {
