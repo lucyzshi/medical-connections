@@ -150,8 +150,7 @@ function loadRound() {
   clueBtn.classList.remove("hidden");
 }
 // Reveal next clue
-if (clueBtn) {
-clueBtn.addEventListener("click", () => {
+clueBtn?.addEventListener("click", () => {
   const round = rounds[currentRoundIndex];
 
   if (currentClueIndex < round.clues.length - 1) {
@@ -159,7 +158,6 @@ clueBtn.addEventListener("click", () => {
     addClue(currentClueIndex);
   }
 });
-}
 
 function addClue(index) {
   const round = rounds[currentRoundIndex];
@@ -233,14 +231,13 @@ submitBtn.addEventListener("click", () => {
 
   const round = rounds[currentRoundIndex];
 
-  const guess = normalize(guessRaw);
-  const answers = round.answer.map(normalize);
-
   const isCorrect = isCloseMatch
     ? isCloseMatch(guessRaw, round.answer)
-    : answers.includes(guess);
+    : round.answer.map(normalize).includes(normalize(guessRaw));
 
-  // ❗ If correct → end round
+  // -----------------------
+  // ✅ CORRECT
+  // -----------------------
   if (isCorrect) {
     const score = calculateScore(true, currentClueIndex);
     totalScore += score;
@@ -254,18 +251,38 @@ submitBtn.addEventListener("click", () => {
       score
     });
 
-    guessInput.disabled = true;
-    submitBtn.classList.add("hidden");
-    clueBtn.classList.add("hidden");
-    nextBtn.classList.remove("hidden");
-
+    endRound();
     return;
   }
 
-  // ❗ If wrong → DO NOT advance round
-  feedbackEl.textContent = `Not quite—try the next clue.`;
+  // -----------------------
+  // ❌ WRONG ANSWER
+  // -----------------------
+  const isLastClue = currentClueIndex >= round.clues.length - 1;
 
-  guessInput.value = "";
+  if (!isLastClue) {
+    // 👉 MOVE TO NEXT CLUE
+    currentClueIndex++;
+    addClue(currentClueIndex);
+
+    feedbackEl.textContent = "❌ Not quite—here's another clue.";
+    guessInput.value = "";
+    return;
+  }
+
+  // -----------------------
+  // ❌ WRONG + LAST CLUE → END ROUND
+  // -----------------------
+  feedbackEl.textContent = `❌ Incorrect. Answer: ${round.answer[0]}`;
+
+  history.push({
+    cluesUsed: currentClueIndex + 1,
+    guess: guessRaw,
+    correct: round.answer[0],
+    score: 0
+  });
+
+  endRound();
 });
 
 // Next round
@@ -291,6 +308,15 @@ guessInput.addEventListener("keydown", (e) => {
   }
 });
 
+function endRound() {
+  guessInput.disabled = true;
+  submitBtn.classList.add("hidden");
+  clueBtn.classList.add("hidden");
+  nextBtn.classList.remove("hidden");
+
+  nextBtn.textContent =
+    currentRoundIndex === rounds.length - 1 ? "Finish" : "Next";
+}
 // ------------------ FINAL SCREEN ------------------
 
 function showFinal() {
