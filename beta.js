@@ -324,8 +324,15 @@ function showFinal() {
   finalEl.classList.remove("hidden");
   document.getElementById("progress-bar").style.width = "100%";
 
-  let html = `<h2>Final Score: ${totalScore} / ${rounds.length * 3}</h2>`;
-  html += `<div class="summary">`;
+  const totalPossible = rounds.length * 3;
+
+  // ---------------------------
+  // Build results HTML
+  // ---------------------------
+  let html = `
+    <h2>Final Score: ${totalScore} / ${totalPossible}</h2>
+    <div class="summary">
+  `;
 
   history.forEach((h, i) => {
     const isCorrect = h.score > 0;
@@ -343,46 +350,57 @@ function showFinal() {
     `;
   });
 
+  html += `
+    </div>
+    <button id="shareBtn">Share Score</button>
+    <button onclick="location.reload()">Play Again</button>
+  `;
+
+  // ---------------------------
+  // Render to DOM FIRST
+  // ---------------------------
+  finalEl.innerHTML = html;
+
+  // ---------------------------
+  // Share logic (bind AFTER render)
+  // ---------------------------
   const shareBtn = document.getElementById("shareBtn");
 
-function buildShareText() {
-  const totalPossible = rounds.length * 3;
+  function buildShareText() {
+    const lines = history.map((h, i) => {
+      return `Round ${i + 1}: ${h.score} pts (${h.cluesUsed} clue${h.cluesUsed === 1 ? "" : "s"})`;
+    });
 
-  const lines = history.map((h, i) => {
-    return `Round ${i + 1}: ${h.score} pts`;
-  });
-
-  return `🧠 Discovery Rounds
+    return `🧠 Discovery Rounds
 
 Score: ${totalScore} / ${totalPossible}
 
 ${lines.join("\n")}
 
 Can you beat me? 🎯`;
-}
-
-shareBtn?.addEventListener("click", async () => {
-  const text = buildShareText();
-
-  // 🔥 Native share (mobile / supported browsers)
-  if (navigator.share) {
-    try {
-      await navigator.share({
-        title: "My Discovery Rounds Score",
-        text
-      });
-    } catch (err) {
-      console.log("Share cancelled");
-    }
-  } else {
-    // 📋 Fallback: copy to clipboard
-    await navigator.clipboard.writeText(text);
-    alert("📋 Score copied to clipboard!");
   }
-});
 
-  html += `</div><button onclick="location.reload()">Play Again</button>`;
+  shareBtn?.addEventListener("click", async () => {
+    const text = buildShareText();
 
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: "My Discovery Rounds Score",
+          text
+        });
+      } catch (err) {
+        console.log("Share cancelled");
+      }
+    } else {
+      await navigator.clipboard.writeText(text);
+      alert("📋 Score copied to clipboard!");
+    }
+  });
+
+  // ---------------------------
+  // Save results
+  // ---------------------------
   localStorage.setItem(
     currentPuzzleId,
     JSON.stringify({
@@ -390,10 +408,7 @@ shareBtn?.addEventListener("click", async () => {
       history
     })
   );
-
-  finalEl.innerHTML = html;
 }
-
 // ------------------ INIT ------------------
 
 loadPuzzle();
