@@ -343,6 +343,44 @@ function showFinal() {
     `;
   });
 
+  const shareBtn = document.getElementById("shareBtn");
+
+function buildShareText() {
+  const totalPossible = rounds.length * 3;
+
+  const lines = history.map((h, i) => {
+    return `Round ${i + 1}: ${h.score} pts`;
+  });
+
+  return `🧠 Discovery Rounds
+
+Score: ${totalScore} / ${totalPossible}
+
+${lines.join("\n")}
+
+Can you beat me? 🎯`;
+}
+
+shareBtn?.addEventListener("click", async () => {
+  const text = buildShareText();
+
+  // 🔥 Native share (mobile / supported browsers)
+  if (navigator.share) {
+    try {
+      await navigator.share({
+        title: "My Discovery Rounds Score",
+        text
+      });
+    } catch (err) {
+      console.log("Share cancelled");
+    }
+  } else {
+    // 📋 Fallback: copy to clipboard
+    await navigator.clipboard.writeText(text);
+    alert("📋 Score copied to clipboard!");
+  }
+});
+
   html += `</div><button onclick="location.reload()">Play Again</button>`;
 
   localStorage.setItem(
