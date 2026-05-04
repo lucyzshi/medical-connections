@@ -298,17 +298,22 @@ nextBtn.addEventListener("click", () => {
 });
 
 //  key submit
-guessInput.addEventListener("keydown", (e) => {
+document.addEventListener("keydown", (e) => {
   if (e.key !== "Enter") return;
 
-  e.preventDefault(); // avoids weird browser behavior
+  // prevent form / browser weirdness
+  e.preventDefault();
 
-  if (!guessInput.disabled && !submitBtn.classList.contains("hidden")) {
-    // 👉 Submit guess
+  // PRIORITY 1: submitting a guess
+  if (!submitBtn.classList.contains("hidden")) {
     submitBtn.click();
-  } else if (!nextBtn.classList.contains("hidden")) {
-    // 👉 Move to next round
+    return;
+  }
+
+  // PRIORITY 2: advancing round
+  if (!nextBtn.classList.contains("hidden")) {
     nextBtn.click();
+    return;
   }
 });
 
