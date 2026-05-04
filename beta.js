@@ -322,13 +322,13 @@ function endRound() {
     currentRoundIndex === rounds.length - 1 ? "Finish" : "Next";
 }
 // ------------------ FINAL SCREEN ------------------
-
 function showFinal() {
   document.getElementById("game").classList.add("hidden");
   finalEl.classList.remove("hidden");
   document.getElementById("progress-bar").style.width = "100%";
 
   const totalPossible = rounds.length * 3;
+  const url = window.location.href;
 
   // ---------------------------
   // Build results HTML
@@ -356,86 +356,107 @@ function showFinal() {
 
   html += `
     </div>
+
     <button id="shareBtn">Share Score</button>
+
+    <div id="shareOptions">
+      <button id="copyBtn">Copy</button>
+      <button id="twitterBtn">Twitter</button>
+      <button id="linkedinBtn">LinkedIn</button>
+      <button id="textBtn">Text</button>
+    </div>
+
     <button onclick="location.reload()">Play Again</button>
   `;
 
-  // ---------------------------
-  // Render to DOM FIRST
-  // ---------------------------
   finalEl.innerHTML = html;
 
   // ---------------------------
-  // Share logic (bind AFTER render)
+  // Share text builder
   // ---------------------------
-  const shareBtn = document.getElementById("shareBtn");
-const copyBtn = document.getElementById("copyBtn");
-const twitterBtn = document.getElementById("twitterBtn");
-const linkedinBtn = document.getElementById("linkedinBtn");
-const textBtn = document.getElementById("textBtn");
-const shareOptions = document.getElementById("shareOptions");
+  function buildShareText() {
+    const lines = history.map((h, i) =>
+      `Round ${i + 1}: ${h.score} pts (${h.cluesUsed} clue${h.cluesUsed === 1 ? "" : "s"})`
+    );
 
-const url = window.location.href;
-
-function buildShareText() {
-  const lines = history.map((h, i) => {
-    return `Round ${i + 1}: ${h.score} pts (${h.cluesUsed} clue${h.cluesUsed === 1 ? "" : "s"})`;
-  });
-
-  return `🧠 I scored ${totalScore}/${totalPossible} on this weekly clinical reasoning game!
+    return `🧠 I scored ${totalScore}/${totalPossible} on this weekly clinical reasoning game!
 
 ${lines.join("\n")}
 
 Can you beat me? 🎯
 ${url}`;
-}
-
-function encodedShareText() {
-  return encodeURIComponent(buildShareText());
-}
-
-  shareBtn?.addEventListener("click", async () => {
-  const text = buildShareText();
-
-  if (navigator.share) {
-    try {
-      await navigator.share({
-        title: "My Discovery Rounds Score",
-        text,
-        url
-      });
-    } catch (err) {
-      console.log("Share cancelled");
-    }
-  } else {
-    await navigator.clipboard.writeText(text);
-    alert("📋 Score copied to clipboard!");
   }
-});
 
+  const shareText = buildShareText();
+
+  // ---------------------------
+  // DOM bindings (safe)
+  // ---------------------------
+  const shareBtn = document.getElementById("shareBtn");
+  const copyBtn = document.getElementById("copyBtn");
+  const twitterBtn = document.getElementById("twitterBtn");
+  const linkedinBtn = document.getElementById("linkedinBtn");
+  const textBtn = document.getElementById("textBtn");
+
+  // ---------------------------
+  // Native share (mobile-first)
+  // ---------------------------
+  shareBtn?.addEventListener("click", async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: "My Discovery Rounds Score",
+          text: shareText + "\n" + url
+        });
+      } catch (err) {
+        console.log("Share cancelled");
+      }
+    } else {
+      await navigator.clipboard.writeText(shareText);
+      alert("📋 Copied!");
+    }
+  });
+
+  // ---------------------------
+  // Copy
+  // ---------------------------
   copyBtn?.addEventListener("click", async () => {
-  await navigator.clipboard.writeText(buildShareText());
-  alert("📋 Copied!");
-});
+    await navigator.clipboard.writeText(shareText);
+    alert("📋 Copied!");
+  });
 
-twitterBtn?.addEventListener("click", () => {
-  const twitterUrl = `https://twitter.com/intent/tweet?text=${encodedShareText()}`;
-  window.open(twitterUrl, "_blank");
-});
+  // ---------------------------
+  // Twitter
+  // ---------------------------
+  twitterBtn?.addEventListener("click", () => {
+    const tweet = encodeURIComponent(shareText);
+    window.open(`https://twitter.com/intent/tweet?text=${tweet}`, "_blank");
+  });
 
-linkedinBtn?.addEventListener("click", () => {
-  const linkedinUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
-  window.open(linkedinUrl, "_blank");
-});
+  // ---------------------------
+  // LinkedIn
+  // ---------------------------
+  linkedinBtn?.addEventListener("click", () => {
+    window.open(
+      `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`,
+      "_blank"
+    );
+  });
 
-textBtn?.addEventListener("click", () => {
-  const smsUrl = `sms:?&body=${encodedShareText()}`;
-  window.location.href = smsUrl;
-});
+  // ---------------------------
+  // SMS
+  // ---------------------------
+  textBtn?.addEventListener("click", () => {
+    window.location.href = `sms:?&body=${encodeURIComponent(shareText)}`;
+  });
 
-  if (navigator.share && shareOptions) {
-  shareOptions.style.display = "none";
-}
+  // ---------------------------
+  // Optional: hide fallback if native share exists
+  // ---------------------------
+  if (navigator.share) {
+    document.getElementById("shareOptions")?.classList.add("hidden");
+  }
+
   // ---------------------------
   // Save results
   // ---------------------------
