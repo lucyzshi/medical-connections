@@ -217,10 +217,12 @@ function isCloseMatch(guess, answers) {
     // Exact match
     if (normGuess === normAns) return true;
 
-    // Allow small typos
-    const dist = levenshtein(normGuess, normAns);
-
-    return dist <= 2; // tolerance level
+    // Allow only tiny edits AND same starting letter
+    return (
+      levenshtein(normGuess, normAns) <= 1 &&
+      normGuess[0] === normAns[0] &&
+      Math.abs(normGuess.length - normAns.length) <= 1
+    );
   });
 }
 
