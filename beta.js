@@ -297,14 +297,18 @@ nextBtn.addEventListener("click", () => {
   }
 });
 
-// Enter key submit
+//  key submit
 guessInput.addEventListener("keydown", (e) => {
-  if (
-    e.key === "Enter" &&
-    !guessInput.disabled &&
-    !submitBtn.classList.contains("hidden")
-  ) {
+  if (e.key !== "Enter") return;
+
+  e.preventDefault(); // avoids weird browser behavior
+
+  if (!guessInput.disabled && !submitBtn.classList.contains("hidden")) {
+    // 👉 Submit guess
     submitBtn.click();
+  } else if (!nextBtn.classList.contains("hidden")) {
+    // 👉 Move to next round
+    nextBtn.click();
   }
 });
 
