@@ -369,39 +369,73 @@ function showFinal() {
   // Share logic (bind AFTER render)
   // ---------------------------
   const shareBtn = document.getElementById("shareBtn");
+const copyBtn = document.getElementById("copyBtn");
+const twitterBtn = document.getElementById("twitterBtn");
+const linkedinBtn = document.getElementById("linkedinBtn");
+const textBtn = document.getElementById("textBtn");
+const shareOptions = document.getElementById("shareOptions");
 
-  function buildShareText() {
-    const lines = history.map((h, i) => {
-      return `Round ${i + 1}: ${h.score} pts (${h.cluesUsed} clue${h.cluesUsed === 1 ? "" : "s"})`;
-    });
+const url = window.location.href;
 
-    return `🧠 Discovery Rounds
+function buildShareText() {
+  const lines = history.map((h, i) => {
+    return `Round ${i + 1}: ${h.score} pts (${h.cluesUsed} clue${h.cluesUsed === 1 ? "" : "s"})`;
+  });
 
-Score: ${totalScore} / ${totalPossible}
+  return `🧠 I scored ${totalScore}/${totalPossible} on this weekly clinical reasoning game!
 
 ${lines.join("\n")}
 
-Can you beat me? 🎯`;
-  }
+Can you beat me? 🎯
+${url}`;
+}
+
+function encodedShareText() {
+  return encodeURIComponent(buildShareText());
+}
 
   shareBtn?.addEventListener("click", async () => {
-    const text = buildShareText();
+  const text = buildShareText();
 
-    if (navigator.share) {
-      try {
-        await navigator.share({
-          title: "My Discovery Rounds Score",
-          text
-        });
-      } catch (err) {
-        console.log("Share cancelled");
-      }
-    } else {
-      await navigator.clipboard.writeText(text);
-      alert("📋 Score copied to clipboard!");
+  if (navigator.share) {
+    try {
+      await navigator.share({
+        title: "My Discovery Rounds Score",
+        text,
+        url
+      });
+    } catch (err) {
+      console.log("Share cancelled");
     }
-  });
+  } else {
+    await navigator.clipboard.writeText(text);
+    alert("📋 Score copied to clipboard!");
+  }
+});
 
+  copyBtn?.addEventListener("click", async () => {
+  await navigator.clipboard.writeText(buildShareText());
+  alert("📋 Copied!");
+});
+
+twitterBtn?.addEventListener("click", () => {
+  const twitterUrl = `https://twitter.com/intent/tweet?text=${encodedShareText()}`;
+  window.open(twitterUrl, "_blank");
+});
+
+linkedinBtn?.addEventListener("click", () => {
+  const linkedinUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
+  window.open(linkedinUrl, "_blank");
+});
+
+textBtn?.addEventListener("click", () => {
+  const smsUrl = `sms:?&body=${encodedShareText()}`;
+  window.location.href = smsUrl;
+});
+
+  if (navigator.share && shareOptions) {
+  shareOptions.style.display = "none";
+}
   // ---------------------------
   // Save results
   // ---------------------------
