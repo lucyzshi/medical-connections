@@ -666,7 +666,10 @@ document.getElementById("shuffle-button").addEventListener("click", () => {
   const state = getActiveWeekState();
   shuffleRemainingTiles(state);
 });
-
+document.getElementById("beta-button")?.addEventListener("click", () => {
+  window.location.href = "beta.html";
+});
+  
   // Leaderboard button
   const leaderboardBtn = document.getElementById("leaderboard-button");
   if (leaderboardBtn) leaderboardBtn.addEventListener("click", () => window.location.href = "leaderboard.html");
