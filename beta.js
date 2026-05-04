@@ -381,18 +381,27 @@ function showFinal() {
   // Share text builder
   // ---------------------------
   function buildShareText() {
-    const lines = history.map((h, i) =>
-      `Round ${i + 1}: ${h.score} pts (${h.cluesUsed} clue${h.cluesUsed === 1 ? "" : "s"})`
-    );
+  const url = window.location.href;
+  const totalPossible = rounds.length * 3;
 
-    return `🧠 I scored ${totalScore}/${totalPossible} on this weekly medical trivia game!
+  // Emoji mapping like NYT-style results
+  function scoreEmoji(score) {
+    if (score === 3) return "🟩";
+    if (score === 2) return "🟨";
+    if (score === 1) return "🟧";
+    return "⬜";
+  }
 
-${lines.join("\n")}
+  const grid = history.map(h => scoreEmoji(h.score)).join(" ");
+
+  return `🧠 Discovery Rounds ${currentPuzzleId}
+
+${grid}
+Score: ${totalScore}/${totalPossible}
 
 Can you beat me? 🎯
 ${url}`;
-  }
-
+}
   const shareText = buildShareText();
 
   // ---------------------------
