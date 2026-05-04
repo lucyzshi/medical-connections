@@ -335,7 +335,6 @@ function showFinal() {
   document.getElementById("progress-bar").style.width = "100%";
 
   const totalPossible = rounds.length * 3;
-  const url = window.location.href;
 
   // ---------------------------
   // Build results HTML
@@ -386,7 +385,7 @@ function showFinal() {
       `Round ${i + 1}: ${h.score} pts (${h.cluesUsed} clue${h.cluesUsed === 1 ? "" : "s"})`
     );
 
-    return `🧠 I scored ${totalScore}/${totalPossible} on this weekly clinical reasoning game!
+    return `🧠 I scored ${totalScore}/${totalPossible} on this weekly medical trivia game!
 
 ${lines.join("\n")}
 
@@ -416,8 +415,9 @@ ${url}`;
           text: shareText + "\n" + url
         });
       } catch (err) {
-        console.log("Share cancelled");
-      }
+  console.error("Share failed:", err);
+  alert("Share not supported on this browser—copying instead.");
+}
     } else {
       await navigator.clipboard.writeText(shareText);
       alert("📋 Copied!");
