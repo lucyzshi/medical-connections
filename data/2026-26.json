@@ -1,0 +1,6 @@
+{
+  "Findings in SLE": ["Migratory arthralgias",	"Jaccoud",	"Anti-dsDNA",	"Photosensitivity"],
+  "Findings in RA": ["MCP/PIP",	"ILD association",	"Boutonniere", "Anti-CCP"],
+  "Findings in Osteoarthritis": ["Asymmetric", "DIP", "Bouchard", "Heberden"],
+  "Findings in Ankylosing Spondylitis": ["SI joints", "HLA-B27", "Bamboo", "IBD association"]
+}
