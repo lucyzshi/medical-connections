@@ -52,76 +52,103 @@ const nextBtn = document.getElementById("nextBtn");
 const clueBtn = document.getElementById("clueBtn");
 const finalEl = document.getElementById("final");
 
-// ------------------ WEEK LOGIC (UNCHANGED) ------------------
-function getCurrentISOWeekInfo() {
+// ------------------ TWICE-WEEKLY LOGIC ------------------
+
+function getCurrentPuzzleInfo() {
   const now = new Date();
-  const dayNum = now.getUTCDay() || 7;
-  now.setUTCDate(now.getUTCDate() + 4 - dayNum);
-  const yearStart = new Date(Date.UTC(now.getUTCFullYear(), 0, 1));
-  const week = Math.ceil((((now - yearStart) / 86400000) + 1) / 7);
-  return { year: now.getUTCFullYear(), week };
+
+  // ISO week calculation
+  const temp = new Date(Date.UTC(
+    now.getUTCFullYear(),
+    now.getUTCMonth(),
+    now.getUTCDate()
+  ));
+
+  const dayNum = temp.getUTCDay() || 7;
+  temp.setUTCDate(temp.getUTCDate() + 4 - dayNum);
+
+  const yearStart = new Date(Date.UTC(temp.getUTCFullYear(), 0, 1));
+
+  const week = Math.ceil((((temp - yearStart) / 86400000) + 1) / 7);
+
+  // Monday–Wednesday = A
+  // Thursday–Sunday = B
+  const currentDay = now.getUTCDay() || 7;
+
+  const half = currentDay <= 3 ? "A" : "B";
+
+  return {
+    year: temp.getUTCFullYear(),
+    week,
+    half
+  };
 }
-const currentWeekInfo = getCurrentISOWeekInfo();
-const currentWeek = currentWeekInfo.week;
-const currentYear = currentWeekInfo.year;
+
+const currentPuzzleInfo = getCurrentPuzzleInfo();
+
+const currentWeek = currentPuzzleInfo.week;
+const currentYear = currentPuzzleInfo.year;
+const currentHalf = currentPuzzleInfo.half;
 
 function getISOWeeksInYear(year) {
   const dec28 = new Date(Date.UTC(year, 11, 28));
   const day = dec28.getUTCDay() || 7;
+
   dec28.setUTCDate(dec28.getUTCDate() + 4 - day);
+
   const startOfYear = new Date(Date.UTC(dec28.getUTCFullYear(), 0, 1));
+
   return Math.ceil((((dec28 - startOfYear) / 86400000) + 1) / 7);
 }
 
-function getStartOfISOWeek(year, week) {
-  const jan4 = new Date(Date.UTC(year, 0, 4));
-  const jan4Day = jan4.getUTCDay() || 7;
-  const startOfWeek1 = new Date(jan4);
-  startOfWeek1.setUTCDate(jan4.getUTCDate() - jan4Day + 1);
-  const startDate = new Date(startOfWeek1);
-  startDate.setUTCDate(startOfWeek1.getUTCDate() + (week - 1) * 7);
-  return startDate;
-}
-
-function formatWeekRange(year, week) {
-  const start = getStartOfISOWeek(year, week);
-  const end = new Date(start);
-  end.setUTCDate(start.getUTCDate() + 6);
-  const options = { timeZone: "UTC", month: "short", day: "numeric" };
-  return `${start.toLocaleDateString("en-US", options)} – ${end.toLocaleDateString("en-US", options)}, ${year}`;
-}
-
 // ------------------ LOAD PUZZLE ------------------
+async function loadPuzzle(year = currentYear, week = currentWeek, half = currentHalf) {
 
-async function loadPuzzle(year = currentYear, week = currentWeek) {
   const Week = String(week).padStart(2, "0");
-  const filePath = `Discovery/${year}-${Week}.json`;
+
+  const filePath = `Discovery/${year}-${Week}-${half}.json`;
 
   try {
     const res = await fetch(filePath);
+
     if (!res.ok) throw new Error("File not found");
 
     const data = await res.json();
 
     rounds = data.rounds;
-    currentPuzzleId = `${year}-${Week}`;
-
+    currentPuzzleId = `${year}-${Week}-${half}`;
+    logVisit(currentPuzzleId);
     loadRound();
+
   } catch (err) {
+
     console.error("Error loading puzzle:", err);
-    loadPreviousWeek(year, week);
+
+    loadPreviousPuzzle(year, week, half);
   }
 }
 
-function loadPreviousWeek(year, week) {
-  week -= 1;
-  if (week <= 0) {
-    year -= 1;
-    week = getISOWeeksInYear(year);
-  }
-  loadPuzzle(year, week);
-}
+function loadPreviousPuzzle(year, week, half) {
 
+  // If current puzzle is B, fall back to A of same week
+  if (half === "B") {
+    half = "A";
+  }
+
+  // If current puzzle is A, go to previous week's B
+  else {
+    week -= 1;
+
+    if (week <= 0) {
+      year -= 1;
+      week = getISOWeeksInYear(year);
+    }
+
+    half = "B";
+  }
+
+  loadPuzzle(year, week, half);
+}
 // ------------------ GAME LOGIC ------------------
 
 function updateProgressBar() {
