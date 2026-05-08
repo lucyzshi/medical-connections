@@ -284,12 +284,12 @@ history.push({
   cluesUsed: currentClueIndex + 1,
   guess: guessRaw,
   correct: round.answer[0],
-  score
+  score: 0
 });
 
 endRound();
-return;
-  }
+}
+);
     
   // -----------------------
   // ❌ WRONG ANSWER
