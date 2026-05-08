@@ -369,13 +369,60 @@ function showFinal() {
 
   const totalPossible = rounds.length * 3;
 
+  let rankTitle = "";
+let rankMessage = "";
+let celebrationHTML = "";
+
+// PERFECT SCORE
+if (totalScore === 15) {
+  rankTitle = "🏆 Diagnostic Legend!";
+  rankMessage = "Perfect score! You cracked every round with elite efficiency.";
+
+  celebrationHTML = `
+    <div class="celebration perfect">
+      🎉 🎊 🧠 🎊 🎉
+    </div>
+  `;
+}
+
+// GREAT SCORE
+else if (totalScore >= 13) {
+  rankTitle = "🔥 Clinical Sleuth!";
+  rankMessage = "Outstanding performance. Your instincts are sharp.";
+
+  celebrationHTML = `
+    <div class="celebration great">
+      ⭐ ⭐ ⭐
+    </div>
+  `;
+}
+
+// GOOD SCORE
+else if (totalScore >= 11) {
+  rankTitle = "👏 Strong Detective Work!";
+  rankMessage = "Nice job connecting the clues and narrowing the differential.";
+
+  celebrationHTML = `
+    <div class="celebration good">
+      ✨ 🧠 ✨
+    </div>
+  `;
+}
+
   // ---------------------------
   // Build results HTML
   // ---------------------------
-  let html = `
-    <h2>Final Score: ${totalScore} / ${totalPossible}</h2>
-    <div class="summary">
-  `;
+let html = `
+  ${celebrationHTML}
+
+  <div class="final-banner">
+    <h2>${rankTitle}</h2>
+    <h3>Final Score: ${totalScore} / ${totalPossible}</h3>
+    <p>${rankMessage}</p>
+  </div>
+
+  <div class="summary">
+`;
 
   history.forEach((h, i) => {
     const isCorrect = h.score > 0;
@@ -410,6 +457,24 @@ function showFinal() {
 
   finalEl.innerHTML = html;
 
+  if (totalScore === 15) {
+  launchConfetti();
+}
+  function launchConfetti() {
+  for (let i = 0; i < 120; i++) {
+    const confetti = document.createElement("div");
+
+    confetti.className = "confetti";
+    confetti.style.left = Math.random() * 100 + "vw";
+    confetti.style.animationDuration = (Math.random() * 2 + 2) + "s";
+confetti.style.opacity = Math.random();
+confetti.style.backgroundColor =
+  `hsl(${Math.random() * 360}, 90%, 60%)`;
+    document.body.appendChild(confetti);
+
+    setTimeout(() => confetti.remove(), 4000);
+  }
+}
   // ---------------------------
   // Share text builder
   // ---------------------------
