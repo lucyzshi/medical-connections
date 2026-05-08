@@ -289,6 +289,7 @@ history.push({
 
 endRound();
 return;
+  }
     
   // -----------------------
   // ❌ WRONG ANSWER
