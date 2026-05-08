@@ -267,30 +267,33 @@ submitBtn.addEventListener("click", () => {
   // -----------------------
   // ✅ CORRECT
   // -----------------------
-  if (isCorrect) {
-    const score = calculateScore(true, currentClueIndex);
-    totalScore += score;
+ // -----------------------
+// ✅ CORRECT
+// -----------------------
+if (isCorrect) {
+  const score = calculateScore(true, currentClueIndex);
+  totalScore += score;
 
-feedbackEl.textContent = `Correct! +${score} point${score === 1 ? "" : "s"}`;
+  feedbackEl.textContent =
+    `Correct! +${score} point${score === 1 ? "" : "s"}`;
 
-// Reveal any remaining clues
-if (currentClueIndex < round.clues.length - 1) {
-  for (let i = currentClueIndex + 1; i < round.clues.length; i++) {
-    addClue(i);
+  // Reveal any remaining clues
+  if (currentClueIndex < round.clues.length - 1) {
+    for (let i = currentClueIndex + 1; i < round.clues.length; i++) {
+      addClue(i);
+    }
   }
-}
 
-history.push({
-  cluesUsed: currentClueIndex + 1,
-  guess: guessRaw,
-  correct: round.answer[0],
-  score: 0
-});
+  history.push({
+    cluesUsed: currentClueIndex + 1,
+    guess: guessRaw,
+    correct: round.answer[0],
+    score
+  });
 
-endRound();
+  endRound();
+  return;
 }
-);
-    
   // -----------------------
   // ❌ WRONG ANSWER
   // -----------------------
