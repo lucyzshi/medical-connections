@@ -271,19 +271,25 @@ submitBtn.addEventListener("click", () => {
     const score = calculateScore(true, currentClueIndex);
     totalScore += score;
 
-    feedbackEl.textContent = `Correct! +${score} point${score === 1 ? "" : "s"}`;
+feedbackEl.textContent = `Correct! +${score} point${score === 1 ? "" : "s"}`;
 
-    history.push({
-      cluesUsed: currentClueIndex + 1,
-      guess: guessRaw,
-      correct: round.answer[0],
-      score
-    });
-
-    endRound();
-    return;
+// Reveal any remaining clues
+if (currentClueIndex < round.clues.length - 1) {
+  for (let i = currentClueIndex + 1; i < round.clues.length; i++) {
+    addClue(i);
   }
+}
 
+history.push({
+  cluesUsed: currentClueIndex + 1,
+  guess: guessRaw,
+  correct: round.answer[0],
+  score
+});
+
+endRound();
+return;
+    
   // -----------------------
   // ❌ WRONG ANSWER
   // -----------------------
