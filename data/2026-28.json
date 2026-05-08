@@ -1,0 +1,6 @@
+{
+  "Findings in antiphospholipid syndrome": ["Arterial=venous",	"Dilute Russell Viper Venom Time",	"Miscarriage",	"Ab mediated"],
+  "Findings in nephrotic syndrome": ["Venous>>arterial",	"Low protein C/S","Hypoalbuminemia", "Hyperlipidemia"],
+  "Findings in malignancy-associated thrombosis": ["Venous>arterial", "Migratory", "Weight loss", "Tissue factor release"],
+  "Findings in atrial fibrillation": ["Arterial>venous", "Stroke risk", "ECG abnormality", "Stasis"]
+}
