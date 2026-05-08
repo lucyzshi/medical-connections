@@ -264,9 +264,6 @@ submitBtn.addEventListener("click", () => {
     ? isCloseMatch(guessRaw, round.answer)
     : round.answer.map(normalize).includes(normalize(guessRaw));
 
-  // -----------------------
-  // ✅ CORRECT
-  // -----------------------
  // -----------------------
 // ✅ CORRECT
 // -----------------------
@@ -483,6 +480,7 @@ confetti.style.backgroundColor =
   // Share text builder
   // ---------------------------
   function buildShareText() {
+  const shareText = buildShareText();
   const url = window.location.href;
   const totalPossible = rounds.length * 3;
 
