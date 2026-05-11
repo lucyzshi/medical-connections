@@ -2,15 +2,24 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 
   <url>
-    <loc>https://lucyzshi.github.io/medical-connections/index.html</loc>
+    <loc>https://lucyzshi.github.io/medical-connections</loc>
     <priority>1.0</priority>
     <changefreq>weekly</changefreq>
   </url>
+  
+    <url>
+    <loc>https://lucyzshi.github.io/medical-connections/beta.html</loc>
+    <priority>1.0</priority>
+    <changefreq>weekly</changefreq>
+  </url>
+
 
   <url>
     <loc>https://lucyzshi.github.io/medical-connections/leaderboard.html</loc>
     <priority>0.8</priority>
     <changefreq>weekly</changefreq>
   </url>
+
+
 
 </urlset>
