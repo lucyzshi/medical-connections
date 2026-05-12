@@ -460,6 +460,39 @@ confetti.style.backgroundColor =
     setTimeout(() => confetti.remove(), 4000);
   }
 }
+
+  // ---------------------------
+// FIREBASE VISITOR COUNTER
+// ---------------------------
+function initVisitorCounter(pageName) {
+  const visitRef = ref(db, `visits/${pageName}`);
+
+  if (!sessionStorage.getItem(`visited-${pageName}`)) {
+
+    runTransaction(visitRef, current => (current || 0) + 1)
+      .then(result => {
+
+        document.getElementById("visit-count").textContent =
+          result.snapshot.val();
+
+        sessionStorage.setItem(`visited-${pageName}`, "true");
+
+      }).catch(err => {
+
+        console.error("Visitor counter failed:", err);
+
+        document.getElementById("visit-count").textContent = "Error";
+      });
+
+  } else {
+
+    get(visitRef).then(snapshot => {
+
+      document.getElementById("visit-count").textContent =
+        snapshot.val() || 0;
+    });
+  }
+}
   // ---------------------------
   // Share text builder
   // ---------------------------
@@ -497,6 +530,13 @@ ${url}`;
   const linkedinBtn = document.getElementById("linkedinBtn");
   const textBtn = document.getElementById("textBtn");
 
+  // Initialize visitor counter
+  initVisitorCounter("discovery-rounds");
+
+  // Initialize comment box
+  initCommentBox();
+
+  
   // ---------------------------
   // Native share (mobile-first)
   // ---------------------------
