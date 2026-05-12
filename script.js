@@ -20,20 +20,7 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 const analytics = getAnalytics(app);
 
-function logVisit(pageName) {
-  const sessionKey = `visited-${pageName}`;
 
-  if (sessionStorage.getItem(sessionKey)) return;
-  sessionStorage.setItem(sessionKey, "true");
-
-  const pageRef = ref(db, `visits/${pageName}`);
-  runTransaction(pageRef, current => (current || 0) + 1);
-
-  const totalRef = ref(db, `visits/total`);
-  runTransaction(totalRef, current => (current || 0) + 1);
-}
-
-logVisit("medical connections");
 
 // ---------------------------
 // GLOBAL VARIABLES
@@ -314,20 +301,32 @@ function createTile(word, solved = false, revealed = false) {
 // ---------------------------
 // FIREBASE VISITOR COUNTER
 // ---------------------------
-function initVisitorCounter() {
-  const visitRef = ref(db, 'visits');
+function initVisitorCounter(pageName) {
+  const visitRef = ref(db, `visits/${pageName}`);
 
-  if (!sessionStorage.getItem("visited")) {
-    runTransaction(visitRef, current => (current || 0) + 1).then(result => {
-      document.getElementById("visit-count").textContent = result.snapshot.val();
-      sessionStorage.setItem("visited", "true");
-    }).catch(err => {
-      console.error("Visitor counter failed:", err);
-      document.getElementById("visit-count").textContent = "Error";
-    });
+  if (!sessionStorage.getItem(`visited-${pageName}`)) {
+
+    runTransaction(visitRef, current => (current || 0) + 1)
+      .then(result => {
+
+        document.getElementById("visit-count").textContent =
+          result.snapshot.val();
+
+        sessionStorage.setItem(`visited-${pageName}`, "true");
+
+      }).catch(err => {
+
+        console.error("Visitor counter failed:", err);
+
+        document.getElementById("visit-count").textContent = "Error";
+      });
+
   } else {
+
     get(visitRef).then(snapshot => {
-      document.getElementById("visit-count").textContent = snapshot.val();
+
+      document.getElementById("visit-count").textContent =
+        snapshot.val() || 0;
     });
   }
 }
@@ -637,7 +636,7 @@ endPromptClose?.addEventListener("click", () => {
   populatePastWeeksDropdown(currentWeekInfo);
 
   // Initialize visitor counter
-  initVisitorCounter();
+  initVisitorCounter("medical-connections");
 
   // Initialize comment box
   initCommentBox();
