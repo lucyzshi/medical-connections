@@ -503,30 +503,25 @@ function initCommentBox() {
 // ---------------------------
 function initVisitorCounter(pageName) {
   const visitRef = ref(db, `visits/${pageName}`);
+  const visitEl = document.getElementById("visit-count");
+
+  if (!visitEl) return;
 
   if (!sessionStorage.getItem(`visited-${pageName}`)) {
 
     runTransaction(visitRef, current => (current || 0) + 1)
       .then(result => {
-
-        document.getElementById("visit-count").textContent =
-          result.snapshot.val();
-
+        visitEl.textContent = result.snapshot.val();
         sessionStorage.setItem(`visited-${pageName}`, "true");
-
-      }).catch(err => {
-
+      })
+      .catch(err => {
         console.error("Visitor counter failed:", err);
-
-        document.getElementById("visit-count").textContent = "Error";
+        visitEl.textContent = "Error";
       });
 
   } else {
-
     get(visitRef).then(snapshot => {
-
-      document.getElementById("visit-count").textContent =
-        snapshot.val() || 0;
+      visitEl.textContent = snapshot.val() || 0;
     });
   }
 }
@@ -568,8 +563,13 @@ ${url}`;
   const textBtn = document.getElementById("textBtn");
 
   // Initialize visitor counter
+if (document.readyState === "loading") {
+  document.addEventListener("DOMContentLoaded", () => {
+    initVisitorCounter("discovery-rounds");
+  });
+} else {
   initVisitorCounter("discovery-rounds");
-
+}
   // Initialize comment box
   initCommentBox();
 
