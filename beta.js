@@ -621,27 +621,28 @@ function initCommentBox() {
   // ---------------------------
 // FIREBASE VISITOR COUNTER
 // ---------------------------
-import { onValue, runTransaction } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-database.js";
-
 function initVisitorCounter(pageName) {
   const visitRef = ref(db, `visits/${pageName}`);
   const visitEl = document.getElementById("visit-count");
 
   if (!visitEl) return;
 
-  // Always keep UI synced in real time
-  onValue(visitRef, (snapshot) => {
+  // live sync (optional but nice)
+  get(visitRef).then(snapshot => {
     visitEl.textContent = snapshot.val() || 0;
   });
 
-  // Only count ONE visit per session
-  if (!sessionStorage.getItem(`visited-${pageName}`)) {
-    sessionStorage.setItem(`visited-${pageName}`, "true");
+  // count only once per page per session
+  const key = `visited-${pageName}`;
 
-    runTransaction(visitRef, (current) => (current || 0) + 1)
-      .catch((err) => {
-        console.error("Visitor counter failed:", err);
-      });
+  if (!sessionStorage.getItem(key)) {
+    sessionStorage.setItem(key, "true");
+
+    runTransaction(visitRef, (current) => {
+      return (current || 0) + 1;
+    }).catch((err) => {
+      console.error("Visitor counter failed:", err);
+    });
   }
 }
 // ------------------ INIT ------------------
