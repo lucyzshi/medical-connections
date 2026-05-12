@@ -20,21 +20,6 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 const analytics = getAnalytics(app);
 
-function logVisit(pageName) {
-  const sessionKey = `visited-${pageName}`;
-
-  if (sessionStorage.getItem(sessionKey)) return;
-  sessionStorage.setItem(sessionKey, "true");
-
-  const pageRef = ref(db, `visits/${pageName}`);
-  runTransaction(pageRef, current => (current || 0) + 1);
-
-  const totalRef = ref(db, `visits/total`);
-  runTransaction(totalRef, current => (current || 0) + 1);
-}
-
-logVisit("discovery-rounds");
-
 let rounds = [];
 let currentRoundIndex = 0;
 let currentClueIndex = 0;
