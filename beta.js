@@ -497,7 +497,6 @@ function initVisitorCounter(pageName) {
   // Share text builder
   // ---------------------------
   function buildShareText() {
-  const shareText = buildShareText();
   const url = window.location.href;
   const totalPossible = rounds.length * 3;
 
@@ -520,6 +519,7 @@ Can you beat me? 🎯
 ${url}`;
 }
   const shareText = buildShareText();
+  const url = window.location.href;
 
   // ---------------------------
   // DOM bindings (safe)
