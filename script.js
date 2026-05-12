@@ -666,7 +666,7 @@ document.getElementById("shuffle-button").addEventListener("click", () => {
   shuffleRemainingTiles(state);
 });
 document.getElementById("beta-button")?.addEventListener("click", () => {
-  window.location.href = "beta.html";
+  window.location.href = "discovery.html";
 });
   
   // Leaderboard button
