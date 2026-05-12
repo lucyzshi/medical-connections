@@ -462,6 +462,43 @@ confetti.style.backgroundColor =
 }
 
   // ---------------------------
+// COMMENTS
+// ---------------------------
+function saveComment(text) {
+  const commentsRef = ref(db, "comments");
+  const newComment = push(commentsRef);
+  set(newComment, { text, timestamp: Date.now() })
+    .then(() => console.log("Comment saved!"))
+    .catch(err => console.error("Error saving comment:", err));
+}
+
+function initCommentBox() {
+  const commentInput = document.getElementById("comment-input");
+  const submitBtn = document.getElementById("submit-comment");
+  if (!commentInput || !submitBtn) return;
+
+  commentInput.addEventListener("input", () => {
+    commentInput.style.height = "auto";
+    commentInput.style.height = commentInput.scrollHeight + "px";
+  });
+
+  submitBtn.addEventListener("click", () => {
+    const text = commentInput.value.trim();
+    if (!text) return;
+    saveComment(text);
+    commentInput.value = "";
+    commentInput.style.height = "auto";
+    alert("✅ Thanks! Your comment was submitted.");
+  });
+
+  commentInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      submitBtn.click();
+    }
+  });
+}
+  // ---------------------------
 // FIREBASE VISITOR COUNTER
 // ---------------------------
 function initVisitorCounter(pageName) {
