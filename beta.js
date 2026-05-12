@@ -244,10 +244,8 @@ submitBtn.addEventListener("click", () => {
 
   const round = rounds[currentRoundIndex];
 
-  const isCorrect = isCloseMatch
-    ? isCloseMatch(guessRaw, round.answer)
-    : round.answer.map(normalize).includes(normalize(guessRaw));
-
+const isCorrect = isCloseMatch(guessRaw, round.answer);
+  
  // -----------------------
 // ✅ CORRECT
 // -----------------------
@@ -461,97 +459,6 @@ confetti.style.backgroundColor =
   }
 }
 
-  // ---------------------------
-// COMMENTS
-// ---------------------------
-function saveComment(text) {
-  const commentsRef = ref(db, "comments");
-  const newComment = push(commentsRef);
-  set(newComment, { text, timestamp: Date.now() })
-    .then(() => console.log("Comment saved!"))
-    .catch(err => console.error("Error saving comment:", err));
-}
-
-function initCommentBox() {
-  const commentInput = document.getElementById("comment-input");
-  const submitBtn = document.getElementById("submit-comment");
-  if (!commentInput || !submitBtn) return;
-
-  commentInput.addEventListener("input", () => {
-    commentInput.style.height = "auto";
-    commentInput.style.height = commentInput.scrollHeight + "px";
-  });
-
-  submitBtn.addEventListener("click", () => {
-    const text = commentInput.value.trim();
-    if (!text) return;
-    saveComment(text);
-    commentInput.value = "";
-    commentInput.style.height = "auto";
-    alert("✅ Thanks! Your comment was submitted.");
-  });
-
-  commentInput.addEventListener("keydown", (e) => {
-    if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault();
-      submitBtn.click();
-    }
-  });
-}
-  // ---------------------------
-// FIREBASE VISITOR COUNTER
-// ---------------------------
-function initVisitorCounter(pageName) {
-  const visitRef = ref(db, `visits/${pageName}`);
-  const visitEl = document.getElementById("visit-count");
-
-  if (!visitEl) return;
-
-  if (!sessionStorage.getItem(`visited-${pageName}`)) {
-
-    runTransaction(visitRef, current => (current || 0) + 1)
-      .then(result => {
-        visitEl.textContent = result.snapshot.val();
-        sessionStorage.setItem(`visited-${pageName}`, "true");
-      })
-      .catch(err => {
-        console.error("Visitor counter failed:", err);
-        visitEl.textContent = "Error";
-      });
-
-  } else {
-    get(visitRef).then(snapshot => {
-      visitEl.textContent = snapshot.val() || 0;
-    });
-  }
-}
-  // ---------------------------
-  // Share text builder
-  // ---------------------------
-  function buildShareText() {
-  const url = window.location.href;
-  const totalPossible = rounds.length * 3;
-
-  // Emoji mapping like NYT-style results
-  function scoreEmoji(score) {
-    if (score === 3) return "🟩";
-    if (score === 2) return "🟨";
-    if (score === 1) return "🟧";
-    return "⬜";
-  }
-
-  const grid = history.map(h => scoreEmoji(h.score)).join(" ");
-
-  return `🧠 Discovery Rounds ${currentPuzzleId}
-
-${grid}
-Score: ${totalScore}/${totalPossible}
-
-Can you beat me? 🎯
-${url}`;
-}
-  const shareText = buildShareText();
-  const url = window.location.href;
 
   // ---------------------------
   // DOM bindings (safe)
@@ -561,7 +468,8 @@ ${url}`;
   const twitterBtn = document.getElementById("twitterBtn");
   const linkedinBtn = document.getElementById("linkedinBtn");
   const textBtn = document.getElementById("textBtn");
-
+const shareText = buildShareText();
+  
   // Initialize visitor counter
 if (document.readyState === "loading") {
   document.addEventListener("DOMContentLoaded", () => {
@@ -644,6 +552,97 @@ if (document.readyState === "loading") {
       history
     })
   );
+}
+  // ---------------------------
+  // Share text builder
+  // ---------------------------
+  function buildShareText() {
+  const url = window.location.href;
+  const totalPossible = rounds.length * 3;
+
+  // Emoji mapping like NYT-style results
+  function scoreEmoji(score) {
+    if (score === 3) return "🟩";
+    if (score === 2) return "🟨";
+    if (score === 1) return "🟧";
+    return "⬜";
+  }
+
+  const grid = history.map(h => scoreEmoji(h.score)).join(" ");
+
+  return `🧠 Discovery Rounds ${currentPuzzleId}
+
+${grid}
+Score: ${totalScore}/${totalPossible}
+
+Can you beat me? 🎯
+${url}`;
+}
+  const shareText = buildShareText();
+  const url = window.location.href;
+
+  // ---------------------------
+// COMMENTS
+// ---------------------------
+function saveComment(text) {
+  const commentsRef = ref(db, "comments");
+  const newComment = push(commentsRef);
+  set(newComment, { text, timestamp: Date.now() })
+    .then(() => console.log("Comment saved!"))
+    .catch(err => console.error("Error saving comment:", err));
+}
+
+function initCommentBox() {
+  const commentInput = document.getElementById("comment-input");
+  const submitBtn = document.getElementById("submit-comment");
+  if (!commentInput || !submitBtn) return;
+
+  commentInput.addEventListener("input", () => {
+    commentInput.style.height = "auto";
+    commentInput.style.height = commentInput.scrollHeight + "px";
+  });
+
+  submitBtn.addEventListener("click", () => {
+    const text = commentInput.value.trim();
+    if (!text) return;
+    saveComment(text);
+    commentInput.value = "";
+    commentInput.style.height = "auto";
+    alert("✅ Thanks! Your comment was submitted.");
+  });
+
+  commentInput.addEventListener("keydown", (e) => {
+    if (e.key === "Enter" && !e.shiftKey) {
+      e.preventDefault();
+      submitBtn.click();
+    }
+  });
+}
+  // ---------------------------
+// FIREBASE VISITOR COUNTER
+// ---------------------------
+import { onValue, runTransaction } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-database.js";
+
+function initVisitorCounter(pageName) {
+  const visitRef = ref(db, `visits/${pageName}`);
+  const visitEl = document.getElementById("visit-count");
+
+  if (!visitEl) return;
+
+  // Always keep UI synced in real time
+  onValue(visitRef, (snapshot) => {
+    visitEl.textContent = snapshot.val() || 0;
+  });
+
+  // Only count ONE visit per session
+  if (!sessionStorage.getItem(`visited-${pageName}`)) {
+    sessionStorage.setItem(`visited-${pageName}`, "true");
+
+    runTransaction(visitRef, (current) => (current || 0) + 1)
+      .catch((err) => {
+        console.error("Visitor counter failed:", err);
+      });
+  }
 }
 // ------------------ INIT ------------------
 
