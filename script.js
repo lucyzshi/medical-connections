@@ -20,20 +20,20 @@ const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
 const analytics = getAnalytics(app);
 
-function logVisit(Connections) {
-  const sessionKey = `visited-${Connections}`;
+function logVisit(pageName) {
+  const sessionKey = `visited-${pageName}`;
 
   if (sessionStorage.getItem(sessionKey)) return;
   sessionStorage.setItem(sessionKey, "true");
 
-  // increment game-specific counter
-  const gameRef = ref(db, `visits/${Connections}`);
-  runTransaction(gameRef, current => (current || 0) + 1);
+  const pageRef = ref(db, `visits/${pageName}`);
+  runTransaction(pageRef, current => (current || 0) + 1);
 
-  // increment total counter
   const totalRef = ref(db, `visits/total`);
   runTransaction(totalRef, current => (current || 0) + 1);
 }
+
+logVisit("medical connections");
 
 // ---------------------------
 // GLOBAL VARIABLES
