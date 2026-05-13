@@ -1,0 +1,9 @@
+{
+  "rounds": [
+    { "answer": ["Sarcoidosis","sarcoid"], "clues": ["First viewed as a skin condition in 1869, this disease was considered a tuberculosis variant for decades until scientists established it as a distinct immunologic disorder in the mid-20th century","It's not syphilis. This disease is also sometimes called 'the great mimicker' due to diverse presentations and likes to affect old scars or tattoos","An acute, self-limiting form of this disease presents with a classic triad of lymphadenopathy, skin nodules, and arthritis"] },
+    { "answer": ["Glp 1","GLP-1","glucagon-like peptide 1","Glp-1 receptor agonist","glp-1 agonist"], "clues": ["Now a multi-billion dollar market, these medications were originally derived from the venomous saliva of the Gila monster","First approved in 2005 by the FDA, a second indication was approved in 2014 but popularity didn't surge until after 2021","Originally used for diabetes management, these medications are now widely used for weight loss and early studies show potential to treat addiction"] },
+    { "answer": [""], "clues": [""] },
+    { "answer": [""], "clues": [""] },
+    { "answer": [""], "clues": [""] }
+  ]
+}
