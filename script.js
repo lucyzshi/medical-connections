@@ -303,30 +303,23 @@ function createTile(word, solved = false, revealed = false) {
 // ---------------------------
 function initVisitorCounter(pageName) {
   const visitRef = ref(db, `visits/${pageName}`);
+  const visitEl = document.getElementById("visit-count");
 
-  if (!sessionStorage.getItem(`visited-${pageName}`)) {
+  if (!visitEl) return;
 
-    runTransaction(visitRef, current => (current || 0) + 1)
-      .then(result => {
+  onValue(visitRef, (snapshot) => {
+    visitEl.textContent = snapshot.val() || 0;
+  });
 
-        document.getElementById("visit-count").textContent =
-          result.snapshot.val();
+  const key = `visited-${pageName}`;
 
-        sessionStorage.setItem(`visited-${pageName}`, "true");
+  if (!sessionStorage.getItem(key)) {
+    sessionStorage.setItem(key, "true");
 
-      }).catch(err => {
-
-        console.error("Visitor counter failed:", err);
-
-        document.getElementById("visit-count").textContent = "Error";
-      });
-
-  } else {
-
-    get(visitRef).then(snapshot => {
-
-      document.getElementById("visit-count").textContent =
-        snapshot.val() || 0;
+    runTransaction(visitRef, (current) => {
+      return (current || 0) + 1;
+    }).catch((err) => {
+      console.error("Visitor counter failed:", err);
     });
   }
 }
