@@ -2,7 +2,7 @@
 // FIREBASE IMPORTS & INIT
 // ---------------------------
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
-import { getDatabase, ref, push, set, runTransaction, get } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-database.js";
+import { getDatabase, ref, push, set, runTransaction, onValue } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-database.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-analytics.js";
 
 const firebaseConfig = {
@@ -470,14 +470,6 @@ confetti.style.backgroundColor =
   const textBtn = document.getElementById("textBtn");
 const shareText = buildShareText();
   
-  // Initialize visitor counter
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", () => {
-    initVisitorCounter("discovery-rounds");
-  });
-} else {
-  initVisitorCounter("discovery-rounds");
-}
   // Initialize comment box
   initCommentBox();
 
@@ -602,6 +594,7 @@ function initCommentBox() {
     commentInput.style.height = commentInput.scrollHeight + "px";
   });
 
+  
   submitBtn.addEventListener("click", () => {
     const text = commentInput.value.trim();
     if (!text) return;
@@ -627,12 +620,11 @@ function initVisitorCounter(pageName) {
 
   if (!visitEl) return;
 
-  // live sync (optional but nice)
-  get(visitRef).then(snapshot => {
+  // live listener
+  onValue(visitRef, (snapshot) => {
     visitEl.textContent = snapshot.val() || 0;
   });
 
-  // count only once per page per session
   const key = `visited-${pageName}`;
 
   if (!sessionStorage.getItem(key)) {
