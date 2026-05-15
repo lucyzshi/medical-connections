@@ -1,7 +1,7 @@
 // ---------------------------
 // FIREBASE IMPORTS & INIT
 // ---------------------------
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
+import {  initializeApp,  getApps,  getApp} from "https://www.gstatic.com/firebasejs/11.8.1/firebase-app.js";
 import { getDatabase, ref, push, set, runTransaction, onValue } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-database.js";
 import { getAnalytics } from "https://www.gstatic.com/firebasejs/11.8.1/firebase-analytics.js";
 
@@ -16,7 +16,9 @@ const firebaseConfig = {
   measurementId: "G-QT1C8X36P8"
 };
 
-const app = initializeApp(firebaseConfig);
+const app = getApps().length
+  ? getApp()
+  : initializeApp(firebaseConfig);
 const db = getDatabase(app);
 const analytics = getAnalytics(app);
 
@@ -470,9 +472,6 @@ confetti.style.backgroundColor =
   const textBtn = document.getElementById("textBtn");
 const shareText = buildShareText();
   
-  // Initialize comment box
-  initCommentBox();
-
   
   // ---------------------------
   // Native share (mobile-first)
@@ -639,4 +638,6 @@ function initVisitorCounter(pageName) {
 }
 // ------------------ INIT ------------------
 
+initVisitorCounter("discovery-rounds");
+initCommentBox();
 loadPuzzle();
