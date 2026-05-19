@@ -203,6 +203,66 @@ button:hover {
   color: #0f0;
 }
 
+.round-banner {
+  position: fixed;
+  top: 18%;
+  left: 50%;
+  transform: translateX(-50%) scale(0.8);
+  z-index: 10000;
+
+  padding: 18px 28px;
+  border-radius: 18px;
+
+  font-size: 2rem;
+  font-weight: 700;
+  text-align: center;
+
+  color: white;
+  background: linear-gradient(135deg, #6366f1, #8b5cf6);
+
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+
+  opacity: 0;
+  animation: bannerPop 2.2s ease forwards;
+}
+
+.round-banner.small {
+  font-size: 1.4rem;
+  padding: 14px 20px;
+}
+
+.round-banner.medium {
+  font-size: 1.8rem;
+}
+
+.round-banner.large {
+  font-size: 2.4rem;
+}
+
+@keyframes bannerPop {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) scale(0.6);
+  }
+
+  15% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1.08);
+  }
+
+  25% {
+    transform: translateX(-50%) scale(1);
+  }
+
+  85% {
+    opacity: 1;
+  }
+
+  100% {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-20px);
+  }
+}
 /* Final screen */
 #final {
   margin-top: 30px;
