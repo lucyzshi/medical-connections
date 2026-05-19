@@ -348,6 +348,88 @@ function endRound() {
   nextBtn.textContent =
     currentRoundIndex === rounds.length - 1 ? "Finish" : "Next";
 }
+function launchConfetti(amount = 80) {
+
+  for (let i = 0; i < amount; i++) {
+
+    const confetti = document.createElement("div");
+
+    confetti.className = "confetti";
+
+    confetti.style.left = Math.random() * 100 + "vw";
+
+    confetti.style.width =
+      (Math.random() * 10 + 6) + "px";
+
+    confetti.style.height =
+      (Math.random() * 14 + 8) + "px";
+
+    confetti.style.animationDuration =
+      (Math.random() * 2 + 2) + "s";
+
+    confetti.style.opacity = Math.random();
+
+    confetti.style.transform =
+      `rotate(${Math.random() * 360}deg)`;
+
+    confetti.style.backgroundColor =
+      `hsl(${Math.random() * 360}, 90%, 60%)`;
+
+    document.body.appendChild(confetti);
+
+    setTimeout(() => confetti.remove(), 4500);
+  }
+}
+  function celebrateRound(cluesUsed) {
+
+  let amount = 30;
+  let message = "Nice!";
+  let sizeClass = "small";
+
+  // FIRST CLUE = MASSIVE CELEBRATION
+  if (cluesUsed === 1) {
+    amount = 180;
+    message = "🏆 WOW! You nailed it!";
+    sizeClass = "large";
+  }
+
+  // SECOND CLUE = GOOD CELEBRATION
+  else if (cluesUsed === 2) {
+    amount = 90;
+    message = "🔥 Remarkable!";
+    sizeClass = "medium";
+  }
+
+  // THIRD CLUE = SMALL CELEBRATION
+  else {
+    amount = 40;
+    message = "✅ Correct!";
+    sizeClass = "small";
+  }
+
+  launchConfetti(amount);
+
+  const banner = document.createElement("div");
+
+  banner.className = `round-banner ${sizeClass}`;
+  banner.textContent = message;
+
+  document.body.appendChild(banner);
+
+const card = document.querySelector(".card");
+
+if (card) {
+  card.classList.add("celebrate");
+
+  setTimeout(() => {
+    card.classList.remove("celebrate");
+  }, 500);
+}
+
+  setTimeout(() => {
+    banner.remove();
+  }, 2200);
+}
 // ------------------ FINAL SCREEN ------------------
 function showFinal() {
   document.getElementById("game").classList.add("hidden");
@@ -446,86 +528,6 @@ let html = `
 
   if (totalScore === 15) {
   launchConfetti();
-}
-function launchConfetti(amount = 80) {
-
-  for (let i = 0; i < amount; i++) {
-
-    const confetti = document.createElement("div");
-
-    confetti.className = "confetti";
-
-    confetti.style.left = Math.random() * 100 + "vw";
-
-    confetti.style.width =
-      (Math.random() * 10 + 6) + "px";
-
-    confetti.style.height =
-      (Math.random() * 14 + 8) + "px";
-
-    confetti.style.animationDuration =
-      (Math.random() * 2 + 2) + "s";
-
-    confetti.style.opacity = Math.random();
-
-    confetti.style.transform =
-      `rotate(${Math.random() * 360}deg)`;
-
-    confetti.style.backgroundColor =
-      `hsl(${Math.random() * 360}, 90%, 60%)`;
-
-    document.body.appendChild(confetti);
-
-    setTimeout(() => confetti.remove(), 4500);
-  }
-}
-  function celebrateRound(cluesUsed) {
-
-  let amount = 30;
-  let message = "Nice!";
-  let sizeClass = "small";
-
-  // FIRST CLUE = MASSIVE CELEBRATION
-  if (cluesUsed === 1) {
-    amount = 180;
-    message = "🏆 WOW! You nailed it!";
-    sizeClass = "large";
-  }
-
-  // SECOND CLUE = GOOD CELEBRATION
-  else if (cluesUsed === 2) {
-    amount = 90;
-    message = "🔥 Remarkable!";
-    sizeClass = "medium";
-  }
-
-  // THIRD CLUE = SMALL CELEBRATION
-  else {
-    amount = 40;
-    message = "✅ Correct!";
-    sizeClass = "small";
-  }
-
-  launchConfetti(amount);
-
-  const banner = document.createElement("div");
-
-  banner.className = `round-banner ${sizeClass}`;
-  banner.textContent = message;
-
-  document.body.appendChild(banner);
-
-    const card = document.querySelector(".card");
-
-card.classList.add("celebrate");
-
-setTimeout(() => {
-  card.classList.remove("celebrate");
-}, 500);
-
-  setTimeout(() => {
-    banner.remove();
-  }, 2200);
 }
 
   // ---------------------------
