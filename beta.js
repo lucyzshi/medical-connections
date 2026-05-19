@@ -515,6 +515,14 @@ function launchConfetti(amount = 80) {
 
   document.body.appendChild(banner);
 
+    const card = document.querySelector(".card");
+
+card.classList.add("celebrate");
+
+setTimeout(() => {
+  card.classList.remove("celebrate");
+}, 500);
+
   setTimeout(() => {
     banner.remove();
   }, 2200);
