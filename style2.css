@@ -2,7 +2,8 @@ body {
   background: linear-gradient(
     to bottom,
     #f5f1e6,
-    #f3f4f6
+    #f3f4f6;
+      font-family: Inter, system-ui, sans-serif;
   );
 }
 
@@ -103,16 +104,25 @@ body {
 .clue {
   background: #f9fafb;
   border-left: 4px solid #6366f1;
-  padding: 16px 18px;
-  margin: 12px 0;
-  border-radius: 10px;
-  font-size: 1.2rem;   /* ~19px */
-  line-height: 1.5;
+
+  padding: 18px 20px;
+  margin: 14px 0;
+
+  border-radius: 12px;
+
+  font-family: Inter, system-ui, sans-serif;
+
+  font-size: 1.28rem;
+  font-weight: 400;
+  line-height: 1.65;
+
+  color: #1f2937;
+
   text-align: left;
-}
-.clue {
+
   animation: fadeIn 0.25s ease-in;
 }
+
 .clue:not(:last-child) {
   opacity: 0.7;
 }
