@@ -388,7 +388,7 @@ function launchConfetti(amount = 80) {
 
   // FIRST CLUE = MASSIVE CELEBRATION
   if (cluesUsed === 1) {
-    amount = 180;
+    amount = 300;
     message = "🏆 WOW! You nailed it!";
     sizeClass = "large";
   }
@@ -402,7 +402,7 @@ function launchConfetti(amount = 80) {
 
   // THIRD CLUE = SMALL CELEBRATION
   else {
-    amount = 40;
+    amount = 0;
     message = "✅ Correct!";
     sizeClass = "small";
   }
