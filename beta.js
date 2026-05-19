@@ -38,6 +38,7 @@ const submitBtn = document.getElementById("submitBtn");
 const nextBtn = document.getElementById("nextBtn");
 const clueBtn = document.getElementById("clueBtn");
 const finalEl = document.getElementById("final");
+const url = window.location.href;
 
 // ------------------ TWICE-WEEKLY LOGIC ------------------
 
@@ -224,13 +225,16 @@ function levenshtein(a, b) {
 function isCloseMatch(guess, answers) {
   const normGuess = normalize(guess);
 
-  return answers.some(ans => {
+  const answerArray = Array.isArray(answers)
+    ? answers
+    : [answers];
+
+  return answerArray.some(ans => {
     const normAns = normalize(ans);
 
     // Exact match
     if (normGuess === normAns) return true;
 
-    // Allow only tiny edits AND same starting letter
     return (
       levenshtein(normGuess, normAns) <= 1 &&
       normGuess[0] === normAns[0] &&
@@ -264,13 +268,17 @@ if (isCorrect) {
       addClue(i);
     }
   }
-  
-celebrateRound(currentClueIndex + 1);
-  
+
+  celebrateRound(currentClueIndex + 1);
+
+  const correctAnswer = Array.isArray(round.answer)
+    ? round.answer[0]
+    : round.answer;
+
   history.push({
     cluesUsed: currentClueIndex + 1,
     guess: guessRaw,
-    correct: round.answer[0],
+    correct: correctAnswer,
     score
   });
 
@@ -295,12 +303,16 @@ celebrateRound(currentClueIndex + 1);
   // -----------------------
   // ❌ WRONG + LAST CLUE → END ROUND
   // -----------------------
-  feedbackEl.textContent = `❌ Incorrect. Answer: ${round.answer[0]}`;
+const correctAnswer = Array.isArray(round.answer)
+  ? round.answer[0]
+  : round.answer;
+
+feedbackEl.textContent = `❌ Incorrect. Answer: ${correctAnswer}`;
 
   history.push({
     cluesUsed: currentClueIndex + 1,
     guess: guessRaw,
-    correct: round.answer[0],
+    correct: correctAnswer,
     score: 0
   });
 
@@ -542,7 +554,7 @@ let html = `
   const twitterBtn = document.getElementById("twitterBtn");
   const linkedinBtn = document.getElementById("linkedinBtn");
   const textBtn = document.getElementById("textBtn");
-const shareText = buildShareText();
+
   
   
   // ---------------------------
@@ -620,7 +632,6 @@ const shareText = buildShareText();
   // Share text builder
   // ---------------------------
   function buildShareText() {
-  const url = window.location.href;
   const totalPossible = rounds.length * 3;
 
   // Emoji mapping like NYT-style results
@@ -642,7 +653,6 @@ Can you beat me? 🎯
 ${url}`;
 }
   const shareText = buildShareText();
-  const url = window.location.href;
 
   // ---------------------------
 // COMMENTS
@@ -650,35 +660,43 @@ ${url}`;
 function saveComment(text) {
   const commentsRef = ref(db, "comments");
   const newComment = push(commentsRef);
-  set(newComment, { text, timestamp: Date.now() })
+
+  set(newComment, {
+    text,
+    timestamp: Date.now()
+  })
     .then(() => console.log("Comment saved!"))
     .catch(err => console.error("Error saving comment:", err));
 }
 
 function initCommentBox() {
   const commentInput = document.getElementById("comment-input");
-  const submitBtn = document.getElementById("submit-comment");
-  if (!commentInput || !submitBtn) return;
+  const commentSubmitBtn = document.getElementById("submit-comment");
+
+  if (!commentInput || !commentSubmitBtn) return;
 
   commentInput.addEventListener("input", () => {
     commentInput.style.height = "auto";
     commentInput.style.height = commentInput.scrollHeight + "px";
   });
 
-  
-  submitBtn.addEventListener("click", () => {
+  commentSubmitBtn.addEventListener("click", () => {
     const text = commentInput.value.trim();
+
     if (!text) return;
+
     saveComment(text);
+
     commentInput.value = "";
     commentInput.style.height = "auto";
+
     alert("✅ Thanks! Your comment was submitted.");
   });
 
   commentInput.addEventListener("keydown", (e) => {
     if (e.key === "Enter" && !e.shiftKey) {
       e.preventDefault();
-      submitBtn.click();
+      commentSubmitBtn.click();
     }
   });
 }
