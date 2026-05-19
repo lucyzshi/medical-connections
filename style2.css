@@ -8,7 +8,8 @@ body {
 
 /* Page layout */
 .container {
-  max-width: 600px;
+  max-width: 760px;
+  width: 92%;
   margin: 80px auto;
   padding: 20px;
   text-align: center;
@@ -83,17 +84,20 @@ body {
 
 /* Event text */
 .event {
-  font-size: 20px;
-  font-weight: 500;
-  margin-bottom: 25px;
+  font-size: 1.7rem;
+  line-height: 1.4;
+  font-weight: 600;
+  margin-bottom: 30px;
 }
+
 .clue {
   background: #f9fafb;
   border-left: 4px solid #6366f1;
-  padding: 10px 12px;
-  margin: 8px 0;
-  border-radius: 6px;
-  font-size: 15px;
+  padding: 16px 18px;
+  margin: 12px 0;
+  border-radius: 10px;
+  font-size: 1.2rem;   /* ~19px */
+  line-height: 1.5;
   text-align: left;
 }
 .clue {
@@ -110,9 +114,9 @@ body {
 
 /* Input */
 input {
-  padding: 12px;
-  font-size: 16px;
-  width: 160px;
+  padding: 14px;
+  font-size: 18px;
+  width: 190px;
   text-align: center;
   border-radius: 8px;
   border: 1px solid #d1d5db;
@@ -129,9 +133,9 @@ input:focus {
 }
 
 button {
-  padding: 10px 18px;
+  padding: 12px 22px;
   margin: 10px 5px;
-  font-size: 15px;
+  font-size: 17px;
   border-radius: 8px;
   border: none;
   cursor: pointer;
@@ -300,5 +304,28 @@ button:hover {
 @keyframes fall {
   to {
     transform: translateY(110vh) rotate(720deg);
+  }
+}
+@media (max-width: 640px) {
+  .container {
+    width: 95%;
+    margin: 40px auto;
+  }
+
+  .card {
+    padding: 24px 18px;
+  }
+
+  .title {
+    font-size: 2rem;
+  }
+
+  .event {
+    font-size: 1.4rem;
+  }
+
+  .clue {
+    font-size: 1.08rem;
+    padding: 14px 16px;
   }
 }
