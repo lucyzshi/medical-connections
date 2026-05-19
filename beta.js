@@ -391,11 +391,11 @@ function launchConfetti(amount = 80) {
     amount = 500;
     message = "🏆 WOW! You nailed it!";
     sizeClass = "large";
-  }
+
     // extra burst waves (this is the key upgrade)
     setTimeout(() => launchConfetti(200), 0);
     setTimeout(() => launchConfetti(150), 250);
-  }
+    }
 
   // SECOND CLUE = GOOD CELEBRATION
   else if (cluesUsed === 2) {
