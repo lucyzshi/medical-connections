@@ -20,7 +20,13 @@ const app = getApps().length
   ? getApp()
   : initializeApp(firebaseConfig);
 const db = getDatabase(app);
-const analytics = getAnalytics(app);
+let analytics;
+
+try {
+  analytics = getAnalytics(app);
+} catch (e) {
+  console.warn("Analytics unavailable:", e);
+}
 
 let rounds = [];
 let currentRoundIndex = 0;
@@ -459,7 +465,7 @@ let rankMessage = "";
 let celebrationHTML = "";
 
 // PERFECT SCORE
-if (totalScore === 15) {
+if (totalScore === totalPossible) {
   rankTitle = "🏆 Diagnostic Legend!";
   rankMessage = "Perfect score! You cracked every round with elite efficiency.";
 
@@ -493,6 +499,7 @@ else if (totalScore >= 11) {
     </div>
   `;
 }
+    const shareText = buildShareText();
 
   // ---------------------------
   // Build results HTML
@@ -542,7 +549,7 @@ let html = `
 
   finalEl.innerHTML = html;
 
-  if (totalScore === 15) {
+if (totalScore === totalPossible) {
   launchConfetti();
 }
 
@@ -652,7 +659,7 @@ Score: ${totalScore}/${totalPossible}
 Can you beat me? 🎯
 ${url}`;
 }
-  const shareText = buildShareText();
+
 
   // ---------------------------
 // COMMENTS
@@ -709,9 +716,14 @@ function initVisitorCounter(pageName) {
 
   if (!visitEl) return;
 
-  // live listener
+  // Live listener
   onValue(visitRef, (snapshot) => {
-    visitEl.textContent = snapshot.val() || 0;
+    if (snapshot.exists()) {
+      visitEl.textContent = snapshot.val();
+    } else {
+      visitEl.textContent = "—";
+      console.warn(`Missing counter: ${pageName}`);
+    }
   });
 
   const key = `visited-${pageName}`;
@@ -719,11 +731,24 @@ function initVisitorCounter(pageName) {
   if (!sessionStorage.getItem(key)) {
     sessionStorage.setItem(key, "true");
 
-    runTransaction(visitRef, (current) => {
-      return (current || 0) + 1;
-    }).catch((err) => {
-      console.error("Visitor counter failed:", err);
-    });
+runTransaction(visitRef, (current) => {
+
+  if (current === null) {
+    return 1;
+  }
+
+  if (typeof current !== "number") {
+    console.error("Counter invalid");
+    return;
+  }
+
+  return current + 1;
+
+}).catch((err) => {
+
+  console.error("Visitor counter failed:", err);
+
+});
   }
 }
 // ------------------ INIT ------------------
