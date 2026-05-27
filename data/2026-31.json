@@ -1,0 +1,6 @@
+{
+  "Causes of elevated creatinine without impact on GFR": ["Ketosis",	"Trimethoprim",	"High Protein Diet",	"Creatine Supplement"],
+  "Causes of lower creatinine without impact on GFR": ["Muscle wasting",	"High Bilirubin",	"Pregnancy", "Limb amputation"],
+  "Causes of lower cystatin C without impact on GFR": ["Hypothyroidism", "Methimazole", "Low body fat", "Hashimoto's"],
+  "Causes of elevated cystatin C without impact on GFR": ["Hyperthyroidism", "High dose Steroids", "High body fat", "Tobacco use"]
+}
