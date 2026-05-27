@@ -435,7 +435,20 @@ button:hover {
     width: 95%;
     margin: 40px auto;
   }
+.seo-content {
+  font-size: 0.85rem;
+  color: #4b5563;
+  line-height: 1.6;
+}
 
+.seo-content h2 {
+  font-size: 1rem;
+  margin-bottom: 12px;
+}
+
+.seo-content p {
+  font-size: 0.85rem;
+}
   .card {
     padding: 24px 18px;
   }
