@@ -1,0 +1,6 @@
+{
+  "Causes of WHO Group 1 pulmonary HTN": ["Methamphetamine",	"Scleroderma",	"HIV",	"Portal Hypertension"],
+  "Causes of WHO Group 3 pulmonary HTN": ["COPD",	"ILD",	"OSA", "Chronic high altitude"],
+  "Causes of WHO Group 5 pulmonary HTN": ["Myeloproliferative disease", "Sarcoidosis", "Thyroid disease", "CKD"],
+  "Causes of WHO Group 4 pulmonary HTN": ["PE", "Angiosarcoma", "Takayasu arteritis", "Parasites"]
+}
