@@ -1,0 +1,6 @@
+{
+  "Findings in Dermatomyositis": ["Heliotrope",	"Gottron",	"Anti-MDA5",	"Malignancy"],
+  "Findings in Inclusion Body Myositis": ["Weak Grip",	"Asymmetric",	"Rimmed vacuoles", "Poor Steroid Response"],
+  "Findings in Antisynthetase": ["Arthritis", "Mechanics Hands", "Anti-Jo1", "Raynaud's"],
+  "Findings in PMR": ["Pain>weakness", "Normal CK", "High ESR/CRP", "Morning Stiffness"]
+}
