@@ -1,0 +1,9 @@
+{
+  "rounds": [
+    { "answer": ["Chlamydia","Chlamydia trachomatis","trachoma"], "clues": ["The name of this disease comes from an ancient Greek word meaning 'a short draped military cloak' because the bacteria cloak the nucleus of the host cells it infects","Caused by an obligate intracellular parisite, this disease is actually a massive public health threat to Australian koalas","Although typically thought of as affecting the reproductive system, some strains can also affect the eye. This devastating version is the world's leading preventable cause of blindness."] }
+    { "answer": ["Celecoxib","celebrex","COX-2 inhibitor"], "clues": ["Due to concerns about cardiovascular safety, other medications in the same class were pulled from the market. The PRECISION trial helped establish safety of this medication regarding cardiovascular events.","Beyond treating pain, this medication is also approved for the treatment of familial adenomatous polyposis","Not available over the counter, this medication was designed to target inflammation with fewer GI side effects"] }
+    { "answer": ["Cocaine"], "clues": ["Although better known for his influence on psychotherapy, in the 1880s Sigmund Freud heavily promoted this as a miracle cure for morphine addiction.","One of few drugs that combines numbing and blood vessel constricting properties, this is used occasionally in ENT surgeries involving nasal passages","Ironically, intranasal use of this can also lead to significant tissue damage and a perforated septum"] }
+    { "answer": [""], "clues": [""] },
+    { "answer": [""], "clues": [""] }
+  ]
+}
