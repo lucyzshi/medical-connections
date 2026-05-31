@@ -34,6 +34,7 @@ let currentClueIndex = 0;
 let totalScore = 0;
 let history = [];
 let currentPuzzleId = "";
+let awaitingNextRound = false;
 
 // DOM
 const eventEl = document.getElementById("event");
@@ -41,8 +42,6 @@ const guessInput = document.getElementById("guess");
 const feedbackEl = document.getElementById("feedback");
 const progressEl = document.getElementById("progress");
 const submitBtn = document.getElementById("submitBtn");
-const nextBtn = document.getElementById("nextBtn");
-const clueBtn = document.getElementById("clueBtn");
 const finalEl = document.getElementById("final");
 const url = window.location.href;
 
@@ -165,19 +164,12 @@ function loadRound() {
   guessInput.value = "";
   guessInput.disabled = false;
 
-  submitBtn.classList.remove("hidden");
-  nextBtn.classList.add("hidden");
-  clueBtn.classList.remove("hidden");
-}
-// Reveal next clue
-clueBtn?.addEventListener("click", () => {
-  const round = rounds[currentRoundIndex];
+awaitingNextRound = false;
 
-  if (currentClueIndex < round.clues.length - 1) {
-    currentClueIndex++;
-    addClue(currentClueIndex);
-  }
-});
+submitBtn.classList.remove("hidden");
+submitBtn.textContent = "Submit";
+
+}
 
 function addClue(index) {
   const round = rounds[currentRoundIndex];
@@ -250,70 +242,138 @@ function isCloseMatch(guess, answers) {
 }
 
 // Submit guess
+// Submit guess
 submitBtn.addEventListener("click", () => {
-  const guessRaw = guessInput.value;
-  if (!guessRaw) return;
 
-  const round = rounds[currentRoundIndex];
-
-const isCorrect = isCloseMatch(guessRaw, round.answer);
-  
- // -----------------------
-// ✅ CORRECT
-// -----------------------
-if (isCorrect) {
-  const score = calculateScore(true, currentClueIndex);
-  totalScore += score;
-
-  feedbackEl.textContent =
-    `Correct! +${score} point${score === 1 ? "" : "s"}`;
-
-  // Reveal any remaining clues
-  if (currentClueIndex < round.clues.length - 1) {
-    for (let i = currentClueIndex + 1; i < round.clues.length; i++) {
-      addClue(i);
+  // -----------------------
+  // NEXT / FINISH BUTTON MODE
+  // -----------------------
+  if (awaitingNextRound) {
+    if (currentRoundIndex === rounds.length - 1) {
+      showFinal();
+    } else {
+      currentRoundIndex++;
+      loadRound();
     }
+    return;
   }
 
-  celebrateRound(currentClueIndex + 1);
+  const guessRaw = guessInput.value.trim();
+  const round = rounds[currentRoundIndex];
 
-  const correctAnswer = Array.isArray(round.answer)
-    ? round.answer[0]
-    : round.answer;
-
-  history.push({
-    cluesUsed: currentClueIndex + 1,
-    guess: guessRaw,
-    correct: correctAnswer,
-    score
-  });
-
-  endRound();
-  return;
-}
   // -----------------------
-  // ❌ WRONG ANSWER
+  // BLANK SUBMISSION
   // -----------------------
-  const isLastClue = currentClueIndex >= round.clues.length - 1;
+  if (!guessRaw) {
 
-  if (!isLastClue) {
-    // 👉 MOVE TO NEXT CLUE
-    currentClueIndex++;
-    addClue(currentClueIndex);
+    const isLastClue =
+      currentClueIndex >= round.clues.length - 1;
 
-    feedbackEl.textContent = "❌ Not quite—here's another clue.";
-    guessInput.value = "";
+    // Reveal another clue
+    if (!isLastClue) {
+      currentClueIndex++;
+      addClue(currentClueIndex);
+
+feedbackEl.textContent =
+  "";
+      
+      return;
+    }
+
+    // No guess on final clue
+    const correctAnswer = Array.isArray(round.answer)
+      ? round.answer[0]
+      : round.answer;
+
+    feedbackEl.textContent =
+      `Answer: ${correctAnswer}`;
+
+    history.push({
+      cluesUsed: currentClueIndex + 1,
+      guess: "(no guess)",
+      correct: correctAnswer,
+      score: 0
+    });
+
+    endRound();
     return;
   }
 
   // -----------------------
-  // ❌ WRONG + LAST CLUE → END ROUND
+  // CHECK ANSWER
   // -----------------------
-const correctAnswer = Array.isArray(round.answer)
-  ? round.answer[0]
-  : round.answer;
+  const isCorrect =
+    isCloseMatch(guessRaw, round.answer);
 
-feedbackEl.textContent = `❌ Incorrect. Answer: ${correctAnswer}`;
+  // -----------------------
+  // CORRECT
+  // -----------------------
+  if (isCorrect) {
+
+    const score =
+      calculateScore(true, currentClueIndex);
+
+    totalScore += score;
+
+    feedbackEl.textContent =
+      `Correct! +${score} point${score === 1 ? "" : "s"}`;
+
+    // Reveal remaining clues
+    if (currentClueIndex < round.clues.length - 1) {
+      for (
+        let i = currentClueIndex + 1;
+        i < round.clues.length;
+        i++
+      ) {
+        addClue(i);
+      }
+    }
+
+    celebrateRound(currentClueIndex + 1);
+
+    const correctAnswer = Array.isArray(round.answer)
+      ? round.answer[0]
+      : round.answer;
+
+    history.push({
+      cluesUsed: currentClueIndex + 1,
+      guess: guessRaw,
+      correct: correctAnswer,
+      score
+    });
+
+    endRound();
+    return;
+  }
+
+  // -----------------------
+  // WRONG ANSWER
+  // -----------------------
+  const isLastClue =
+    currentClueIndex >= round.clues.length - 1;
+
+  if (!isLastClue) {
+
+    currentClueIndex++;
+    addClue(currentClueIndex);
+
+    feedbackEl.textContent =
+      "❌ Not quite—here's another clue.";
+
+    guessInput.value = "";
+
+    return;
+  }
+
+  // -----------------------
+  // WRONG ON FINAL CLUE
+  // -----------------------
+  const correctAnswer = Array.isArray(round.answer)
+    ? round.answer[0]
+    : round.answer;
+
+  feedbackEl.textContent =
+    `❌ Incorrect. Answer: ${correctAnswer}`;
 
   history.push({
     cluesUsed: currentClueIndex + 1,
@@ -323,49 +383,28 @@ feedbackEl.textContent = `❌ Incorrect. Answer: ${correctAnswer}`;
   });
 
   endRound();
-});
 
-// Next round
-nextBtn.addEventListener("click", () => {
-  if (!guessInput.disabled) return;
-
-  if (currentRoundIndex === rounds.length - 1) {
-    showFinal();
-  } else {
-    currentRoundIndex++;
-    loadRound();
-  }
 });
 
 //  key submit
 document.addEventListener("keydown", (e) => {
   if (e.key !== "Enter") return;
 
-  // prevent form / browser weirdness
   e.preventDefault();
-
-  // PRIORITY 1: submitting a guess
-  if (!submitBtn.classList.contains("hidden")) {
-    submitBtn.click();
-    return;
-  }
-
-  // PRIORITY 2: advancing round
-  if (!nextBtn.classList.contains("hidden")) {
-    nextBtn.click();
-    return;
-  }
+  submitBtn.click();
 });
 
 function endRound() {
   guessInput.disabled = true;
-  submitBtn.classList.add("hidden");
-  clueBtn.classList.add("hidden");
-  nextBtn.classList.remove("hidden");
 
-  nextBtn.textContent =
-    currentRoundIndex === rounds.length - 1 ? "Finish" : "Next";
+  awaitingNextRound = true;
+
+  submitBtn.textContent =
+    currentRoundIndex === rounds.length - 1
+      ? "Finish"
+      : "Next";
 }
+  
 function launchConfetti(amount = 80) {
 
   for (let i = 0; i < amount; i++) {
