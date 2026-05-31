@@ -168,14 +168,6 @@ button:hover {
   background: #4f46e5;
 }
 
-/* Secondary button */
-#nextBtn {
-  background: #10b981;
-}
-
-#nextBtn:hover {
-  background: #059669;
-}
 
 /* Feedback */
 #feedback {
@@ -449,6 +441,13 @@ button:hover {
 .seo-content p {
   font-size: 0.85rem;
 }
+
+@media (max-width: 640px) {
+  .container {
+    width: 95%;
+    margin: 40px auto;
+  }
+
   .card {
     padding: 24px 18px;
   }
