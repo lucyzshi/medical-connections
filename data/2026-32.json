@@ -1,0 +1,6 @@
+{
+  "ACEI": ["First HFrEF GDMT",	"1980s",	"Block angiotensin II",	"CONSENSUS"],
+  "Beta Blockers": ["Mid 1990s", "COPERNICUS","Blocks sympathetic act", "Largest mortality benefit"],
+  "SGLT2": ["2020", "EMPEROR-reduced", "Osmotic diuresis", "Benefit in days-wks"],
+  "Digoxin": ["19th century", "Foxglove", "No mortality benefit", "Na/K ATPase inh"]
+}
