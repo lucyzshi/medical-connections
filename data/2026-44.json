@@ -1,0 +1,6 @@
+{
+  "Findings in Staph scalded skin syndrome (SSSS)": ["Desmoglein cleavage",	"Flaccid bullae",	"No mucosal inv",	"Toxin-mediated"],
+  "Findings in Toxic Epidermal Necrolysis (TEN)": ["Dusky erythema",	"Prominent mucosal inv",	"Atypical targets", "Medication reaction"],
+  "Findings in Erythroderma": ["Underlying skin disease", ">90% body involved", "Severe scaling", "Gradual onset"],
+  "Findings in Kawasaki disease": ["Strawberry tongue", "Vasculitis", "Periungual peeling", "Kids <5"]
+}
