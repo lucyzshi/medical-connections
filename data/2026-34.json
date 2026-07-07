@@ -1,0 +1,6 @@
+{
+  "Findings in beta-Thalassemia trait": ["Basophilic stippling",	"Increased HbA2",	"Target Cells",	"Mentzer index <13"],
+  "Findings in Iron Deficiency Anemia": ["Low reticulocytes",	"Increased RDW",	"Pencil cells", "Anisopoikilocytosis"],
+  "Findings in G6PD deficiency": ["Bite cells", "Heinz bodies", "Increased LDH", "Low Haptoglobin"],
+  "Findings in Vitamin B12 Deficiency": ["Hypersegmented Neutrophils", "Macro-ovalocytes", "Elevated MMA", "Peripheral neuropathy"]
+}
