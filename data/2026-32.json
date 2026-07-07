@@ -1,0 +1,6 @@
+{
+  "Classic ESBL producers": ["E Coli",	"Klebsiella pneumoniae",	"Proteus mirabilis",	"Klebsiella oxytoca"],
+  "Classic inducible Amp C producers": ["Klebsiella aerogenes",	"Serratia marcescens",	"E cloacae", "Citrobacter freundii"],
+  "Non-fermenters (frequently MDR)": ["Burkholderia", "Stenotrophomonas", "Acinetobacter", "Pseudomonas aeruginosa"],
+  "Gram positive cocci that can cause UTIs": ["Staph saprophyticus", "Staph aureus", "Strep agalactiae", "Enterococcus sp"]
+}
