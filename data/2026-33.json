@@ -1,0 +1,6 @@
+{
+  "Findings in Hashimoto Thyroiditis": ["Hypothyroidism",	"TPO Ab+",	"Thyroglobulin Ab+",	"Lymphoma risk"],
+  "Findings in Graves Disease": ["Ophthalmopathy",	"TRAb +",	"High radioiodine uptake", "Pretibial myxedema"],
+  "Findings in Subacute thyroiditis": ["Painful thyroid", "Low radioiodine uptake", "Post-viral", "Elevated ESR"],
+  "Findings in thyroid cancer": ["Euthyroid", "Hypoechoic nodule", "Lymphadenopathy", "History of radiation"]
+}
