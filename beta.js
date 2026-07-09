@@ -350,7 +350,7 @@ history.push({
   cluesUsed: currentClueIndex + 1,
   guess: guessRaw,
   correct: correctAnswer,
-  score,
+  score: 0,
   clues: [...round.clues]
 });
 
@@ -654,14 +654,7 @@ history.forEach((h, i) => {
 html += `
     </details>
 
-    <button id="shareBtn">📤 Share</button>
-
-    <div id="shareOptions">
-      <button id="copyBtn">Copy</button>
-      <button id="twitterBtn">Share on X</button>
-      <button id="textBtn">Text</button>
-    </div>
-
+    <button id="shareBtn">Share</button>
     <button onclick="location.reload()">Play Again</button>
   `;
 
@@ -675,43 +668,23 @@ if (totalScore === totalPossible) {
   // DOM bindings (safe)
   // ---------------------------
   const shareBtn = document.getElementById("shareBtn");
-  const copyBtn = document.getElementById("copyBtn");
-  const twitterBtn = document.getElementById("twitterBtn");
-  const linkedinBtn = document.getElementById("linkedinBtn");
-  const textBtn = document.getElementById("textBtn");
 
-  
-  
   // ---------------------------
-  // Native share (mobile-first)
-  // ---------------------------
+// Copy share text
+// ---------------------------
 
-  
-  shareBtn?.addEventListener("click", async () => {
-    if (navigator.share) {
-      try {
-await navigator.share({
-  title: "Discovery Rounds",
-  text: shareText,
-  url: url
-});
-      } catch (err) {
-
-  // User simply cancelled sharing
-  if (err.name === "AbortError") return;
-
-  console.error(err);
-
+shareBtn?.addEventListener("click", async () => {
   await copyText(shareText);
 
-alert("📋 Results copied!");
-}
-    } else {
-      await copyText(shareText);
-      alert("📋 Copied!");
-    }
-  });
-  async function copyText(text) {
+  shareBtn.textContent = "Copied!";
+
+  setTimeout(() => {
+    shareBtn.textContent = "Share";
+  }, 2000);
+});
+
+
+async function copyText(text) {
   try {
     await navigator.clipboard.writeText(text);
   } catch {
@@ -719,7 +692,6 @@ alert("📋 Results copied!");
     area.value = text;
 
     document.body.appendChild(area);
-
     area.select();
 
     document.execCommand("copy");
@@ -727,40 +699,6 @@ alert("📋 Results copied!");
     document.body.removeChild(area);
   }
 }
-
-  // ---------------------------
-  // Copy
-  // ---------------------------
-  copyBtn?.addEventListener("click", async () => {
-   await copyText(shareText);
-    alert("📋 Copied!");
-  });
-
-// ---------------------------
-// Twitter
-// ---------------------------
-twitterBtn?.addEventListener("click", () => {
-
-  window.open(
-    `https://twitter.com/intent/tweet?text=${encodeURIComponent(
-      shareText.replace(url, "")
-    )}&url=${encodeURIComponent(url)}`,
-    "_blank"
-  );
-
-});
-
-// ---------------------------
-// SMS
-// ---------------------------
-textBtn?.addEventListener("click", () => {
-
-  window.location.href =
-    `sms:?body=${encodeURIComponent(shareText)}`;
-
-});
-
-
   // ---------------------------
   // Save results
   // ---------------------------
@@ -796,7 +734,7 @@ function buildShareText() {
   const grid = buildEmojiGrid();
 
   return [
-    `🧠 Discovery Rounds #${currentPuzzleId}`,
+    `🧠 Discovery Rounds`,
     "",
     grid,
     "",
