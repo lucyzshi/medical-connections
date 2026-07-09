@@ -113,11 +113,9 @@ async function loadPuzzle(year = currentYear, week = currentWeek, half = current
     loadRound();
 
   } catch (err) {
-
-    console.error("Error loading puzzle:", err);
-
-    loadPreviousPuzzle(year, week, half);
-  }
+  console.error("Error loading puzzle:", err);
+  loadPreviousPuzzle(year, week, half);
+}
 }
 
 function loadPreviousPuzzle(year, week, half) {
@@ -539,6 +537,7 @@ else if (totalScore >= 11) {
   `;
 }
     const shareText = buildShareText();
+  const emojiGrid = buildEmojiGrid();
 
   // ---------------------------
   // Build results HTML
@@ -547,39 +546,56 @@ let html = `
   ${celebrationHTML}
 
   <div class="final-banner">
+
     <h2>${rankTitle}</h2>
-    <h3>Final Score: ${totalScore} / ${totalPossible}</h3>
-    <p>${rankMessage}</p>
-  </div>
 
-  <div class="summary">
-`;
+    <h3>${totalScore}/${totalPossible}</h3>
 
-  history.forEach((h, i) => {
-    const isCorrect = h.score > 0;
-
-    html += `
-      <p>
-        <strong>Round ${i + 1}</strong><br>
-        Your guess: ${h.guess} | 
-        Correct: ${h.correct} | 
-        Clues used: ${h.cluesUsed} |
-        <span style="color:${isCorrect ? 'green' : 'red'}">
-          ${isCorrect ? 'Correct' : 'Incorrect'}
-        </span>
-      </p>
-    `;
-  });
-
-  html += `
+    <div class="emoji-grid">
+      ${emojiGrid}
     </div>
 
-    <button id="shareBtn">Share Score</button>
+    <p>${rankMessage}</p>
+
+  </div>
+
+  <details class="summary">
+    <summary>View Round Details</summary>
+`;
+
+history.forEach((h, i) => {
+
+  html += `
+
+    <div class="round-summary">
+
+      <strong>Round ${i + 1}</strong><br>
+
+      ${
+        h.score > 0
+          ? `✅ Correct: ${h.correct}<br>
+             Solved after ${h.cluesUsed} clue${h.cluesUsed > 1 ? "s" : ""} (+${h.score})`
+          : `❌ Missed<br>
+             Your guess: ${h.guess}<br>
+             Correct answer: ${h.correct}`
+      }
+
+    </div>
+
+    <hr>
+
+  `;
+
+});
+
+html += `
+    </details>
+
+    <button id="shareBtn">📤 Share</button>
 
     <div id="shareOptions">
       <button id="copyBtn">Copy</button>
-      <button id="twitterBtn">Twitter</button>
-      <button id="linkedinBtn">LinkedIn</button>
+      <button id="twitterBtn">Share on X</button>
       <button id="textBtn">Text</button>
     </div>
 
@@ -606,62 +622,81 @@ if (totalScore === totalPossible) {
   // ---------------------------
   // Native share (mobile-first)
   // ---------------------------
+
+  
   shareBtn?.addEventListener("click", async () => {
     if (navigator.share) {
       try {
-        await navigator.share({
-          title: "My Discovery Rounds Score",
-          text: shareText + "\n" + url
-        });
+await navigator.share({
+  title: "Discovery Rounds",
+  text: shareText,
+  url: url
+});
       } catch (err) {
-  console.error("Share failed:", err);
-  alert("Share not supported on this browser—copying instead.");
+
+  // User simply cancelled sharing
+  if (err.name === "AbortError") return;
+
+  console.error(err);
+
+  await copyText(shareText);
+
+alert("📋 Results copied!");
 }
     } else {
-      await navigator.clipboard.writeText(shareText);
+      await copyText(shareText);
       alert("📋 Copied!");
     }
   });
+  async function copyText(text) {
+  try {
+    await navigator.clipboard.writeText(text);
+  } catch {
+    const area = document.createElement("textarea");
+    area.value = text;
+
+    document.body.appendChild(area);
+
+    area.select();
+
+    document.execCommand("copy");
+
+    document.body.removeChild(area);
+  }
+}
 
   // ---------------------------
   // Copy
   // ---------------------------
   copyBtn?.addEventListener("click", async () => {
-    await navigator.clipboard.writeText(shareText);
+   await copyText(shareText);
     alert("📋 Copied!");
   });
 
-  // ---------------------------
-  // Twitter
-  // ---------------------------
-  twitterBtn?.addEventListener("click", () => {
-    const tweet = encodeURIComponent(shareText);
-    window.open(`https://twitter.com/intent/tweet?text=${tweet}`, "_blank");
-  });
+// ---------------------------
+// Twitter
+// ---------------------------
+twitterBtn?.addEventListener("click", () => {
 
-  // ---------------------------
-  // LinkedIn
-  // ---------------------------
-  linkedinBtn?.addEventListener("click", () => {
-    window.open(
-      `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`,
-      "_blank"
-    );
-  });
+  window.open(
+    `https://twitter.com/intent/tweet?text=${encodeURIComponent(
+      shareText.replace(url, "")
+    )}&url=${encodeURIComponent(url)}`,
+    "_blank"
+  );
 
-  // ---------------------------
-  // SMS
-  // ---------------------------
-  textBtn?.addEventListener("click", () => {
-    window.location.href = `sms:?&body=${encodeURIComponent(shareText)}`;
-  });
+});
 
-  // ---------------------------
-  // Optional: hide fallback if native share exists
-  // ---------------------------
-  if (navigator.share) {
-    document.getElementById("shareOptions")?.classList.add("hidden");
-  }
+// ---------------------------
+// SMS
+// ---------------------------
+textBtn?.addEventListener("click", () => {
+
+  window.location.href =
+    `sms:?body=${encodeURIComponent(shareText)}`;
+
+});
+
 
   // ---------------------------
   // Save results
@@ -677,28 +712,37 @@ if (totalScore === totalPossible) {
   // ---------------------------
   // Share text builder
   // ---------------------------
-  function buildShareText() {
-  const totalPossible = rounds.length * 3;
+function buildEmojiGrid() {
 
-  // Emoji mapping like NYT-style results
-  function scoreEmoji(score) {
-    if (score === 3) return "🟩";
-    if (score === 2) return "🟨";
-    if (score === 1) return "🟧";
-    return "⬜";
+  function emoji(score) {
+    switch (score) {
+      case 3: return "🟩";
+      case 2: return "🟨";
+      case 1: return "🟧";
+      default: return "⬛";
+    }
   }
 
-  const grid = history.map(h => scoreEmoji(h.score)).join(" ");
-
-  return `🧠 Discovery Rounds ${currentPuzzleId}
-
-${grid}
-Score: ${totalScore}/${totalPossible}
-
-Can you beat me? 🎯
-${url}`;
+  return history.map(h => emoji(h.score)).join(" ");
 }
 
+function buildShareText() {
+
+  const totalPossible = rounds.length * 3;
+
+  const grid = buildEmojiGrid();
+
+  return [
+    `🧠 Discovery Rounds #${currentPuzzleId}`,
+    "",
+    grid,
+    "",
+    `Score ${totalScore}/${totalPossible}`,
+    "",
+    "Can you diagnose them all?",
+    url
+  ].join("\n");
+}
 
   // ---------------------------
 // COMMENTS
