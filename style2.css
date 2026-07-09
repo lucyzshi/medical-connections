@@ -296,10 +296,10 @@ details summary{
 
   box-sizing: border-box;
 
+  width: 220px;
   height: 48px;
-  min-width: 210px;
 
-  padding: 12px 22px;
+  padding: 0;
 
   background: #6366f1;
   color: white;
