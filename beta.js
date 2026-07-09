@@ -286,12 +286,13 @@ feedbackEl.textContent =
     feedbackEl.textContent =
       `Answer: ${correctAnswer}`;
 
-    history.push({
-      cluesUsed: currentClueIndex + 1,
-      guess: "(no guess)",
-      correct: correctAnswer,
-      score: 0
-    });
+history.push({
+  cluesUsed: currentClueIndex + 1,
+  guess: guessRaw,
+  correct: correctAnswer,
+  score,
+  clues: [...round.clues]
+});
 
     endRound();
     return;
@@ -333,12 +334,13 @@ feedbackEl.textContent =
       ? round.answer[0]
       : round.answer;
 
-    history.push({
-      cluesUsed: currentClueIndex + 1,
-      guess: guessRaw,
-      correct: correctAnswer,
-      score
-    });
+history.push({
+  cluesUsed: currentClueIndex + 1,
+  guess: guessRaw,
+  correct: correctAnswer,
+  score,
+  clues: [...round.clues]
+});
 
     endRound();
     return;
@@ -373,12 +375,13 @@ feedbackEl.textContent =
   feedbackEl.textContent =
     `❌ Incorrect. Answer: ${correctAnswer}`;
 
-  history.push({
-    cluesUsed: currentClueIndex + 1,
-    guess: guessRaw,
-    correct: correctAnswer,
-    score: 0
-  });
+history.push({
+  cluesUsed: currentClueIndex + 1,
+  guess: guessRaw,
+  correct: correctAnswer,
+  score,
+  clues: [...round.clues]
+});
 
   endRound();
 
@@ -562,30 +565,30 @@ let html = `
   <details class="summary">
     <summary>View Round Details</summary>
 `;
-
 history.forEach((h, i) => {
 
   html += `
+    <details class="round-summary">
 
-    <div class="round-summary">
+      <summary>
+        Round ${i + 1}
+        ${h.score > 0 ? "✅" : "❌"}
+      </summary>
 
-      <strong>Round ${i + 1}</strong><br>
+      <p><strong>Answer:</strong> ${h.correct}</p>
+      <p><strong>Your guess:</strong> ${h.guess}</p>
+      <p><strong>Clues used:</strong> ${h.cluesUsed}</p>
 
-      ${
-        h.score > 0
-          ? `✅ Correct: ${h.correct}<br>
-             Solved after ${h.cluesUsed} clue${h.cluesUsed > 1 ? "s" : ""} (+${h.score})`
-          : `❌ Missed<br>
-             Your guess: ${h.guess}<br>
-             Correct answer: ${h.correct}`
-      }
+      <ol class="clue-review">
+       ${h.clues.map((clue, index) => `
+  <li class="${index + 1 === h.cluesUsed ? 'solved-clue' : ''}">
+    ${clue}
+  </li>
+`).join("")}
+      </ol>
 
-    </div>
-
-    <hr>
-
+    </details>
   `;
-
 });
 
 html += `
