@@ -230,6 +230,52 @@ details summary{
   font-weight: 500;
 }
 
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.45);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  z-index: 10000;
+}
+
+.modal-content {
+  background: white;
+
+  width: 90%;
+  max-width: 600px;
+
+  padding: 30px;
+  border-radius: 16px;
+
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+
+  text-align: left;
+
+  line-height: 1.6;
+}
+
+.close-btn {
+  float: right;
+
+  background: none;
+  color: #374151;
+
+  font-size: 28px;
+  padding: 0;
+
+  margin: -10px -10px 10px 0;
+}
+
+.close-btn:hover {
+  background: none;
+  color: #111827;
+}
+
+
 /* Hidden */
 .hidden {
   display: none;
