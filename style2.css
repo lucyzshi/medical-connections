@@ -289,7 +289,14 @@ details summary{
 }
 
 .nav-btn {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  box-sizing: border-box;
+
+  height: 48px;
+  min-width: 210px;
 
   padding: 12px 22px;
 
@@ -302,6 +309,9 @@ details summary{
   font-family: Inter, system-ui, sans-serif;
 
   border-radius: 8px;
+  border: none;
+
+  cursor: pointer;
 
   box-shadow: 0 4px 10px rgba(99, 102, 241, 0.18);
 
@@ -318,13 +328,6 @@ details summary{
   box-shadow: 0 6px 14px rgba(99, 102, 241, 0.28);
 }
 
-.nav-btn:active {
-  transform: translateY(0);
-}
-
-.nav-btn.active {
-  background: #4338ca;
-}
 .visit-counter-container {
   display: flex;
   justify-content: center;
