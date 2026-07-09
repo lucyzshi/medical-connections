@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>The Medical Archives: Discovery Rounds- Free Medical Trivia Game for Students, Residents, and Attendings</title>
-    <meta name="description" content="Test your knowledge in a medical trivia game. Designed for anyone with an interest in the history of medical discoveries." />
+  <title>The Medical Archives: Discovery Rounds</title>
+    <meta name="description" content="Test your knowledge in a free medical trivia game. Designed for anyone with an interest in the history of medical discoveries." />
   <meta name="keywords" content="medical game, different rounding styles, nyt games, medical puzzle, discovery rounds, discovery rounds game, historical medicine, medical history, clinical archive, medical archives, gamification, medical trivia, meded, medical trivia game, doctordle, free daily game, free medical game, gamification medical education, meded trivia, free game, free educational game, educational puzzle, educational game, medical quiz, med ed, medical students, medical education, gamification example, meded gamification, GME, UME, resident education" />
   <meta name="author" content="Lucy Z Shi" />
     <meta property="og:title" content="Discovery Rounds" />
@@ -12,7 +12,7 @@
   <meta property="og:url" content="https://lucyzshi.github.io/medical-connections/discovery.html" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="google-site-verification" content="nW-RMwxXt0GXx_MRytrcTWHmjonFAO424NBJkEUV4Zs" />
-  <link rel="canonical" href="https://lucyzshi.github.io/medical-connections/discovery.html">
+  <link rel="canonical" href="https://lucyzshi.github.io/medical-connections/discovery.html" />
   <link rel="stylesheet" href="style2.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -26,7 +26,16 @@
     Every Monday and Thursday, a new trivia challenge is released.
     Players receive progressive clues and have three chances to identify the correct disease, medication, anatomic structure, or organism.
   </p>
+<div class="puzzle-selector">
 
+    <label for="puzzleSelect">
+        Play a prior game...
+    </label>
+
+    <select id="puzzleSelect">
+    </select>
+
+</div>
 <div id="game">
   <div class="card">
     <div class="progress-wrapper">
@@ -76,7 +85,7 @@
 
   <p>
     Discovery Rounds © 2026 by <a href="https://www.linkedin.com/in/lucyzshi/">Lucy Z Shi</a> is licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a><img src="https://mirrors.creativecommons.org/presskit/icons/cc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/by.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/nc.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;"><img src="https://mirrors.creativecommons.org/presskit/icons/sa.svg" alt="" style="max-width: 1em;max-height:1em;margin-left: .2em;">
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script> Discovery Rounds is a free medical trivia game designed for anyone with an interest in the history of medicine.
+    Discovery Rounds is a free medical trivia game designed for anyone with an interest in the history of medicine.
     Players solve clues related to medical history, landmark discoveries,
     diagnoses, pharmacology, and pathology. Discovery Rounds aims to foster a deeper appreciation for
   the history of medicine, the medical humanities, and the stories behind discoveries that continue to shape modern clinical practice.
@@ -89,6 +98,7 @@
 </nav>
 
 </div>
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.2/dist/confetti.browser.min.js"></script>
   <script type="module" src="beta.js"></script>
 </body>
 </html>
