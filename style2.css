@@ -292,6 +292,7 @@ details summary{
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  appearance: none;
 
   box-sizing: border-box;
 
@@ -326,6 +327,9 @@ details summary{
   transform: translateY(-1px);
 
   box-shadow: 0 6px 14px rgba(99, 102, 241, 0.28);
+}
+.nav-btn:active {
+  transform: translateY(0);
 }
 
 .visit-counter-container {
