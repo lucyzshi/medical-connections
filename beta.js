@@ -94,6 +94,66 @@ function getISOWeeksInYear(year) {
   return Math.ceil((((dec28 - startOfYear) / 86400000) + 1) / 7);
 }
 
+function getPuzzleDate(year, week, half) {
+
+  // Find Monday of the ISO week
+  const jan4 = new Date(Date.UTC(year, 0, 4));
+  const day = jan4.getUTCDay() || 7;
+
+  const monday = new Date(jan4);
+
+  monday.setUTCDate(
+    jan4.getUTCDate() - day + 1 + (week - 1) * 7
+  );
+
+  // B puzzle is Thursday
+  if (half === "B") {
+    monday.setUTCDate(monday.getUTCDate() + 3);
+  }
+
+  return monday;
+}
+
+function getRecentPuzzles(count = 5) {
+
+  let year = currentYear;
+  let week = currentWeek;
+  let half = currentHalf;
+
+  const puzzles = [];
+
+  for (let i = 0; i < count; i++) {
+
+    puzzles.push({
+      year,
+      week,
+      half
+    });
+
+    // move backwards
+
+    if (half === "B") {
+
+      half = "A";
+
+    } else {
+
+      half = "B";
+      week--;
+
+      if (week <= 0) {
+        year--;
+        week = getISOWeeksInYear(year);
+      }
+
+    }
+
+  }
+
+  return puzzles;
+
+}
+
 // ------------------ LOAD PUZZLE ------------------
 async function loadPuzzle(year = currentYear, week = currentWeek, half = currentHalf) {
 
@@ -837,8 +897,71 @@ runTransaction(visitRef, (current) => {
 });
   }
 }
+function initPuzzleSelector() {
+
+  const select = document.getElementById("puzzleSelect");
+
+  if (!select) return;
+
+  const puzzles = getRecentPuzzles(5);
+
+  puzzles.forEach((p, index) => {
+
+    const option = document.createElement("option");
+
+    option.value =
+      `${p.year}-${String(p.week).padStart(2, "0")}-${p.half}`;
+
+    const date = getPuzzleDate(
+      p.year,
+      p.week,
+      p.half
+    );
+
+    const label = date.toLocaleDateString(undefined, {
+      month: "short",
+      day: "numeric",
+      year: "numeric"
+    });
+
+    option.textContent =
+      index === 0
+        ? `${label} (Current)`
+        : label;
+
+    select.appendChild(option);
+
+  });
+
+  select.addEventListener("change", () => {
+
+    const [year, week, half] =
+      select.value.split("-");
+
+    // Reset game
+
+    history = [];
+    totalScore = 0;
+    currentRoundIndex = 0;
+
+    finalEl.classList.add("hidden");
+
+    document
+      .getElementById("game")
+      .classList.remove("hidden");
+
+    loadPuzzle(
+      Number(year),
+      Number(week),
+      half
+    );
+
+  });
+
+}
 // ------------------ INIT ------------------
 
 initVisitorCounter("discovery-rounds");
 initCommentBox();
+initPuzzleSelector();
 loadPuzzle();
