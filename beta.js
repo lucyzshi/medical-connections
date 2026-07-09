@@ -897,6 +897,28 @@ function initPuzzleSelector() {
   });
 
 }
+// ---------------------------
+// ABOUT MODAL
+// ---------------------------
+
+const aboutBtn = document.getElementById("aboutBtn");
+const aboutModal = document.getElementById("aboutModal");
+const closeAbout = document.getElementById("closeAbout");
+
+aboutBtn?.addEventListener("click", () => {
+  aboutModal.classList.remove("hidden");
+});
+
+closeAbout?.addEventListener("click", () => {
+  aboutModal.classList.add("hidden");
+});
+
+aboutModal?.addEventListener("click", (e) => {
+  if (e.target === aboutModal) {
+    aboutModal.classList.add("hidden");
+  }
+});
+
 // ------------------ INIT ------------------
 
 initVisitorCounter("discovery-rounds");
