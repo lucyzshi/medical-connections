@@ -1,0 +1,8 @@
+{
+  "rounds": [
+    { "answer": ["Alpha gal syndrome","red meat allergy","AGS","Alpha gal"], "clues": ["This syndrome was discovered in the late 2000s by scientists at the University of Virginia who were investigating severe allergic reactions to cetuximab, an IV cancer treatment. They found that patients with this reaction lived predominantly in the Southeast of the United States indicating regional exposure","Unlike typical food allergies that target proteins, this targets a carbohydrate molecule. Because these molecules take longer to digest, symptom onset is about 3-6 hours after eating food","We now know that this syndrome is caused by lone star tick bites that transfer the molecule into your blood causing an IgE mediated response. Subsequent reactions include hives, stomach pain, and anaphylaxis after eating red meat"] },
+    { "answer": ["Botulism","Clostridium botulinum","botox"], "clues": ["The name actually comes from the Latin word for sausage, tracing back to 18th and 19th century Europe where many cases were linked to 'sausage poisoning'.","Approximately 12-36 hours after exposure, you might develop dilated pupils, diplopia, and weakness. Infants can become hypotonic and sleepy","A single pound of pure toxin causing this disease could theoretically kill the entire human population. In tiny doses, it's used to treat muscle spasms, migraines, hyperhidrosis, and facial wrinkles"] },
+   
+  
+  ]
+}
