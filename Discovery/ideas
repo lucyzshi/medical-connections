@@ -6,7 +6,10 @@ puberty
 { "answer": ["Chlorthiazide","diuril","thiazide","thiazide diuretic"], "clues": ["Before this medication was discovered, the only available options were IV or IM mercurial agents","",""] },
 {    { "answer": ["Vincristine","Oncovin","vinca alkaloid"], "clues": ["Traditional healers in Madagascar and Southern Africa used rosy periwinkle (catharanthus roseus) for various folk remedies such as treating diabetes. Researchers studying this plant found numerous alkaloids with no blood sugar lowering effect but isolated and developed this medication in 1961, which is now on the WHO list of essential medications","Originally, this medication was exceptionally expensive as it required roughly one ton of dried periwinkle leaves to yield just one ounce of the drug, although now it is made semi-synthetically and remains a core part of pediatric cancer care","Commonly causing peripheral neuropathy, this medication works by binding to tubulin and preventing mitosis"] }
     { "answer": ["Cerebral amyloid angiopathy","CAA","cerebral angiopathy","cerebral amyloid"], "clues": ["Early descriptions of this disease are linked to neurologist Hermann Oppenheim, who later faced persecution under Nazi Germany because of his Jewish heritage.","This disease can cause transient focal neurologic episodes, brief disturbances in motor, sensory, visual, or language functions that can be difficult to distinguish from TIAs or seizures","It's not Alzheimers. This disease is caused by amyloid proteins that deposit into the arteries and arterioles in the brain, causing memory issues and increasing the risk of bleeding events"] }
-{ "answer": [""], "clues": ["","",""] },
+{ "answer": ["osteoporosis"], "clues": ["","",""] },
+{ "answer": ["Scarlet fever"], "clues": ["","",""] },
+{ "answer": ["uvula"], "clues": ["","",""] },
+{ "answer": ["rubeola"], "clues": ["","",""] },
 { "answer": [""], "clues": ["","",""] },
 { "answer": [""], "clues": ["","",""] },
 autism
