@@ -1,0 +1,6 @@
+{
+  "Findings and risk factors for Giardia": ["Greasy stool",	"Teardrop-shaped trophozoite",	"Malabsorption",	"Camping"],
+  "Findings and risk factors for Shigella": ["Bloody stool",	"Gram-neg Rod",	"Tenesmus", "Person-to-person"],
+  "Findings and risk factors for Cryptosporidium": ["Profuse watery stool", "Tiny round oocysts", "Immunocompromised", "Villous injury"],
+  "Findings and risk factors for Vibrio vulnificus": ["Raw oysters", "Liver disease", "Necrotizing skin infection", "Comma-shaped GN rod"]
+}
