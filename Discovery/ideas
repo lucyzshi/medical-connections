@@ -9,6 +9,13 @@ puberty
 { "answer": ["heart catheterization"], "clues": ["","",""] },
 { "answer": ["Yellow fever"], "clues": ["The first recorded epidemic of this disease took place on Mexico's yucatan Peninsula in 1648. Spanish colonists and indigenous Mayans were struck down by a terrifying, unknown plague, which they called xekik ('black vomit') due to one of the most gruesome hallmarks of the disease.","Philadelphia used to be the capital of the United States when a devastating outbreak struck in the summer of 1793. The disease likely arrived via refugees fleeing the revolution in Haiti and killed about 10% of the population. The epidemic stopped in late November when freezing autumn frost killed off the mosquito population","A serious viral illness now primarily found in tropical and subtropical regions, individuals affected by this disease can developed fever, headache, and body aches. About 15% of people enter a second dangerous phase with high fever, jaundice, bleeding from the mouth, nose or eyes, and multiorgan failure."] },
 { "answer": ["Urea"], "clues": ["Before the 1820s, scientists believe that organic compounds needed a magial life spark or 'vital force' from living creatures to exist. In 1828, a German chemist accidentally synthesized this from silver cyanate and ammonium chloride in his lab which was the first time an organic compound was made entirely from inorganic materials. This was the start of modern organic chemistry","Produced in the liver to safely break down toxic molecules, this is also a natural component of the human skin that helps retain moisture in the stratum corneum","Making up more than 50% of the total dissolved solic waste and organic matter in human urine, this substance is also sometimes used in patients with hyponatremia, acting as an obligatory osmotic diuretic."] },
-
+{ "answer": ["Troponin"], "clues": ["This regulatory protein was first discovered by Setsuro Ebashi in 1963 while he was investigating how calcium controls muscle contraction and relaxation","It is actually a group of proteins that consists of three subunits. These are named C (which binds calcium), I (which inhibits contraction), and T (which anchors the complex).","The name comes from the Greek word tropos, meaning 'turn' or 'change', because it helps trigger the turning/contraction of muscle fibers by shifting position when bound to calcium. We mostly measure I and T since they have cardiac-specific variants."] },
+{ "answer": [""], "clues": ["","",""] },
+{ "answer": [""], "clues": ["","",""] },
+{ "answer": [""], "clues": ["","",""] },
+{ "answer": [""], "clues": ["","",""] },
+{ "answer": [""], "clues": ["","",""] },
+{ "answer": [""], "clues": ["","",""] },
+{ "answer": [""], "clues": ["","",""] },
 { "answer": [""], "clues": ["","",""] },
 autism
