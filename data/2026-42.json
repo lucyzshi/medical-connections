@@ -1,0 +1,6 @@
+{
+  "Findings with an empyema": ["Pus",	"pH <7.2",	"Low Glucose",	"High LDH"],
+  "Findings with pleural effusions from heart failure": ["Low protein",	"Clear fluid",	"Low LDH", "Bilateral effusions"],
+  "Findings and risk factors for pleural effusion from chylothorax": ["High TG", "Milky fluid", "Lymphoma", "Thoracic duct injury"],
+  "Findings with pleural effusion from tuberculosis": ["Lymphocyte predominant", "High protein", "High ADA", "Granulomas"]
+}
