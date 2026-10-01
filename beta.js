@@ -439,7 +439,7 @@ history.push({
   cluesUsed: currentClueIndex + 1,
   guess: guessRaw,
   correct: correctAnswer,
-  score,
+  score: 0,
   clues: [...round.clues]
 });
 
