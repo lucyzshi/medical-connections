@@ -2,14 +2,12 @@ puberty
 { "answer": ["Alcohol"], "clues": ["","",""] }
 { "answer": ["Thalidomide"], "clues": ["","",""] },
 { "answer": ["MGUS or multiple myeloma"], "clues": ["","",""] },
-{ "answer": ["heart catheterization"], "clues": ["","",""] },
-{ "answer": ["Naegleria fowleri","N fowleri","brain eating ameoba"], "clues": ["","",""] },
 { "answer": ["Chlorthiazide","diuril","thiazide","thiazide diuretic"], "clues": ["Before this medication was discovered, the only available options were IV or IM mercurial agents","",""] },
     { "answer": ["Alcohol withdrawal","Delirium tremens","DT","DTs"], "clues": ["In 'The Adventures of Huckleberry Finn', Huck's father suffers from this condition where he thought snakes were biting his legs. If that's not helpful, Nicolas Cage also played a character who  in the 1995 film, Leaving Las Vegas. His performance won him the Academy Award for Best Actor in 1996","For centuries, this was misidentified as 'phrenitis' or an inflammation of the brain. It was formally identified and named in 1813, which marked a turning point in the clinical recognition of this as a disease that could be managed medically","Patients might develop confusion, shaking, and vivid hallucinations which popularized an older idiom 'seeing pink elephants'"] }
 
-{ "answer": ["vibrio vulnificus","vibrio"], "clues": ["Genetic and fossil evidence suggests this bacteria has existed in marine environments for hundreds of millions of years, hitching rides on microscopic zooplankton like copepods.","Hippocrates meticulously documented this disease in a man living on an island in the Aegean Sea. The patient developed black bullous skin lesions and suffered from rapidly progressive septicemia and died on the second day of the illness","Unlike it's more famous cousin that causes cholera, this is primarily known for causing wound infections, particularly in those with hemochromatosis."] },
-{ "answer": [""], "clues": ["","",""] },
-{ "answer": [""], "clues": ["","",""] },
+{ "answer": ["vibrio vulnificus","vibrio","v ulnificus","vulnificus"], "clues": ["Genetic and fossil evidence suggests this bacteria has existed in marine environments for hundreds of millions of years, hitching rides on microscopic zooplankton like copepods.","Hippocrates meticulously documented this disease in a man living on an island in the Aegean Sea. The patient developed black bullous skin lesions and suffered from rapidly progressive septicemia and died on the second day of the illness","Unlike it's more famous cousin that causes cholera, this is primarily known for causing wound infections, particularly in those with hemochromatosis."] },
+{ "answer": ["EKG","ECG","Electrocardiogram"], "clues": ["To demonstrate this technology for the first time, British physiologist Augustus Waller used his Samoyed mix named Jimmy. Jimmy was trained to stand patiently with his paws dipped in jars of saline solution.","The first of this machine was built in 1901 and weighed 600 pounds. Kind of like Jimmy, patients had to place both hands and one foot into large buckets of saltwater. Machines now only weigh about 8 pounds","Early versions were labeled with ABCD. Einthoven developed a mathematical formula that compensated for the inertia and friction of the mercury column in the capillary tube and the mathematically corrected reading was subsequently labeled with PQRST."] },
+{ "answer": ["Fidaxomicin","dificid"], "clues": ["This drug was initially isolated by Abbott Laboratories in the 1970-80s but they decided to out-license it to PathoGenesis in the 90s. Chiron Corp then acquired PathoGenesis in 2000 but wasn't interested in this medication and sold the licensing rights to a startup, Optimer Pharmaceuticals. Just as Optimer gained FDA approval in 2011, a major compliance scandal emerged and the company imploded. Optimer was bought by Cubist which was then bought by Merck and finally reached the market.","When Abbott Laboratories was developing the drug in the 1980s, the entire pharmaceutical industry was obsessed with finding a cure for MRSA. This drug was fantastic at killing MRSA in test tubes but animal tesing showed that the drug was not absorbed when swallowed.","Because it is barely absorbed, it acts locally in the GI tract and has a narrow spectrum of action. It binds to bacterial RNA polymerase and halts transcription but also uniquely inhibits spore production and toxin formation, lowering the chance of recurrent infection."] },
 { "answer": [""], "clues": ["","",""] },
 { "answer": [""], "clues": ["","",""] },
 { "answer": [""], "clues": ["","",""] },
@@ -25,4 +23,4 @@ puberty
 { "answer": [""], "clues": ["","",""] },
 
 
-autism
+
