@@ -1,0 +1,6 @@
+{
+  "Findings in Measles": ["Paramyxovirus",	"Downward spreading",	"Koplik spots",	"Conjunctivitis"],
+  "Findings in Erythema Infectiosum (Fifth disease)": ["Parvovirus",	"Bright red cheeks",	"Lacy reticular rash", "Arthralgias"],
+  "Findings in Varicella (chickenpox)": ["Pruritic", "Trunk outward", "Lesions in Multiple Stages", "Vesicular rash"],
+  "Findings in Hand-foot-and-mouth disease": ["Coxsackievirus", "Papulovesicules", "Palms and soles", "Painful oral lesions"]
+}
