@@ -1,0 +1,6 @@
+{
+  "Findings in Vit A deficiency": ["Night blindness",	"Bitot spots",	"Xerophthalmia",	"Dry Skin"],
+  "Findings in Vitamin B1 (thiamine) deficiency": ["Ophthalmoplegia","High-output heart failure",	"Peripheral Neuropathy", "Ataxia"],
+  "Findings in Vitamin B9 (Folate) deficiency": ["Megaloblastic anemia", "Elevated Homocysteine", "Neural Tube Defects", "Hypersegmented Neutrophils"],
+  "Findings in Vitamin B3 (Niacin) deficiency": ["Symmetrical lesions", "Photosensitive Rash", "Diarrhea", "Dementia"]
+}
