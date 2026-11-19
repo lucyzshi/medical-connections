@@ -1,0 +1,6 @@
+{
+  "Findings in Tinea Capitis": ["Dermatophyte",	"Fine scale",	"Patchy alopecia",	"Broken hairs"],
+  "Findings in Cutaneous Candidiasis": ["Skin folds",	"Red plaques",	"Satellite papules", "Pseudohyphae"],
+  "Findings in Seborrheic Dermatitis": ["Round budding yeast", "Eyebrows", "Greasy", "Yellow-white scale"],
+  "Findings in Tinea Nigra": ["Hortaea werneckii", "Palms", "Brown-black macule", "Asymptomatic"]
+}
